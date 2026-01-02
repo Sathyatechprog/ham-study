@@ -16,6 +16,17 @@ export const meta: MetaFunction = () => {
       content:
         "3D演示极化的一般形式——椭圆极化，探索轴比与倾角对通信的影响。",
     },
+    { name: "twitter:title", content: "椭圆极化 (Elliptical Polarization) | 业余无线电可视化" },
+    {
+      name: "twitter:description",
+      content:
+        "3D演示极化的一般形式——椭圆极化，探索轴比与倾角对通信的影响。",
+    },
+    {
+      name: "keywords",
+      content:
+        "椭圆极化, elliptical polarization, 轴比, axial ratio, 极化损耗, polarization loss",
+    },
   ];
 };
 

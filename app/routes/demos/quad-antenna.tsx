@@ -16,6 +16,17 @@ export const meta: MetaFunction = () => {
       content:
         "3D演示方框天线（Cubical Quad）的闭合回路结构、高增益及低噪特性。",
     },
+    { name: "twitter:title", content: "方框天线 (Quad Antenna) | 业余无线电可视化" },
+    {
+      name: "twitter:description",
+      content:
+        "3D演示方框天线（Cubical Quad）的闭合回路结构、高增益及低噪特性。",
+    },
+    {
+      name: "keywords",
+      content:
+        "方框天线, quad antenna, cubical quad, 回路天线, loop antenna, 高增益, high gain, 低底噪, low noise",
+    },
   ];
 };
 

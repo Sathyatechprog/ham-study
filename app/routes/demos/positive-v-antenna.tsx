@@ -16,6 +16,17 @@ export const meta: MetaFunction = () => {
       content:
         "3D演示正V天线（V-Dipole）的结构特点、旋转偶极子应用及方向性。",
     },
+    { name: "twitter:title", content: "正V天线 (Positive V / V-Dipole) | 业余无线电可视化" },
+    {
+      name: "twitter:description",
+      content:
+        "3D演示正V天线（V-Dipole）的结构特点、旋转偶极子应用及方向性。",
+    },
+    {
+      name: "keywords",
+      content:
+        "正V天线, positive v antenna, v-dipole, 旋转偶极子, rotatable dipole, 楼顶天线",
+    },
   ];
 };
 

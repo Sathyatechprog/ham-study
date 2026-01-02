@@ -16,6 +16,17 @@ export const meta: MetaFunction = () => {
       content:
         "3D演示垂直GP天线（Ground Plane）的辐射原理、地网作用及垂直极化特性。",
     },
+    { name: "twitter:title", content: "GP天线 (Ground Plane Antenna) | 业余无线电可视化" },
+    {
+      name: "twitter:description",
+      content:
+        "3D演示垂直GP天线（Ground Plane）的辐射原理、地网作用及垂直极化特性。",
+    },
+    {
+      name: "keywords",
+      content:
+        "GP天线, ground plane antenna, 垂直天线, vertical antenna, 地网, radials, 单极天线, monopole",
+    },
   ];
 };
 

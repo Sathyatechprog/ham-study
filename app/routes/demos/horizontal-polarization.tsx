@@ -16,6 +16,17 @@ export const meta: MetaFunction = () => {
       content:
         "3D演示水平偶极子天线的电场传播与极化匹配原理。",
     },
+    { name: "twitter:title", content: "水平极化 (Horizontal Polarization) | 业余无线电可视化" },
+    {
+      name: "twitter:description",
+      content:
+        "3D演示水平偶极子天线的电场传播与极化匹配原理。",
+    },
+    {
+      name: "keywords",
+      content:
+        "水平极化, horizontal polarization, 偶极子, dipole, 电场, electric field, 天线方向性",
+    },
   ];
 };
 

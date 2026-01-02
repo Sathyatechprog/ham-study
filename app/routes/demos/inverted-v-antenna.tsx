@@ -16,6 +16,17 @@ export const meta: MetaFunction = () => {
       content:
         "3D演示倒V天线（Inverted V）的结构、阻抗匹配优势及混合极化特性。",
     },
+    { name: "twitter:title", content: "倒V天线 (Inverted V Antenna) | 业余无线电可视化" },
+    {
+      name: "twitter:description",
+      content:
+        "3D演示倒V天线（Inverted V）的结构、阻抗匹配优势及混合极化特性。",
+    },
+    {
+      name: "keywords",
+      content:
+        "倒V天线, inverted v antenna, 偶极子, dipole, 阻抗匹配, impedance matching, 倒V架设",
+    },
   ];
 };
 

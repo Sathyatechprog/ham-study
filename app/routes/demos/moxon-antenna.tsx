@@ -16,6 +16,17 @@ export const meta: MetaFunction = () => {
       content:
         "3D演示Moxon天线的高前后比特性与矩形结构优势。",
     },
+    { name: "twitter:title", content: "莫克森天线 (Moxon Antenna) | 业余无线电可视化" },
+    {
+      name: "twitter:description",
+      content:
+        "3D演示Moxon天线的高前后比特性与矩形结构优势。",
+    },
+    {
+      name: "keywords",
+      content:
+        "莫克森天线, moxon antenna, 矩形天线, rectangle antenna, 定向天线, directional antenna, 前后比, front-to-back ratio",
+    },
   ];
 };
 

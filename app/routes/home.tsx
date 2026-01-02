@@ -34,6 +34,17 @@ export const meta: MetaFunction = () => {
       content:
         "业余无线电天线可视化合集：包含垂直/水平/圆极化、八木、倒V、GP、正V、方框、莫克森等经典天线的3D极化与辐射演示。",
     },
+    { name: "twitter:title", content: "首页 | 业余无线电可视化" },
+    {
+      name: "twitter:description",
+      content:
+        "业余无线电天线可视化合集：包含垂直/水平/圆极化、八木、倒V、GP、正V、方框、莫克森等经典天线的3D极化与辐射演示。",
+    },
+    {
+      name: "keywords",
+      content:
+        "业余无线电, 天线演示, 3D可视化, 垂直极化, 水平极化, 圆极化, 八木天线, GP天线, 倒V天线, 正V天线, 方框天线, 莫克森天线, ham radio demos, antenna visualization",
+    },
   ];
 };
 

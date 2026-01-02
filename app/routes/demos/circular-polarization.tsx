@@ -16,6 +16,17 @@ export const meta: MetaFunction = () => {
       content:
         "3D演示电磁波的圆极化传播（RHCP/LHCP），及其在卫星通信中的应用。",
     },
+    { name: "twitter:title", content: "圆极化 (Circular Polarization) | 业余无线电可视化" },
+    {
+      name: "twitter:description",
+      content:
+        "3D演示电磁波的圆极化传播（RHCP/LHCP），及其在卫星通信中的应用。",
+    },
+    {
+      name: "keywords",
+      content:
+        "圆极化, circular polarization, RHCP, LHCP, 卫星通信, satellite communication, 螺旋天线, axial mode",
+    },
   ];
 };
 

@@ -16,6 +16,17 @@ export const meta: MetaFunction = () => {
       content:
         "3D演示八木天线的引向/反射原理、高增益方向性及极化特性。",
     },
+    { name: "twitter:title", content: "八木-宇田天线 (Yagi-Uda Antenna) | 业余无线电可视化" },
+    {
+      name: "twitter:description",
+      content:
+        "3D演示八木天线的引向/反射原理、高增益方向性及极化特性。",
+    },
+    {
+      name: "keywords",
+      content:
+        "八木天线, yagi antenna, yagi-uda, 定向天线, directional antenna, 引向器, director, 反射器, reflector",
+    },
   ];
 };
 

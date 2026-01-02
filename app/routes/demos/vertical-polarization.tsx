@@ -16,6 +16,17 @@ export const meta: MetaFunction = () => {
       content:
         "3D演示垂直极化偶极子天线的电场传播与极化匹配原理。",
     },
+    { name: "twitter:title", content: "垂直极化 (Vertical Polarization) | 业余无线电可视化" },
+    {
+      name: "twitter:description",
+      content:
+        "3D演示垂直极化偶极子天线的电场传播与极化匹配原理。",
+    },
+    {
+      name: "keywords",
+      content:
+        "垂直极化, vertical polarization, 偶极子, dipole, 垂直天线, vertical antenna, 极化损耗",
+    },
   ];
 };
 
