@@ -106,8 +106,8 @@ export default function Home() {
       <h1 className="text-3xl font-bold mb-6">业余无线电可视化</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {demos.map((demo) => (
-          <Card key={demo.href} className="border ring-offset-4 ring-border/50 ring-offset-gray-50 hover:ring-offset-gray-100 transition duration-300 hover:shadow-lg"> 
-            <CardHeader>
+          <Card key={demo.href} className="border flex flex-col ring-offset-4 ring-border/50 ring-offset-gray-50 hover:ring-offset-gray-100 transition duration-300 hover:shadow-lg"> 
+            <CardHeader className="flex-1">
               <CardTitle>{demo.title}</CardTitle>
               <CardDescription>{demo.description}</CardDescription>
             </CardHeader>
