@@ -123,7 +123,7 @@ export default function Home() {
               <CardDescription>{demo.description}</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="bg-slate-100 dark:bg-slate-800 h-[200px] rounded-md overflow-hidden flex items-center justify-center text-muted-foreground text-sm">
+              <div className="bg-slate-100 grid dark:bg-slate-800 h-[200px] rounded-md overflow-hidden text-muted-foreground text-sm">
                 <ClientOnly
                   fallback={
                     <div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />
