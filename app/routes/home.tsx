@@ -141,6 +141,28 @@ export default function Home() {
           </Card>
         ))}
       </div>
+
+      
+      {/* JSON-LD Structured Data for CollectionPage */}
+      <script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data requires this
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: "业余无线电天线可视化合集",
+            description: "包含垂直/水平/圆极化、八木、倒V、GP、正V、方框、莫克森等经典天线的3D极化与辐射演示。",
+            url: "https://ham.charlesify.com/",
+            hasPart: demos.map((demo) => ({
+              "@type": "CreativeWork",
+              name: demo.title,
+              description: demo.description,
+              url: `https://ham.charlesify.com${demo.href}`, // Assuming absolute URL required for best practice, or relative if base is set
+            })),
+          }),
+        }}
+      />
     </div>
   );
 }

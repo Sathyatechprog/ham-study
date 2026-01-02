@@ -91,7 +91,7 @@ export function RadialWaveLines({ antennaType, polarizationType, isThumbnail = f
             // End envelope for natural fade out
             const endEnvelope = Math.max(
                 0,
-                1.0 - Math.pow(r / (maxDist * 0.95), 3)
+                1.0 - (r / (maxDist * 0.95)) ** 3
             );
             
             const decay = 4.0 / (r + 1.0);
@@ -134,7 +134,7 @@ export function RadialWaveLines({ antennaType, polarizationType, isThumbnail = f
 
             // --- Pulse Color Logic ---
             // High intensity at wave peaks, transparent at nodes
-            let intensity = Math.pow(Math.abs(waveVal), 3.0);
+            let intensity = Math.abs(waveVal) ** 3.0;
             intensity *= Math.min(1.0, r * 0.5); // Prevent start artifact
             intensity *= endEnvelope;
 
@@ -164,7 +164,7 @@ export function RadialWaveLines({ antennaType, polarizationType, isThumbnail = f
                 break;
 
             case 'yagi':
-                gain = dirVec.x > 0 ? Math.pow(dirVec.x, 2) : 0.1;
+                gain = dirVec.x > 0 ? dirVec.x ** 2 : 0.1;
                 break;
 
             case 'quad':

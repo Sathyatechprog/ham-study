@@ -67,6 +67,32 @@ export default function DemosLayout() {
       <main>
         <Outlet />
       </main>
+      
+      {/* JSON-LD Structured Data for BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data requires this
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "首页",
+                item: "https://ham.charlesify.com/"
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: currentName,
+                item: `https://ham.charlesify.com/demos/${currentPath}`
+              }
+            ]
+          }),
+        }}
+      />
     </div>
   );
 }

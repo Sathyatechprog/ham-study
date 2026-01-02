@@ -56,7 +56,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const data = useLoaderData<typeof loader>();
   const location = useLocation();
   const origin = data?.origin || "";
-  const image = origin + "/og.webp";
+  const image = `${origin}/og.webp`;
   const url = origin + location.pathname;
 
   return (
@@ -74,6 +74,33 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content={image} />
+        
+        {/* Canonical URL */}
+        <link rel="canonical" href={url} />
+
+        {/* JSON-LD Structured Data for WebSite - Only on Homepage */}
+        {location.pathname === "/" && (
+          <script
+            type="application/ld+json"
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data requires this
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                name: "业余无线电可视化 (Ham Radio Visualization)",
+                url: origin,
+                potentialAction: {
+                  "@type": "SearchAction",
+                  target: {
+                    "@type": "EntryPoint",
+                    urlTemplate: `${origin}/?q={search_term_string}`
+                  },
+                  "query-input": "required name=search_term_string"
+                }
+              }),
+            }}
+          />
+        )}
 
         <Meta />
         <Links />
