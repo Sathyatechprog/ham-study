@@ -50,6 +50,8 @@ export const links: Route.LinksFunction = () => [
   { rel: "manifest", href: "/site.webmanifest" },
 ];
 
+import { Footer } from "./components/footer";
+
 export function Layout({ children }: { children: React.ReactNode }) {
   const data = useLoaderData<typeof loader>();
   const location = useLocation();
@@ -58,7 +60,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const url = origin + location.pathname;
 
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" className="h-full">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -76,8 +78,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
-        {children}
+      <body className="flex flex-col min-h-full">
+        <main className="flex-1">
+            {children}
+        </main>
+        <Footer />
         <ScrollRestoration />
         <Scripts />
       </body>

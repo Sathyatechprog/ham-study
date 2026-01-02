@@ -1,4 +1,4 @@
-import { ArrowLeft, House } from "@phosphor-icons/react";
+import { ArrowLeftIcon, HouseIcon } from "@phosphor-icons/react";
 import { Link, Outlet, useLocation } from "react-router";
 import {
   Breadcrumb,
@@ -26,6 +26,7 @@ export default function DemosLayout() {
     "positive-v-antenna": "正V天线 (Positive V Antenna)",
     "quad-antenna": "方框天线 (Quad Antenna)",
     "moxon-antenna": "莫克森天线 (Moxon Antenna)",
+    "quad-array-antenna": "四阵列天线 (Quad Array Antenna)",
   };
 
   const currentPath = location.pathname.split("/").pop() || "";
@@ -37,7 +38,7 @@ export default function DemosLayout() {
         <div className="flex items-center gap-4">
           <Button variant="outline" size="icon" asChild className="h-8 w-8">
             <Link to="/">
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeftIcon className="h-4 w-4" weight="bold" />
               <span className="sr-only">返回</span>
             </Link>
           </Button>
@@ -49,7 +50,7 @@ export default function DemosLayout() {
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
                   <Link to="/" className="flex items-center gap-2">
-                    <House className="h-4 w-4" />
+                    <HouseIcon className="h-4 w-4" weight="bold" />
                     首页
                   </Link>
                 </BreadcrumbLink>
