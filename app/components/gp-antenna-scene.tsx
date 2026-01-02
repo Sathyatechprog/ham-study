@@ -115,7 +115,7 @@ export default function GPAntennaScene({ isThumbnail = false }: { isThumbnail?: 
                 <color attach="background" args={["#111111"]} />
                 <fog attach="fog" args={["#111111", 10, 50]} />
                 
-                {!isThumbnail && <OrbitControls enableDamping dampingFactor={0.05} target={[0, 3, 0]} />}
+                {!isThumbnail && <OrbitControls enableDamping dampingFactor={0.05} zoomSpeed={0.3} target={[0, 3, 0]} />}
                 
                 <ambientLight intensity={0.5} color={0x404040} />
                 <directionalLight position={[10, 10, 10]} intensity={1} color={0xffffff} />
@@ -182,7 +182,7 @@ export default function GPAntennaScene({ isThumbnail = false }: { isThumbnail?: 
                     </div>
                 
                     <div className="absolute bottom-4 left-4 text-gray-400 text-xs pointer-events-none select-none">
-                        Created by BG4IST - For Ham Radio Education
+                        Created by BG8ROM - For Ham Radio Education
                     </div>
                 </>
             )}
