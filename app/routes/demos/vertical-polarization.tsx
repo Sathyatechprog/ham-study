@@ -25,6 +25,26 @@ export default function VerticalPolarizationPage() {
              <li><strong>垂直偶极子 (Vertical Dipole):</strong> 产生垂直极化的波。</li>
              <li><strong>传播 (Propagation):</strong> 在水平面 (Azimuth) 上是全向的 (Omnidirectional)。</li>
           </ul>
+
+          <h3>极化匹配与损耗 (Polarization Match & Loss)</h3>
+          <ul>
+            <li>
+                <strong>垂直发射 -&gt; 垂直接收 (Vertical to Vertical):</strong> 
+                <span className="text-green-600 font-bold dark:text-green-400"> 最佳匹配</span>。信号强度最大，无额外极化损耗。
+            </li>
+            <li>
+                <strong>垂直发射 -&gt; 水平接收 (Vertical to Horizontal):</strong> 
+                <span className="text-red-600 font-bold dark:text-red-400"> 极化隔离 (Cross-polarization)</span>。
+                理论上接收不到任何信号 (无限大损耗)。实际上由于反射和多径效应，通常会有 <strong>-20dB 到 -30dB</strong> 的巨大损耗。
+                <br />
+                <em>这也是为什么这两种极化方式可以复用同一频率而不容易互相干扰。</em>
+            </li>
+            <li>
+                <strong>垂直发射 -&gt; 圆极化接收 (Vertical to Circular):</strong>  
+                <span className="text-yellow-600 font-bold dark:text-yellow-400"> 3dB 损耗</span>。
+                线性极化波可以分解为两个相反旋转的圆极化波，接收天线只能接收其中一个分量，因此损失一半能量 (3dB)。尽管有损耗，但考虑到极化失配的风险，这种组合在特定情况下（如移动通信）是可以接受的。
+            </li>
+          </ul>
         </div>
       </div>
     </div>

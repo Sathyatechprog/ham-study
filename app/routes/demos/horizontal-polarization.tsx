@@ -25,6 +25,24 @@ export default function HorizontalPolarizationPage() {
              <li><strong>水平偶极子 (Horizontal Dipole):</strong> 产生水平极化的波。</li>
              <li><strong>传播 (Propagation):</strong> 虽然在垂直于导线的方向最强，但通常我们关注其相对于地面的水平特性。</li>
           </ul>
+
+          <h3>极化匹配与损耗 (Polarization Match & Loss)</h3>
+          <ul>
+            <li>
+                <strong>水平发射 -&gt; 水平接收 (Horizontal to Horizontal):</strong> 
+                <span className="text-green-600 font-bold dark:text-green-400"> 最佳匹配</span>。信号强度最大。
+            </li>
+            <li>
+                <strong>水平发射 -&gt; 垂直接收 (Horizontal to Vertical):</strong> 
+                <span className="text-red-600 font-bold dark:text-red-400"> 极化隔离 (Cross-polarization)</span>。
+                巨大的信号损耗 (约 <strong>-20dB 到 -30dB</strong>)。在短波 DX (远距离通信) 中，由于电离层反射经常改变极化方向，这种影响可能不如视距通信(VHF/UHF)那么显著，但在视距通信中是致命的。
+            </li>
+            <li>
+                <strong>水平发射 -&gt; 圆极化接收 (Horizontal to Circular):</strong> 
+                <span className="text-yellow-600 font-bold dark:text-yellow-400"> 3dB 损耗</span>。
+                损失一半能量。
+            </li>
+          </ul>
         </div>
       </div>
     </div>

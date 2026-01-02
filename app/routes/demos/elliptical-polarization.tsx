@@ -28,6 +28,16 @@ export default function EllipticalPolarizationPage() {
              <li><strong>圆极化 (Circular):</strong> 垂直与水平幅度相等且相位差为 90°。</li>
              <li><strong>椭圆极化 (Elliptical):</strong> 其他所有情况。</li>
           </ul>
+
+          <h3>关于极化匹配的一般规则</h3>
+          <p>
+            实际上，大多数无线电信号在传播过程中都会变成某种程度的椭圆极化（由于反射、折射等）。
+            极化失配损耗 (Polarization Mismatch Loss) 取决于两个椭圆极化波的<strong>轴比 (Axial Ratio)</strong> 和 <strong>倾角 (Tilt Angle)</strong> 的差异。
+          </p>
+          <ul>
+              <li>如果接收和发射极化的旋转方向相反，或者长轴方向互相垂直，损耗最大。</li>
+              <li>在实际工程中，为了避免严重的极化失配，通常会选择<strong>圆极化</strong>（用于不确定的方向或卫星）或严格的<strong>同向线极化</strong>（用于固定点对点通信）。</li>
+          </ul>
         </div>
       </div>
     </div>

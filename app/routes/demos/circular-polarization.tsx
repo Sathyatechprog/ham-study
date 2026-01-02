@@ -1,5 +1,5 @@
-import { ClientOnly } from "~/components/client-only";
 import CircularPolarizationScene from "~/components/circular-polarization-scene";
+import { ClientOnly } from "~/components/client-only";
 
 export default function CircularPolarizationPage() {
   return (
@@ -24,6 +24,26 @@ export default function CircularPolarizationPage() {
              <li><strong>右旋圆极化 (RHCP):</strong> 电场矢量沿传播方向顺时针旋转（符合右手法则）。</li>
              <li><strong>左旋圆极化 (LHCP):</strong> 电场矢量沿传播方向逆时针旋转。</li>
              <li><strong>应用:</strong> 圆极化广泛用于<b>卫星通信</b>，因为它可以抵抗法拉第旋转（信号穿过电离层时极化面的改变），并且不要求接收天线与发射天线的极化角度精确对齐（不需要像线极化那样严格水平或垂直对齐）。</li>
+          </ul>
+
+          <h3>极化匹配与损耗 (Polarization Match & Loss)</h3>
+          <ul>
+            <li>
+                <strong>RHCP 发射 -&gt; RHCP 接收:</strong> 
+                <span className="text-green-600 font-bold dark:text-green-400"> 最佳匹配</span>。
+            </li>
+            <li>
+                <strong>RHCP 发射 -&gt; LHCP 接收 (交叉极化):</strong> 
+                <span className="text-red-600 font-bold dark:text-red-400"> 极高损耗 (High Loss)</span>。
+                理论上有无限大损耗，实际通常 &gt;20dB。
+                <br />
+                <em>注意：当圆极化信号从表面反射时，其旋转方向通常会翻转 (例如 RHCP 变成 LHCP)。</em>
+            </li>
+            <li>
+                <strong>圆极化发射 -&gt; 线性极化接收 (Vertical/Horizontal):</strong> 
+                <span className="text-yellow-600 font-bold dark:text-yellow-400"> 3dB 损耗</span>。
+                这是打卫星时的常用策略（如果不想制作复杂的追踪圆极化天线），但会损失一半信号。
+            </li>
           </ul>
         </div>
       </div>
