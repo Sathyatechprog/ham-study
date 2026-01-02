@@ -162,7 +162,7 @@ export default function VerticalPolarizationScene() {
     const [showWaves, setShowWaves] = useState(true);
 
     return (
-        <div className="relative w-full h-[600px] border rounded-lg overflow-hidden bg-black">
+        <div className="relative w-full h-[450px] md:h-[600px] border rounded-lg overflow-hidden bg-black touch-none">
             <Canvas camera={{ position: [20, 15, 20], fov: 45 }}>
                 <color attach="background" args={["#111111"]} />
                 <fog attach="fog" args={["#111111", 20, 100]} />
@@ -181,7 +181,7 @@ export default function VerticalPolarizationScene() {
             </Canvas>
 
             {/* Overlay UI */}
-             <div className="absolute top-4 left-4 p-4 bg-black/70 text-white rounded-lg max-w-xs pointer-events-none select-none">
+             <div className="absolute top-4 left-4 right-4 md:right-auto md:w-auto p-3 md:p-4 bg-black/70 text-white rounded-lg max-w-full md:max-w-xs pointer-events-none select-none">
                 <h1 className="text-xl font-bold text-sky-400 mb-2">天线垂直极化演示</h1>
                 <p className="text-sm mb-2">这是一个垂直放置的偶极子天线。</p>
                 <div className="space-y-1 text-sm">
@@ -201,7 +201,7 @@ export default function VerticalPolarizationScene() {
                  <p className="text-xs text-gray-400 mt-2">操作：鼠标左键旋转，滚轮缩放。</p>
             </div>
 
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-6 pointer-events-auto bg-black/70 p-4 rounded-lg backdrop-blur-sm">
+            <div className="absolute bottom-6 left-4 right-4 md:left-1/2 md:right-auto md:-translate-x-1/2 flex justify-center gap-4 md:gap-6 pointer-events-auto bg-black/70 p-3 md:p-4 rounded-lg backdrop-blur-sm">
                 <div className="flex items-center space-x-2">
                     <Switch
                         id="show-pattern"

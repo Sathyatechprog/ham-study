@@ -10,7 +10,7 @@ export default function HorizontalPolarizationPage() {
       </div>
 
       <div className="flex flex-col gap-6">
-        <ClientOnly fallback={<div className="h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">加载 3D 场景中...</div>}>
+        <ClientOnly fallback={<div className="h-[450px] md:h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">加载 3D 场景中...</div>}>
           <HorizontalPolarizationScene />
         </ClientOnly>
         
