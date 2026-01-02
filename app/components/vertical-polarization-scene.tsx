@@ -1,8 +1,9 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { clsx } from "clsx";
 import { useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import { Label } from "~/components/ui/label";
+import { Switch } from "~/components/ui/switch";
 
 function Antenna() {
   return (
@@ -10,7 +11,7 @@ function Antenna() {
       {/* Main Dipole Element (Vertical) */}
       <mesh position={[0, 0, 0]}>
         <cylinderGeometry args={[0.2, 0.2, 4, 32]} />
-        <meshPhongMaterial color={0xff3333} shininess={100} />
+        <meshPhongMaterial color="#ef4444" shininess={100} />
       </mesh>
       {/* Feed point indicator */}
       <mesh position={[0, 0, 0]}>
@@ -49,7 +50,7 @@ function RadiationPattern() {
     <group>
         <mesh geometry={geometry}>
             <meshBasicMaterial 
-                color={0x00ff00} 
+                color="#22c55e" 
                 wireframe={true} 
                 transparent={true} 
                 opacity={0.3} 
@@ -147,7 +148,7 @@ function WaveParticles() {
                 />
             </bufferGeometry>
             <pointsMaterial
-                color={0x00ffff}
+                color="#22d3ee"
                 size={0.2} // Snippet was 0.3, adjusting for R3F scaling potentially
                 transparent
                 opacity={0.8}
@@ -181,46 +182,46 @@ export default function VerticalPolarizationScene() {
 
             {/* Overlay UI */}
              <div className="absolute top-4 left-4 p-4 bg-black/70 text-white rounded-lg max-w-xs pointer-events-none select-none">
-                <h1 className="text-xl font-bold text-[#4db8ff] mb-2">天线垂直极化演示</h1>
+                <h1 className="text-xl font-bold text-sky-400 mb-2">天线垂直极化演示</h1>
                 <p className="text-sm mb-2">这是一个垂直放置的偶极子天线。</p>
                 <div className="space-y-1 text-sm">
                     <div className="flex items-center gap-2">
-                        <span className="w-3 h-3 bg-[#ff3333] inline-block"></span>
+                        <span className="w-3 h-3 bg-red-500 inline-block rounded-full"></span>
                         <span>天线 (Y轴)</span>
                     </div>
                     <div className="flex items-center gap-2">
-                         <span className="w-3 h-3 border-2 border-[#00ff00] inline-block box-border"></span>
+                         <span className="w-3 h-3 border-2 border-green-500 inline-block box-border rounded-full"></span>
                         <span>辐射方向图 (甜甜圈形)</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <span className="w-3 h-3 bg-[#00ffff] inline-block"></span>
-                        <span>电场 E-field (上下振动)</span>
+                        <span className="w-3 h-3 bg-cyan-400 inline-block rounded-full"></span>
+                        <span>电场 (E-field) - 上下振动</span>
                     </div>
                 </div>
                  <p className="text-xs text-gray-400 mt-2">操作：鼠标左键旋转，滚轮缩放。</p>
             </div>
 
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-4 pointer-events-auto">
-                <button
-                    type="button"
-                    onClick={() => setShowPattern(!showPattern)}
-                    className={clsx(
-                        "px-4 py-2 rounded transition-colors text-sm font-medium",
-                        showPattern ? "bg-[#4db8ff] text-black font-bold" : "bg-[#333] text-white hover:bg-[#555]"
-                    )}
-                >
-                    显示方向图
-                </button>
-                <button
-                    type="button"
-                    onClick={() => setShowWaves(!showWaves)}
-                    className={clsx(
-                        "px-4 py-2 rounded transition-colors text-sm font-medium",
-                        showWaves ? "bg-[#4db8ff] text-black font-bold" : "bg-[#333] text-white hover:bg-[#555]"
-                    )}
-                >
-                    显示电波动画
-                </button>
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-6 pointer-events-auto bg-black/70 p-4 rounded-lg backdrop-blur-sm">
+                <div className="flex items-center space-x-2">
+                    <Switch
+                        id="show-pattern"
+                        checked={showPattern}
+                        onCheckedChange={setShowPattern}
+                    />
+                    <Label htmlFor="show-pattern" className="text-white text-sm font-medium cursor-pointer">
+                        显示方向图
+                    </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <Switch
+                        id="show-waves"
+                        checked={showWaves}
+                        onCheckedChange={setShowWaves}
+                    />
+                    <Label htmlFor="show-waves" className="text-white text-sm font-medium cursor-pointer">
+                        显示电波动画
+                    </Label>
+                </div>
             </div>
         </div>
     );

@@ -1,39 +1,29 @@
-import { ArrowLeft } from "@phosphor-icons/react";
-import { Link } from "react-router";
-import { ClientOnly } from "../../components/client-only";
-import { Button } from "../../components/ui/button";
-import VerticalPolarizationScene from "../../components/vertical-polarization-scene";
+import { ClientOnly } from "~/components/client-only";
+import VerticalPolarizationScene from "~/components/vertical-polarization-scene";
 
 export default function VerticalPolarizationPage() {
   return (
-    <div className="container mx-auto py-6">
-      <div className="mb-6 flex items-center gap-4">
-        <Button variant="ghost" size="icon" asChild>
-          <Link to="/">
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
-        </Button>
-        <div>
-           <h1 className="text-2xl font-bold">Vertical Polarization</h1>
-           <p className="text-muted-foreground">Antenna Theory Visualization</p>
-        </div>
+    <div className="flex flex-col gap-6">
+      <div>
+         <h1 className="text-2xl font-bold">垂直极化 (Vertical Polarization)</h1>
+         <p className="text-muted-foreground">天线理论可视化 (Antenna Theory Visualization)</p>
       </div>
 
       <div className="flex flex-col gap-6">
-        <ClientOnly fallback={<div className="h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">Loading 3D Scene...</div>}>
+        <ClientOnly fallback={<div className="h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">加载 3D 场景中...</div>}>
           <VerticalPolarizationScene />
         </ClientOnly>
         
         <div className="prose dark:prose-invert max-w-none">
-          <h3>About this Demo</h3>
+          <h3>关于此演示</h3>
           <p>
-            This visualization demonstrates the electromagnetic wave propagation from a vertically polarized dipole antenna.
-            Observe how the Electric Field (E-field) vector oscillates up and down (vertically) as the wave travels outwards.
+            本可视化演示了来自垂直极化偶极子天线 (Dipole Antenna) 的电磁波传播。
+            观察电场 (E-field) 矢量如何在波向外传播时上下（垂直）振荡。
           </p>
           <ul>
-             <li><strong>Polarization:</strong> Defined by the orientation of the E-field vector.</li>
-             <li><strong>Vertical Dipole:</strong> Produces vertically polarized waves.</li>
-             <li><strong>Propagation:</strong> Omnidirectional in the horizontal plane (azimuth).</li>
+             <li><strong>极化 (Polarization):</strong> 由电场 (E-field) 矢量的方向定义。</li>
+             <li><strong>垂直偶极子 (Vertical Dipole):</strong> 产生垂直极化的波。</li>
+             <li><strong>传播 (Propagation):</strong> 在水平面 (Azimuth) 上是全向的 (Omnidirectional)。</li>
           </ul>
         </div>
       </div>
