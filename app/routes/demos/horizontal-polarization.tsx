@@ -1,5 +1,23 @@
+import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import HorizontalPolarizationScene from "~/components/horizontal-polarization-scene";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "水平极化 (Horizontal Polarization) | 业余无线电可视化" },
+    {
+      name: "description",
+      content:
+        "3D演示水平偶极子天线的电场传播与极化匹配原理。",
+    },
+    { property: "og:title", content: "水平极化 (Horizontal Polarization) | 业余无线电可视化" },
+    {
+      property: "og:description",
+      content:
+        "3D演示水平偶极子天线的电场传播与极化匹配原理。",
+    },
+  ];
+};
 
 export default function HorizontalPolarizationPage() {
   return (

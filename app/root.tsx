@@ -10,6 +10,20 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 
+export const meta: Route.MetaFunction = () => [
+  { charSet: "utf-8" },
+  { name: "viewport", content: "width=device-width, initial-scale=1" },
+  { title: "业余无线电可视化 (Ham Radio Visualization)" },
+  {
+    name: "description",
+    content: "3D可视化演示各类（垂直、水平、圆极化等）天线电磁波传播原理。Interactive 3D visualization of amateur radio antenna polarization and propagation.",
+  },
+  { property: "og:site_name", content: "业余无线电可视化" },
+  { property: "og:type", content: "website" },
+  { property: "og:image", content: "/og-image.png" }, // Placeholder, user can add file later
+];
+
+
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -27,8 +41,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh-CN">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>

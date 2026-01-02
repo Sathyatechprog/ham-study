@@ -1,5 +1,23 @@
+import type { MetaFunction } from "react-router";
 import CircularPolarizationScene from "~/components/circular-polarization-scene";
 import { ClientOnly } from "~/components/client-only";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "圆极化 (Circular Polarization) | 业余无线电可视化" },
+    {
+      name: "description",
+      content:
+        "3D演示电磁波的圆极化传播（RHCP/LHCP），及其在卫星通信中的应用。",
+    },
+    { property: "og:title", content: "圆极化 (Circular Polarization) | 业余无线电可视化" },
+    {
+      property: "og:description",
+      content:
+        "3D演示电磁波的圆极化传播（RHCP/LHCP），及其在卫星通信中的应用。",
+    },
+  ];
+};
 
 export default function CircularPolarizationPage() {
   return (

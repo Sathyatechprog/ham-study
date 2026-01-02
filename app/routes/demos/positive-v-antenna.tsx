@@ -1,5 +1,23 @@
+import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import PositiveVAntennaScene from "~/components/positive-v-scene";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "正V天线 (Positive V / V-Dipole) | 业余无线电可视化" },
+    {
+      name: "description",
+      content:
+        "3D演示正V天线（V-Dipole）的结构特点、旋转偶极子应用及方向性。",
+    },
+    { property: "og:title", content: "正V天线 (Positive V / V-Dipole) | 业余无线电可视化" },
+    {
+      property: "og:description",
+      content:
+        "3D演示正V天线（V-Dipole）的结构特点、旋转偶极子应用及方向性。",
+    },
+  ];
+};
 
 export default function PositiveVAntennaPage() {
   return (

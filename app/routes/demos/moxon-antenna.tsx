@@ -1,5 +1,23 @@
+import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import MoxonAntennaScene from "~/components/moxon-antenna-scene";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "莫克森天线 (Moxon Antenna) | 业余无线电可视化" },
+    {
+      name: "description",
+      content:
+        "3D演示Moxon天线的高前后比特性与矩形结构优势。",
+    },
+    { property: "og:title", content: "莫克森天线 (Moxon Antenna) | 业余无线电可视化" },
+    {
+      property: "og:description",
+      content:
+        "3D演示Moxon天线的高前后比特性与矩形结构优势。",
+    },
+  ];
+};
 
 export default function MoxonAntennaPage() {
   return (

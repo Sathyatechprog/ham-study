@@ -1,5 +1,23 @@
+import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import InvertedVAntennaScene from "~/components/inverted-v-scene";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "倒V天线 (Inverted V Antenna) | 业余无线电可视化" },
+    {
+      name: "description",
+      content:
+        "3D演示倒V天线（Inverted V）的结构、阻抗匹配优势及混合极化特性。",
+    },
+    { property: "og:title", content: "倒V天线 (Inverted V Antenna) | 业余无线电可视化" },
+    {
+      property: "og:description",
+      content:
+        "3D演示倒V天线（Inverted V）的结构、阻抗匹配优势及混合极化特性。",
+    },
+  ];
+};
 
 export default function InvertedVAntennaPage() {
   return (

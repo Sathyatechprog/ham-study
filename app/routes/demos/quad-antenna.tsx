@@ -1,5 +1,23 @@
+import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import QuadAntennaScene from "~/components/quad-antenna-scene";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "方框天线 (Quad Antenna) | 业余无线电可视化" },
+    {
+      name: "description",
+      content:
+        "3D演示方框天线（Cubical Quad）的闭合回路结构、高增益及低噪特性。",
+    },
+    { property: "og:title", content: "方框天线 (Quad Antenna) | 业余无线电可视化" },
+    {
+      property: "og:description",
+      content:
+        "3D演示方框天线（Cubical Quad）的闭合回路结构、高增益及低噪特性。",
+    },
+  ];
+};
 
 export default function QuadAntennaPage() {
   return (

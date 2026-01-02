@@ -1,5 +1,23 @@
+import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import GPAntennaScene from "~/components/gp-antenna-scene";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "GP天线 (Ground Plane Antenna) | 业余无线电可视化" },
+    {
+      name: "description",
+      content:
+        "3D演示垂直GP天线（Ground Plane）的辐射原理、地网作用及垂直极化特性。",
+    },
+    { property: "og:title", content: "GP天线 (Ground Plane Antenna) | 业余无线电可视化" },
+    {
+      property: "og:description",
+      content:
+        "3D演示垂直GP天线（Ground Plane）的辐射原理、地网作用及垂直极化特性。",
+    },
+  ];
+};
 
 export default function GPAntennaPage() {
   return (

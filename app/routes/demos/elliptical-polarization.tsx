@@ -1,5 +1,23 @@
+import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import EllipticalPolarizationScene from "~/components/elliptical-polarization-scene";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "椭圆极化 (Elliptical Polarization) | 业余无线电可视化" },
+    {
+      name: "description",
+      content:
+        "3D演示极化的一般形式——椭圆极化，探索轴比与倾角对通信的影响。",
+    },
+    { property: "og:title", content: "椭圆极化 (Elliptical Polarization) | 业余无线电可视化" },
+    {
+      property: "og:description",
+      content:
+        "3D演示极化的一般形式——椭圆极化，探索轴比与倾角对通信的影响。",
+    },
+  ];
+};
 
 export default function EllipticalPolarizationPage() {
   return (

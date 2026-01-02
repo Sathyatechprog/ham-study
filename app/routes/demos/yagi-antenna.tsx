@@ -1,5 +1,23 @@
+import type { MetaFunction } from "react-router";
 import { ClientOnly } from "~/components/client-only";
 import YagiAntennaScene from "~/components/yagi-antenna-scene";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "八木-宇田天线 (Yagi-Uda Antenna) | 业余无线电可视化" },
+    {
+      name: "description",
+      content:
+        "3D演示八木天线的引向/反射原理、高增益方向性及极化特性。",
+    },
+    { property: "og:title", content: "八木-宇田天线 (Yagi-Uda Antenna) | 业余无线电可视化" },
+    {
+      property: "og:description",
+      content:
+        "3D演示八木天线的引向/反射原理、高增益方向性及极化特性。",
+    },
+  ];
+};
 
 export default function YagiAntennaPage() {
   return (

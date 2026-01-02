@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, type MetaFunction } from "react-router";
 import CircularPolarizationScene from "../components/circular-polarization-scene";
 import { ClientOnly } from "../components/client-only";
 import EllipticalPolarizationScene from "../components/elliptical-polarization-scene";
@@ -19,6 +19,23 @@ import {
 } from "../components/ui/card";
 import VerticalPolarizationScene from "../components/vertical-polarization-scene";
 import YagiAntennaScene from "../components/yagi-antenna-scene";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "首页 | 业余无线电可视化" },
+    {
+      name: "description",
+      content:
+        "业余无线电天线可视化合集：包含垂直/水平/圆极化、八木、倒V、GP、正V、方框、莫克森等经典天线的3D极化与辐射演示。",
+    },
+    { property: "og:title", content: "首页 | 业余无线电可视化" },
+    {
+      property: "og:description",
+      content:
+        "业余无线电天线可视化合集：包含垂直/水平/圆极化、八木、倒V、GP、正V、方框、莫克森等经典天线的3D极化与辐射演示。",
+    },
+  ];
+};
 
 export default function Home() {
   return (
