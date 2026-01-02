@@ -17,6 +17,7 @@ export default function DemosLayout() {
   // Simple mapping for demo names, in a real app this might be dynamic or route handle based
   const demoNameMap: Record<string, string> = {
     "vertical-polarization": "垂直极化 (Vertical Polarization)",
+    "horizontal-polarization": "水平极化 (Horizontal Polarization)",
   };
 
   const currentPath = location.pathname.split("/").pop() || "";

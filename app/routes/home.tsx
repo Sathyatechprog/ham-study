@@ -32,6 +32,25 @@ export default function Home() {
             </Button>
           </CardFooter>
         </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>水平极化 (Horizontal Polarization)</CardTitle>
+            <CardDescription>
+               可视化水平极化天线的电场传播 (Electric Field Propagation)。
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
+              3D 预览
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button asChild className="w-full">
+              <Link to="/demos/horizontal-polarization">查看演示</Link>
+            </Button>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );

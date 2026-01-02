@@ -14,5 +14,9 @@ export default [
       "demos/vertical-polarization",
       "routes/demos/vertical-polarization.tsx"
     ),
+    route(
+      "demos/horizontal-polarization",
+      "routes/demos/horizontal-polarization.tsx"
+    ),
   ]),
 ] satisfies RouteConfig;
