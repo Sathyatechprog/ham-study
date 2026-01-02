@@ -1,4 +1,5 @@
-import { Envelope } from "@phosphor-icons/react";
+import { EnvelopeIcon, HandWavingIcon } from "@phosphor-icons/react";
+import { Button } from "./ui/button";
 
 export function Footer() {
   return (
@@ -7,32 +8,30 @@ export function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           
           {/* Feedback Section */}
-          <div className="text-center md:text-left">
-            <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
-              👋 有想法或建议？
+          {/* Feedback Section & Contact */}
+          <div className="flex flex-col items-center md:items-start gap-1 text-center md:text-left">
+            <h3 className="flex items-center gap-2 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+              <HandWavingIcon size={20} weight="duotone" />
+              <span>有想法或建议？</span>
             </h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              欢迎随时反馈，帮助改进这个项目
-            </p>
+            <div className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+              <span>欢迎随时反馈，帮助改进这个项目</span>
+              <Button asChild size="icon" variant="outline" className="rounded-full">
+                <a
+                href="mailto:ham@charlesify.com"
+                title="发送邮件给 ham@charlesify.com"
+              >
+                  <EnvelopeIcon weight="duotone" />
+                </a>
+              </Button>
+            </div>
           </div>
 
-          {/* Contact & Callsign */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
-            <a
-              href="mailto:ham@charlesify.com"
-              className="group flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-            >
-              <div className="p-2 rounded-full bg-zinc-100 dark:bg-zinc-900 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 transition-colors">
-                <Envelope size={18} weight="duotone" />
-              </div>
-              <span>ham@charlesify.com</span>
-            </a>
-
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800">
-                BG8ROM
-              </span>
-            </div>
+          {/* Callsign */}
+          <div className="flex items-center gap-4">
+            <span className="text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800">
+              BG8ROM
+            </span>
           </div>
         </div>
         
