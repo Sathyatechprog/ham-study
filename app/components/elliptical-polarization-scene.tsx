@@ -123,7 +123,10 @@ export default function EllipticalPolarizationScene({ isThumbnail = false }: { i
                             </div>
                         </div>
                         
-                        <div className="flex flex-col space-y-4 pointer-events-auto">
+    </div>
+
+                    <div className="absolute bottom-4 right-4 p-4 bg-black/70 text-white rounded-lg pointer-events-auto max-w-xs">
+                        <div className="flex flex-col space-y-4">
                             <div className="flex items-center space-x-2">
                                 <Switch 
                                     id="wave-mode" 

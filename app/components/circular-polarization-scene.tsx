@@ -146,7 +146,10 @@ export default function CircularPolarizationScene({ isThumbnail = false }: { isT
                             </div>
                         </div>
                         
-                        <div className="flex flex-col space-y-3 pointer-events-auto">
+    </div>
+
+                    <div className="absolute bottom-4 right-4 p-4 bg-black/70 text-white rounded-lg pointer-events-auto">
+                        <div className="flex flex-col space-y-3">
                             <div className="flex items-center justify-between space-x-4">
                                 <Label htmlFor="polarization-toggle" className="text-xs md:text-sm text-gray-300 whitespace-nowrap">
                                     当前极化: {isRHCP ? "RHCP (右旋)" : "LHCP (左旋)"}

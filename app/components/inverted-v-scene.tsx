@@ -164,7 +164,10 @@ export default function InvertedVAntennaScene({ isThumbnail = false }: { isThumb
                             </div>
                         </div>
                         
-                        <div className="flex flex-col space-y-3 pointer-events-auto">
+    </div>
+                    
+                    <div className="absolute bottom-4 right-4 p-4 bg-black/70 text-white rounded-lg pointer-events-auto">
+                        <div className="flex flex-col space-y-3">
                             <div className="flex items-center space-x-2">
                                 <Switch 
                                     id="wave-mode" 
