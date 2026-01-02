@@ -51,6 +51,44 @@ export default function Home() {
             </Button>
           </CardFooter>
         </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>圆极化 (Circular Polarization)</CardTitle>
+            <CardDescription>
+               可视化电场矢量旋转的圆极化传播 (Circular Polarization)。
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
+              3D 预览
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button asChild className="w-full">
+              <Link to="/demos/circular-polarization">查看演示</Link>
+            </Button>
+          </CardFooter>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>椭圆极化 (Elliptical Polarization)</CardTitle>
+            <CardDescription>
+               极化的一般形式，介于线极化和圆极化之间。
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-slate-100 dark:bg-slate-800 h-32 rounded-md flex items-center justify-center text-muted-foreground text-sm">
+              3D 预览
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button asChild className="w-full">
+              <Link to="/demos/elliptical-polarization">查看演示</Link>
+            </Button>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );

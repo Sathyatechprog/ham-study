@@ -1,0 +1,35 @@
+import { ClientOnly } from "~/components/client-only";
+import EllipticalPolarizationScene from "~/components/elliptical-polarization-scene";
+
+export default function EllipticalPolarizationPage() {
+  return (
+    <div className="flex flex-col gap-6">
+      <div>
+         <h1 className="text-2xl font-bold">椭圆极化 (Elliptical Polarization)</h1>
+         <p className="text-muted-foreground">天线理论可视化 (Antenna Theory Visualization)</p>
+      </div>
+
+      <div className="flex flex-col gap-6">
+        <ClientOnly fallback={<div className="h-[450px] md:h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">加载 3D 场景中...</div>}>
+          <EllipticalPolarizationScene />
+        </ClientOnly>
+        
+        <div className="prose dark:prose-invert max-w-none">
+          <h3>关于此演示</h3>
+          <p>
+            本可视化演示了<b>椭圆极化 (Elliptical Polarization)</b>。这是极化的一般形式。
+            当垂直和水平分量的幅度不同，或者相位差不是 0、90、180度时，就会产生椭圆极化。
+          </p>
+          <p>
+            通过调整下方的滑块，你可以观察不同参数对极化形状的影响：
+          </p>
+          <ul>
+             <li><strong>线极化 (Linear):</strong> 相位差为 0° 或 180°。</li>
+             <li><strong>圆极化 (Circular):</strong> 垂直与水平幅度相等且相位差为 90°。</li>
+             <li><strong>椭圆极化 (Elliptical):</strong> 其他所有情况。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}

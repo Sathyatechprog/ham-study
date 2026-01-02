@@ -18,6 +18,8 @@ export default function DemosLayout() {
   const demoNameMap: Record<string, string> = {
     "vertical-polarization": "垂直极化 (Vertical Polarization)",
     "horizontal-polarization": "水平极化 (Horizontal Polarization)",
+    "circular-polarization": "圆极化 (Circular Polarization)",
+    "elliptical-polarization": "椭圆极化 (Elliptical Polarization)",
   };
 
   const currentPath = location.pathname.split("/").pop() || "";

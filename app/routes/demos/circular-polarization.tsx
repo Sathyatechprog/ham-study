@@ -1,0 +1,32 @@
+import { ClientOnly } from "~/components/client-only";
+import CircularPolarizationScene from "~/components/circular-polarization-scene";
+
+export default function CircularPolarizationPage() {
+  return (
+    <div className="flex flex-col gap-6">
+      <div>
+         <h1 className="text-2xl font-bold">圆极化 (Circular Polarization)</h1>
+         <p className="text-muted-foreground">天线理论可视化 (Antenna Theory Visualization)</p>
+      </div>
+
+      <div className="flex flex-col gap-6">
+        <ClientOnly fallback={<div className="h-[450px] md:h-[600px] w-full flex items-center justify-center bg-slate-100 rounded-lg">加载 3D 场景中...</div>}>
+          <CircularPolarizationScene />
+        </ClientOnly>
+        
+        <div className="prose dark:prose-invert max-w-none">
+          <h3>关于此演示</h3>
+          <p>
+            本可视化演示了<b>圆极化 (Circular Polarization)</b> 的电磁波传播。
+            在这种极化方式中，电场矢量随着波的传播而不断旋转，描绘出一个螺旋形状。
+          </p>
+          <ul>
+             <li><strong>右旋圆极化 (RHCP):</strong> 电场矢量沿传播方向顺时针旋转（符合右手法则）。</li>
+             <li><strong>左旋圆极化 (LHCP):</strong> 电场矢量沿传播方向逆时针旋转。</li>
+             <li><strong>应用:</strong> 圆极化广泛用于<b>卫星通信</b>，因为它可以抵抗法拉第旋转（信号穿过电离层时极化面的改变），并且不要求接收天线与发射天线的极化角度精确对齐（不需要像线极化那样严格水平或垂直对齐）。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
