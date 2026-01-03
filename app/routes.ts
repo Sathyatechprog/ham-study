@@ -10,23 +10,22 @@ export default [
   route("sitemap.xml", "routes/sitemap.xml.tsx"),
   route("robots.txt", "routes/robots.txt.tsx"),
   // Demos
-  // Demos
   layout("routes/demos/layout.tsx", [
     route(
       "demos/vertical-polarization",
-      "routes/demos/vertical-polarization.tsx"
+      "routes/demos/vertical-polarization.tsx",
     ),
     route(
       "demos/horizontal-polarization",
-      "routes/demos/horizontal-polarization.tsx"
+      "routes/demos/horizontal-polarization.tsx",
     ),
     route(
       "demos/circular-polarization",
-      "routes/demos/circular-polarization.tsx"
+      "routes/demos/circular-polarization.tsx",
     ),
     route(
       "demos/elliptical-polarization",
-      "routes/demos/elliptical-polarization.tsx"
+      "routes/demos/elliptical-polarization.tsx",
     ),
     route("demos/yagi-antenna", "routes/demos/yagi-antenna.tsx"),
     route("demos/inverted-v-antenna", "routes/demos/inverted-v-antenna.tsx"),

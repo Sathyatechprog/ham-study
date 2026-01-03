@@ -17,3 +17,5 @@ Sitemap: ${origin}/sitemap.xml
     },
   });
 };
+
+export default null;
