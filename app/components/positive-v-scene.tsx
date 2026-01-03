@@ -6,16 +6,20 @@ import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { RadialWaveLines } from "./radial-wave-lines";
 
+// Height definition moved from inverted-v-scene (originally for Inverted V)
+// Now used here because we are swapping the geometry logic.
+const height = 3;
+
 function PositiveVAntenna() {
-	// Dipole bent upwards. Center at mount height.
-	const angle = Math.PI / 4; // 45 degrees up from horizontal (or 90 included angle)
+	// Consuming Inverted V Geometry (Dipole bent downwards) as requested
+	const angle = Math.PI / 4; // 45 degrees droop
 	const length = 2; // Arm length
 
 	return (
-		<group position={[0, 1, 0]}>
+		<group position={[0, height, 0]}>
 			{/* Mast */}
-			<mesh position={[0, -2, 0]}>
-				<cylinderGeometry args={[0.05, 0.05, 4, 16]} />
+			<mesh position={[0, -height / 2, 0]}>
+				<cylinderGeometry args={[0.05, 0.05, height, 16]} />
 				<meshStandardMaterial color="#666" />
 			</mesh>
 
@@ -25,27 +29,27 @@ function PositiveVAntenna() {
 				<meshStandardMaterial color="white" />
 			</mesh>
 
-			{/* Left Leg (Up and Left) */}
+			{/* Left Leg */}
 			<mesh
 				position={[
 					(-length * Math.cos(angle)) / 2,
-					(length * Math.sin(angle)) / 2,
+					(-length * Math.sin(angle)) / 2,
 					0,
 				]}
-				rotation={[0, 0, -angle]}
+				rotation={[0, 0, angle]}
 			>
 				<cylinderGeometry args={[0.02, 0.02, length, 16]} />
 				<meshStandardMaterial color="#ef4444" />
 			</mesh>
 
-			{/* Right Leg (Up and Right) */}
+			{/* Right Leg */}
 			<mesh
 				position={[
 					(length * Math.cos(angle)) / 2,
-					(length * Math.sin(angle)) / 2,
+					(-length * Math.sin(angle)) / 2,
 					0,
 				]}
-				rotation={[0, 0, angle]}
+				rotation={[0, 0, -angle]}
 			>
 				<cylinderGeometry args={[0.02, 0.02, length, 16]} />
 				<meshStandardMaterial color="#ef4444" />
@@ -55,6 +59,7 @@ function PositiveVAntenna() {
 }
 
 function RadiationPattern() {
+	// Consuming Inverted V Pattern
 	const geometry = useMemo(() => {
 		const geo = new THREE.SphereGeometry(1, 40, 30);
 		const posAttribute = geo.attributes.position;
@@ -65,27 +70,9 @@ function RadiationPattern() {
 			vertex.fromBufferAttribute(posAttribute, i);
 			vertex.normalize();
 
-			// Positive V Pattern
-			// Similar to dipole but nulls are shallower and pattern is
-			// shifted slightly.
-			// For 90 degree V (Vertical plane):
-
-			// Major lobes are still broadside (Perpendicular to plane of V).
-
+			// Inverted V Pattern logic
 			const angleFromX = Math.acos(vertex.x);
-
-			// Basic dipole pattern
-			let gain = Math.sin(angleFromX);
-
-			// Modification for V shape:
-			// Slightly less gain broadside, slightly more off ends compared to straight dipole.
-			// But main feature of "Positive V" vs "Inverted V":
-			// Inverted V is closer to ground at ends -> Capacitance to ground effects.
-			// Positive V ends are high -> Clear of obstructions, safer voltage-wise?
-
-			// Visually very similar pattern to dipole in free space.
-
-			gain = 0.8 * Math.sin(angleFromX) + 0.2;
+			let gain = 0.7 * Math.sin(angleFromX) + 0.3;
 
 			vertex.multiplyScalar(gain * scale);
 			posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
@@ -95,7 +82,7 @@ function RadiationPattern() {
 	}, []);
 
 	return (
-		<group position={[0, 1, 0]}>
+		<group position={[0, height, 0]}>
 			<mesh geometry={geometry}>
 				<meshBasicMaterial
 					color="#22c55e"
@@ -173,15 +160,19 @@ export default function PositiveVAntennaScene({
 					<axesHelper args={[5]} />
 					<gridHelper
 						args={[20, 20, 0x333333, 0x222222]}
-						position={[0, -1, 0]}
+						// Using height/2 for grid helper relative to mast bottom?
+						// Original Inverted V was position={[0, -height/2, 0]}.
+						// Original Positive V was position={[0, -1, 0]}.
+						// Let's stick to the Inverted V logic for grid since we are using its mast.
+						position={[0, -height / 2, 0]}
 					/>
 
 					<PositiveVAntenna />
 					{showPattern && <RadiationPattern />}
 					{showWaves && (
-						<group position={[0, 1, 0]}>
+						<group position={[0, height, 0]}>
 							<RadialWaveLines
-								antennaType="positive-v"
+								antennaType="inverted-v" // Swapped antenna type for waves to match geometry
 								polarizationType="horizontal"
 								isThumbnail={isThumbnail}
 							/>
