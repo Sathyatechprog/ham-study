@@ -1,4 +1,4 @@
-import { CopyIcon } from "@phosphor-icons/react";
+import { CopyIcon, ApproximateEqualsIcon } from "@phosphor-icons/react";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -99,8 +99,10 @@ export function ResultsTable({ design, copyTable }: ResultsTableProps) {
         <span className="font-medium">
           总臂长: {(design.totalBoomLength + 60).toFixed(0)} mm
         </span>
-        <span className="font-medium text-sky-600">
-          预估增益: ~{design.estimatedGain.toFixed(1)} dBi
+        <span className="font-medium text-sky-600 flex items-center gap-1">
+          预估增益
+          <ApproximateEqualsIcon className="w-4 h-4" />
+          {design.estimatedGain.toFixed(1)} dBi
         </span>
       </div>
     </Card>
