@@ -5,7 +5,7 @@ import { SphereGeometry, Vector3 } from "three";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Switch } from "~/components/ui/switch";
-import { RadialWaveLines } from "./radial-wave-lines";
+import { ElectricFieldInstanced } from "./electric-field-instanced";
 
 function GPAntenna() {
   const radials = 4;
@@ -115,6 +115,7 @@ export default function GPAntennaScene({
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
     "medium",
   );
+  const [vizMode, setVizMode] = useState<"surface" | "pattern">("surface");
 
   const speedMultiplier = {
     slow: 0.3,
@@ -188,17 +189,16 @@ export default function GPAntennaScene({
           />
 
           <GPAntenna />
-          {showPattern && <RadiationPattern />}
-          {showWaves && (
-            <group position={[0, 3, 0]}>
-              <RadialWaveLines
-                antennaType="gp"
-                polarizationType="vertical"
-                isThumbnail={isThumbnail}
-                speed={speedMultiplier}
-                forceAnimation={isHovered}
-              />
-            </group>
+          {vizMode === "pattern" && showPattern && <RadiationPattern />}
+
+          {/* Surface/Field Mode */}
+          {vizMode === "surface" && (
+            <ElectricFieldInstanced
+              antennaType="gp"
+              polarizationType="vertical"
+              speed={speedMultiplier}
+              amplitudeScale={1.5}
+            />
           )}
         </Canvas>
 
@@ -210,6 +210,31 @@ export default function GPAntennaScene({
 
             <div className="absolute bottom-4 right-4 p-4 bg-black/70 text-white rounded-lg pointer-events-auto">
               <div className="flex flex-col space-y-3">
+                {/* Visualization Mode */}
+                <div className="mb-2">
+                  <div className="mb-2 text-xs md:text-sm font-medium">
+                    显示模式 (Visualization)
+                  </div>
+                  <RadioGroup
+                    value={vizMode}
+                    onValueChange={(v: "surface" | "pattern") => setVizMode(v)}
+                    className="flex flex-row space-x-1 bg-muted/50 p-1 rounded-lg"
+                  >
+                    <div className="flex items-center space-x-1 px-2 py-1 rounded-md transition-all">
+                      <RadioGroupItem value="surface" id="viz-surface" />
+                      <Label htmlFor="viz-surface" className="cursor-pointer">
+                        Field
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-1 px-2 py-1 rounded-md transition-all">
+                      <RadioGroupItem value="pattern" id="viz-pattern" />
+                      <Label htmlFor="viz-pattern" className="cursor-pointer">
+                        Pattern
+                      </Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="wave-mode"

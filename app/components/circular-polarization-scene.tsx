@@ -11,7 +11,8 @@ import {
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Switch } from "~/components/ui/switch";
-import { RadialWaveLines } from "./radial-wave-lines";
+import { ContinuousWaveSurface } from "./continuous-wave-surface";
+import { ElectricFieldInstanced } from "./electric-field-instanced";
 
 function HelicalAntenna() {
   const points = useMemo(() => {
@@ -106,6 +107,7 @@ export default function CircularPolarizationScene({
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
     "medium",
   );
+  const [vizMode, setVizMode] = useState<"surface" | "pattern">("surface");
 
   const speedMultiplier = {
     slow: 0.3,
@@ -176,13 +178,14 @@ export default function CircularPolarizationScene({
 
           <HelicalAntenna />
           {showPattern && <RadiationPattern />}
-          {showWaves && (
-            <RadialWaveLines
+          {/* Surface/Field Mode */}
+          {vizMode === "surface" && (
+            <ElectricFieldInstanced
               antennaType="circular"
               polarizationType="circular"
-              isThumbnail={isThumbnail}
               speed={speedMultiplier}
-              forceAnimation={isHovered}
+              amplitudeScale={1.5}
+              isRHCP={isRHCP}
             />
           )}
         </Canvas>
@@ -195,6 +198,32 @@ export default function CircularPolarizationScene({
 
             <div className="absolute bottom-4 right-4 p-4 bg-black/70 text-white rounded-lg pointer-events-auto">
               <div className="flex flex-col space-y-3">
+                {/* Visualization Mode */}
+                <div className="mb-2">
+                  <div className="mb-2 text-xs md:text-sm font-medium">
+                    显示模式 (Visualization)
+                  </div>
+                  <RadioGroup
+                    value={vizMode}
+                    onValueChange={(v: "surface" | "pattern") => setVizMode(v)}
+                    className="flex flex-row space-x-1 bg-muted/50 p-1 rounded-lg"
+                  >
+                    <div className="flex items-center space-x-1 px-2 py-1 rounded-md transition-all">
+                      <RadioGroupItem value="surface" id="viz-surface" />
+                      <Label htmlFor="viz-surface" className="cursor-pointer">
+                        场面 (Field)
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-1 px-2 py-1 rounded-md transition-all">
+                      <RadioGroupItem value="pattern" id="viz-pattern" />
+                      <Label htmlFor="viz-pattern" className="cursor-pointer">
+                        方向图 (Pattern)
+                      </Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+
+                {/* Function Toggles */}
                 <div className="flex items-center justify-between space-x-4">
                   <Label
                     htmlFor="polarization-toggle"
@@ -208,17 +237,6 @@ export default function CircularPolarizationScene({
                     onCheckedChange={setIsRHCP}
                     className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
                   />
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="wave-mode"
-                    checked={showWaves}
-                    onCheckedChange={setShowWaves}
-                    className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
-                  />
-                  <Label htmlFor="wave-mode" className="text-xs md:text-sm">
-                    显示电波 (Show Waves)
-                  </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Switch

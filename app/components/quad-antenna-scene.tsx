@@ -11,7 +11,7 @@ import {
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Switch } from "~/components/ui/switch";
-import { RadialWaveLines } from "./radial-wave-lines";
+import { ElectricFieldInstanced } from "./electric-field-instanced";
 
 interface QuadElementProps {
   position: [number, number, number];
@@ -190,6 +190,7 @@ export default function QuadAntennaScene({
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
     "medium",
   );
+  const [vizMode, setVizMode] = useState<"surface" | "pattern">("surface");
 
   const speedMultiplier = {
     slow: 0.3,
@@ -266,13 +267,15 @@ export default function QuadAntennaScene({
           {showPattern && <RadiationPattern _polarization={polarization} />}
           {showWaves && (
             <group position={[1, 2, 0]}>
-              <RadialWaveLines
-                antennaType="quad"
-                polarizationType={polarization}
-                isThumbnail={isThumbnail}
-                speed={speedMultiplier}
-                forceAnimation={isHovered}
-              />
+              {/* Surface/Field Mode */}
+              {vizMode === "surface" && (
+                <ElectricFieldInstanced
+                  antennaType="quad"
+                  polarizationType="horizontal"
+                  speed={speedMultiplier}
+                  amplitudeScale={1.5}
+                />
+              )}
             </group>
           )}
         </Canvas>
@@ -321,6 +324,30 @@ export default function QuadAntennaScene({
                   <Label htmlFor="pattern-mode" className="text-xs md:text-sm">
                     显示方向图 (Show Pattern)
                   </Label>
+                </div>
+
+                <div className="pt-3 border-t border-white/10">
+                  <div className="mb-2 text-xs md:text-sm font-medium">
+                    显示模式 (Visualization)
+                  </div>
+                  <RadioGroup
+                    value={vizMode}
+                    onValueChange={(v: "surface" | "pattern") => setVizMode(v)}
+                    className="flex flex-row space-x-1 bg-muted/50 p-1 rounded-lg"
+                  >
+                    <div className="flex items-center space-x-1 px-2 py-1 rounded-md transition-all">
+                      <RadioGroupItem value="surface" id="viz-surface" />
+                      <Label htmlFor="viz-surface" className="cursor-pointer">
+                        Field
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-1 px-2 py-1 rounded-md transition-all">
+                      <RadioGroupItem value="pattern" id="viz-pattern" />
+                      <Label htmlFor="viz-pattern" className="cursor-pointer">
+                        Pattern
+                      </Label>
+                    </div>
+                  </RadioGroup>
                 </div>
 
                 <div className="pt-3 border-t border-white/10">
