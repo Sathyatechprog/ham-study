@@ -16,8 +16,8 @@ import {
   Vector3,
 } from "three";
 import { Label } from "~/components/ui/label";
-import { Switch } from "~/components/ui/switch";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { Switch } from "~/components/ui/switch";
 import { RadialWaveLines } from "./radial-wave-lines";
 
 const wireLength = 8;
