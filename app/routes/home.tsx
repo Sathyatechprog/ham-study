@@ -1,8 +1,9 @@
 import { CalculatorIcon, GithubLogoIcon } from "@phosphor-icons/react";
 import { lazy, Suspense } from "react";
 import { Link, type MetaFunction } from "react-router";
-import { ClientOnly } from "../components/client-only";
-import { Button } from "../components/ui/button";
+import { ClientOnly } from "~/components/client-only";
+import { YagiSvgRenderer } from "~/components/tools/yagi-calculator/YagiSvgRenderer";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,38 +11,37 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../components/ui/card";
-import { calculateYagi } from "../lib/yagi-calc";
-import { YagiSvgRenderer } from "../components/tools/yagi-calculator/YagiSvgRenderer";
+} from "~/components/ui/card";
+import { calculateYagi } from "~/lib/yagi-calc";
 
 // Lazy load heavy 3D components
 const CircularPolarizationScene = lazy(
-  () => import("../components/circular-polarization-scene"),
+  () => import("~/components/circular-polarization-scene"),
 );
 const EllipticalPolarizationScene = lazy(
-  () => import("../components/elliptical-polarization-scene"),
+  () => import("~/components/elliptical-polarization-scene"),
 );
-const GPAntennaScene = lazy(() => import("../components/gp-antenna-scene"));
+const GPAntennaScene = lazy(() => import("~/components/gp-antenna-scene"));
 const HorizontalPolarizationScene = lazy(
-  () => import("../components/horizontal-polarization-scene"),
+  () => import("~/components/horizontal-polarization-scene"),
 );
 const InvertedVAntennaScene = lazy(
-  () => import("../components/inverted-v-scene"),
+  () => import("~/components/inverted-v-scene"),
 );
 const MoxonAntennaScene = lazy(
-  () => import("../components/moxon-antenna-scene"),
+  () => import("~/components/moxon-antenna-scene"),
 );
 const EndFedAntennaScene = lazy(
-  () => import("../components/end-fed-antenna-scene"),
+  () => import("~/components/end-fed-antenna-scene"),
 );
 const PositiveVAntennaScene = lazy(
-  () => import("../components/positive-v-scene"),
+  () => import("~/components/positive-v-scene"),
 );
-const QuadAntennaScene = lazy(() => import("../components/quad-antenna-scene"));
+const QuadAntennaScene = lazy(() => import("~/components/quad-antenna-scene"));
 const VerticalPolarizationScene = lazy(
-  () => import("../components/vertical-polarization-scene"),
+  () => import("~/components/vertical-polarization-scene"),
 );
-const YagiAntennaScene = lazy(() => import("../components/yagi-antenna-scene"));
+const YagiAntennaScene = lazy(() => import("~/components/yagi-antenna-scene"));
 
 export const meta: MetaFunction = () => {
   return [
