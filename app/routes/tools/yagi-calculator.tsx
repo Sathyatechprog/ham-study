@@ -300,7 +300,9 @@ export default function YagiCalculator() {
           <div className="flex items-center gap-3">
             <CalculatorIcon className="w-8 h-8 text-sky-400" />
             <div>
-              <h1 className="text-xl font-bold tracking-tight">八木设计工具</h1>
+              <h1 className="text-xl font-bold tracking-tight">
+                八木天线计算器
+              </h1>
               <p className="text-xs text-slate-400 uppercase tracking-widest">
                 DL6WU 工程工具
               </p>
