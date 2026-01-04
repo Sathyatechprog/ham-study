@@ -30,7 +30,7 @@ export function ElectricFieldInstanced({
   const count = gridSize * gridSize;
 
   const meshRef = useRef<InstancedMesh>(null);
-  const colorArray = useMemo(() => new Float32Array(count * 3), []);
+  const colorArray = useMemo(() => new Float32Array(count * 3), [count]);
   const dummy = useMemo(() => new Object3D(), []);
 
   // Small Spheres
