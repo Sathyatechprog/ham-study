@@ -1,0 +1,1181 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DL6WU 八木天线专业计算器</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              ham: {
+                50: "#f0f9ff",
+                100: "#e0f2fe",
+                500: "#0ea5e9",
+                600: "#0284c7",
+                700: "#0369a1",
+                800: "#075985",
+                900: "#0c4a6e",
+              },
+              tech: {
+                bg: "#0f172a",
+                panel: "#1e293b",
+                text: "#94a3b8",
+                accent: "#38bdf8",
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .fade-in {
+        animation: fadeIn 0.3s ease-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      .mode-panel {
+        display: none;
+      }
+      .mode-panel.active {
+        display: block;
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      /* Custom Tooltip */
+      .tooltip {
+        visibility: hidden;
+        position: absolute;
+        z-index: 50;
+        bottom: 140%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 220px;
+        background-color: #1e293b;
+        color: #fff;
+        text-align: left;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        line-height: 1.5;
+        opacity: 0;
+        transition:
+          opacity 0.2s,
+          bottom 0.2s;
+        box-shadow:
+          0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        border: 1px solid #475569;
+        pointer-events: none;
+      }
+      .tooltip::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -6px;
+        border-width: 6px;
+        border-style: solid;
+        border-color: #1e293b transparent transparent transparent;
+      }
+      .has-tooltip:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+        bottom: 120%;
+      }
+
+      /* Dashed underline for tooltips */
+      .tooltip-trigger {
+        cursor: help;
+        border-bottom: 1px dotted #94a3b8;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-100 text-slate-800 min-h-screen font-sans">
+    <!-- 顶部导航 -->
+    <nav class="bg-ham-900 text-white shadow-lg sticky top-0 z-50">
+      <div
+        class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between"
+      >
+        <div class="flex items-center space-x-3">
+          <svg
+            class="w-6 h-6 text-ham-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"
+            />
+          </svg>
+          <div>
+            <h1 class="text-lg font-bold tracking-tight">
+              Yagi Calc <span class="text-ham-400">Pro</span>
+            </h1>
+            <p class="text-[10px] text-slate-400 uppercase tracking-widest">
+              DL6WU Engineering Tool
+            </p>
+          </div>
+        </div>
+
+        <div class="flex bg-ham-800 rounded-lg p-1">
+          <button
+            onclick="switchMode('quick')"
+            id="btn-quick"
+            class="px-4 py-1.5 rounded-md text-xs font-bold transition-all bg-white text-ham-900 shadow-sm"
+          >
+            ⚡ 快速模式
+          </button>
+          <button
+            onclick="switchMode('pro')"
+            id="btn-pro"
+            class="px-4 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white"
+          >
+            🛠️ 专业工程模式
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- 左侧：参数输入区 -->
+        <div class="lg:col-span-4 space-y-6">
+          <!-- 通用基础参数 -->
+          <div
+            class="bg-white rounded-xl shadow-sm border border-slate-200 p-5"
+          >
+            <h3
+              class="text-xs font-bold text-slate-400 uppercase mb-4 tracking-wider"
+            >
+              基础规格 (Basic Specs)
+            </h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-bold text-slate-700 mb-1"
+                  >中心频率 (Frequency)</label
+                >
+                <div class="flex relative">
+                  <input
+                    type="number"
+                    id="freq"
+                    value="435.000"
+                    step="0.1"
+                    class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-ham-500 outline-none font-mono font-bold text-lg"
+                  />
+                  <span
+                    class="absolute right-3 top-2.5 text-sm text-slate-400 font-bold"
+                    >MHz</span
+                  >
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between">
+                  <label class="block text-sm font-bold text-slate-700 mb-1"
+                    >单元数量 (Elements)</label
+                  >
+                  <span
+                    id="elCountDisplay"
+                    class="text-sm font-mono text-ham-600 font-bold"
+                    >5</span
+                  >
+                </div>
+                <input
+                  type="range"
+                  id="elementsRange"
+                  min="3"
+                  max="30"
+                  value="5"
+                  class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-ham-600"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= 快速模式面板 ================= -->
+          <div
+            id="panel-quick"
+            class="mode-panel active bg-white rounded-xl shadow-sm border border-slate-200 p-5 border-l-4 border-l-green-500"
+          >
+            <div class="flex items-center mb-4">
+              <span
+                class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded uppercase mr-2"
+                >Quick Mode</span
+              >
+              <h3 class="text-sm font-bold text-slate-700">场景预设</h3>
+            </div>
+
+            <div class="space-y-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-500 mb-1"
+                  >动臂材质类型</label
+                >
+                <select
+                  id="quickPreset"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none bg-slate-50"
+                >
+                  <option value="metal_bonded">
+                    金属管 - 振子穿过并接触 (最常见)
+                  </option>
+                  <option value="metal_insulated">金属管 - 振子绝缘安装</option>
+                  <option value="pvc">PVC/PPR管 - 非金属</option>
+                </select>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                  * 快速模式下默认使用：<br />
+                  - 振子直径: 4mm / 动臂直径: 20mm<br />
+                  - 折合振子 (Folded Dipole)<br />
+                  - 标准 DL6WU 间距
+                </p>
+              </div>
+
+              <button
+                onclick="calculateQuick()"
+                class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition transform hover:-translate-y-0.5"
+              >
+                快速生成设计
+              </button>
+            </div>
+          </div>
+
+          <!-- ================= 专业模式面板 ================= -->
+          <div
+            id="panel-pro"
+            class="mode-panel bg-white rounded-xl shadow-sm border border-slate-200 p-0 border-l-4 border-l-ham-600 overflow-hidden"
+          >
+            <div
+              class="bg-slate-50 px-5 py-3 border-b border-slate-200 flex justify-between items-center"
+            >
+              <h3 class="text-sm font-bold text-ham-800">工程参数设置</h3>
+              <span
+                class="bg-ham-100 text-ham-700 text-[10px] font-bold px-2 py-1 rounded uppercase"
+                >Pro Mode</span
+              >
+            </div>
+
+            <div class="p-5 space-y-6">
+              <!-- 1. 动臂修正 (Boom Correction) -->
+              <div class="space-y-3">
+                <h4
+                  class="text-xs font-bold text-slate-400 uppercase border-b border-slate-100 pb-1"
+                >
+                  1. 动臂修正 (Boom Correction)
+                </h4>
+
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <div class="has-tooltip relative inline-block">
+                      <label
+                        class="text-[10px] font-bold text-slate-500 uppercase tooltip-trigger"
+                        >振子直径 (d)</label
+                      >
+                      <div class="tooltip">
+                        <p class="font-bold text-sky-400 mb-1">
+                          直径效应 (K Factor)
+                        </p>
+                        <p>
+                          振子越粗，等效电气长度越长。物理切割时需缩短以补偿。
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-center mt-1">
+                      <input
+                        type="number"
+                        id="proElDia"
+                        value="4.0"
+                        step="0.1"
+                        class="w-full px-2 py-1 border border-slate-300 rounded text-sm font-mono"
+                        oninput="updateProPhysics()"
+                      />
+                      <span class="ml-1 text-xs text-slate-400">mm</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="has-tooltip relative inline-block">
+                      <label
+                        class="text-[10px] font-bold text-slate-500 uppercase tooltip-trigger"
+                        >动臂直径 (B)</label
+                      >
+                      <div class="tooltip">
+                        <p class="font-bold text-sky-400 mb-1">动臂短路效应</p>
+                        <p>
+                          金属动臂相当于寄生电感，会“缩短”穿过它的振子的电气长度。
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-center mt-1">
+                      <input
+                        type="number"
+                        id="proBoomDia"
+                        value="20.0"
+                        step="0.1"
+                        class="w-full px-2 py-1 border border-slate-300 rounded text-sm font-mono"
+                        oninput="updateProPhysics()"
+                      />
+                      <span class="ml-1 text-xs text-slate-400">mm</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="has-tooltip relative inline-block">
+                    <label
+                      class="text-[10px] font-bold text-slate-500 uppercase tooltip-trigger"
+                      >安装结构</label
+                    >
+                    <div class="tooltip w-64">
+                      <p class="font-bold text-sky-400 mb-1">
+                        修正系数参考 (k)
+                      </p>
+                      <ul class="list-disc pl-3 space-y-1 text-xs">
+                        <li>非金属: k ≈ 0</li>
+                        <li>上方架设: k ≈ 0.05 (影响小)</li>
+                        <li>穿孔接触: k = 动态计算 (0.6~0.8)</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <select
+                    id="proMountType"
+                    class="w-full px-2 py-1.5 border border-slate-300 rounded text-xs bg-white mt-1"
+                    onchange="updateProPhysics()"
+                  >
+                    <option value="bonded">Bonded (穿过金属管且接触)</option>
+                    <option value="insulated">
+                      Insulated (穿过金属管但绝缘)
+                    </option>
+                    <option value="above">Above (架在金属管上方)</option>
+                    <option value="none">None (非金属动臂)</option>
+                  </select>
+                </div>
+
+                <div
+                  class="bg-ham-50 p-2 rounded border border-ham-100 flex justify-between items-center"
+                >
+                  <div>
+                    <div class="has-tooltip relative inline-block">
+                      <label
+                        class="text-[10px] font-bold text-ham-700 block tooltip-trigger"
+                        >计算修正系数 (BC Factor)</label
+                      >
+                      <div class="tooltip">
+                        <p class="font-bold text-sky-400 mb-1">修正系数 k</p>
+                        <p>
+                          DL6WU 曲线依据
+                          <code class="text-xs bg-slate-700 px-1 rounded"
+                            >B/d</code
+                          >
+                          比值动态计算。<br />最终物理增加长度 = B × k
+                        </p>
+                      </div>
+                    </div>
+                    <span id="bdRatioDisplay" class="text-[10px] text-ham-400"
+                      >B/d = 5.00</span
+                    >
+                  </div>
+                  <div class="w-20">
+                    <input
+                      type="number"
+                      id="proBCFactor"
+                      value="0.00"
+                      step="0.01"
+                      class="w-full px-2 py-1 border border-ham-300 rounded text-sm font-mono font-bold text-ham-800 bg-white text-center"
+                    />
+                  </div>
+                </div>
+                <p class="text-[10px] text-slate-400 italic">
+                  * 系统根据 DL6WU 曲线自动计算 k 值，您也可手动修改右侧数值。
+                </p>
+              </div>
+
+              <!-- 2. 主振子 (Driven Element) -->
+              <div class="space-y-3">
+                <h4
+                  class="text-xs font-bold text-slate-400 uppercase border-b border-slate-100 pb-1"
+                >
+                  2. 主振子 (Driven Element)
+                </h4>
+
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <div class="has-tooltip relative inline-block">
+                      <label
+                        class="text-[10px] font-bold text-slate-500 uppercase tooltip-trigger"
+                        >类型</label
+                      >
+                      <div class="tooltip">
+                        <p class="font-bold text-sky-400 mb-1">阻抗特性</p>
+                        <ul class="list-disc pl-3 space-y-1 text-xs">
+                          <li>Folded: ~288Ω (需4:1巴伦)</li>
+                          <li>Straight: ~72Ω (可直接馈电)</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <select
+                      id="proDeType"
+                      class="w-full px-2 py-1.5 border border-slate-300 rounded text-xs bg-white mt-1"
+                    >
+                      <option value="folded">折合振子 (Folded)</option>
+                      <option value="straight">直立振子 (Straight)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <div class="has-tooltip relative inline-block">
+                      <label
+                        class="text-[10px] font-bold text-slate-500 uppercase tooltip-trigger"
+                        >馈电间隙 (Gap)</label
+                      >
+                      <div class="tooltip">
+                        <p class="font-bold text-sky-400 mb-1">物理切割</p>
+                        <p>
+                          直立偶极子的切割长度需减去此间隙。<br />CutLen =
+                          TotalLen - Gap
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-center mt-1">
+                      <input
+                        type="number"
+                        id="proFeedGap"
+                        value="10"
+                        class="w-full px-2 py-1 border border-slate-300 rounded text-sm font-mono"
+                      />
+                      <span class="ml-1 text-xs text-slate-400">mm</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. 间距策略 (Tapering) -->
+              <div class="space-y-3">
+                <h4
+                  class="text-xs font-bold text-slate-400 uppercase border-b border-slate-100 pb-1"
+                >
+                  3. 间距策略 (Spacing)
+                </h4>
+
+                <div>
+                  <div class="has-tooltip relative inline-block">
+                    <label
+                      class="text-[10px] font-bold text-slate-500 uppercase tooltip-trigger"
+                      >算法选择</label
+                    >
+                    <div class="tooltip">
+                      <p class="font-bold text-sky-400 mb-1">DL6WU Tapering</p>
+                      <p>
+                        引向器间距从 0.075λ 逐渐增大到
+                        0.30λ，以在保证带宽的同时最大化前方增益。
+                      </p>
+                    </div>
+                  </div>
+                  <select
+                    id="proSpacingType"
+                    class="w-full px-2 py-1.5 border border-slate-300 rounded text-xs bg-white mt-1"
+                    onchange="toggleProSpacingInput()"
+                  >
+                    <option value="dl6wu">DL6WU 标准渐变 (推荐)</option>
+                    <option value="uniform">Uniform 等间距 (自定义)</option>
+                  </select>
+                </div>
+
+                <div id="proUniformInput" class="hidden">
+                  <label class="text-[10px] font-bold text-slate-500 uppercase"
+                    >固定间距值 (λ)</label
+                  >
+                  <div class="flex items-center">
+                    <input
+                      type="number"
+                      id="proManualSpacing"
+                      value="0.20"
+                      step="0.01"
+                      class="w-full px-2 py-1 border border-slate-300 rounded text-sm font-mono"
+                    />
+                    <span class="ml-1 text-xs text-slate-400">λ</span>
+                  </div>
+                  <p class="text-[10px] text-slate-400 mt-1">
+                    例如: 0.20 或 0.25
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onclick="calculatePro()"
+                class="w-full bg-ham-600 hover:bg-ham-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition transform hover:-translate-y-0.5"
+              >
+                计算工程参数
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧：结果展示区 -->
+        <div class="lg:col-span-8 space-y-6">
+          <!-- 蓝图 -->
+          <div
+            class="bg-slate-900 rounded-xl shadow-lg border border-slate-700 p-1"
+          >
+            <div
+              class="flex justify-between items-center px-4 py-2 bg-slate-800 rounded-t-lg"
+            >
+              <span
+                class="text-xs font-bold text-slate-400 uppercase tracking-widest"
+                >Blueprint Preview</span
+              >
+              <div class="flex items-center space-x-4">
+                <label class="flex items-center space-x-2 cursor-pointer">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase"
+                    >显示尺寸</span
+                  >
+                  <input
+                    type="checkbox"
+                    id="showDims"
+                    checked
+                    onchange="refreshSvg()"
+                    class="accent-ham-500 w-4 h-4"
+                  />
+                </label>
+                <button
+                  onclick="downloadPng()"
+                  class="text-[10px] bg-sky-600 hover:bg-sky-500 text-white px-3 py-1 rounded font-bold transition"
+                >
+                  ⬇ 保存图纸+表格
+                </button>
+              </div>
+            </div>
+            <div
+              class="bg-[#1e293b] min-h-[400px] flex items-center justify-center overflow-auto rounded-b-lg no-scrollbar relative"
+            >
+              <div id="placeholder" class="text-slate-500 text-sm">
+                请点击左侧
+                <span class="text-ham-400 font-bold">计算</span> 按钮生成图纸
+              </div>
+              <svg
+                id="antennaSvg"
+                class="hidden w-full h-full min-w-[800px]"
+              ></svg>
+            </div>
+          </div>
+
+          <!-- 动态提示框 (显示计算修正细节) -->
+          <div
+            id="correctionInfo"
+            class="hidden bg-amber-50 rounded-xl p-4 border border-amber-100 text-sm text-amber-800 fade-in"
+          >
+            <p
+              class="font-bold flex items-center mb-1 text-xs uppercase tracking-wide text-amber-900"
+            >
+              <svg
+                class="w-4 h-4 mr-1.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              物理修正已应用
+            </p>
+            <p class="text-xs opacity-90 leading-relaxed">
+              基于
+              <span id="infoBD" class="font-mono font-bold">B/d=0.0</span>
+              动态计算系数
+              <span id="infoK" class="font-mono font-bold">k=0.00</span
+              >。所有振子物理长度增加
+              <span
+                id="bcVal"
+                class="font-bold underline bg-amber-100 px-1 rounded"
+                >0.00</span
+              >
+              mm。
+            </p>
+          </div>
+
+          <!-- 数据表 -->
+          <div
+            id="resultCard"
+            class="hidden bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden fade-in"
+          >
+            <div
+              class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50"
+            >
+              <h3 class="font-bold text-slate-800 text-sm">
+                切割数据表 (Cut List)
+              </h3>
+              <button
+                onclick="copyTable()"
+                class="text-xs text-ham-600 hover:text-ham-800 font-bold border border-ham-200 px-3 py-1 rounded bg-white"
+              >
+                复制数据
+              </button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm text-left font-mono">
+                <thead
+                  class="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-200"
+                >
+                  <tr>
+                    <th class="px-5 py-3 font-sans">元件</th>
+                    <th class="px-5 py-3 font-sans">位置 (mm)</th>
+                    <th class="px-5 py-3 font-sans">间距 (mm)</th>
+                    <th class="px-5 py-3 font-sans text-slate-400">单边半长</th>
+                    <th class="px-5 py-3 font-sans text-ham-700 font-bold">
+                      切割总长
+                    </th>
+                    <th class="px-5 py-3 font-sans text-slate-400">备注</th>
+                  </tr>
+                </thead>
+                <tbody
+                  id="resultBody"
+                  class="divide-y divide-slate-100"
+                ></tbody>
+              </table>
+            </div>
+            <div
+              class="bg-slate-50 px-6 py-3 text-xs text-slate-500 flex justify-between border-t border-slate-200"
+            >
+              <span id="resBoomLen">总长: -</span>
+              <span id="resGain">增益: -</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      let currentMode = "quick";
+      let lastResult = null;
+      let lastConfig = {};
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const range = document.getElementById("elementsRange");
+        const disp = document.getElementById("elCountDisplay");
+        range.addEventListener(
+          "input",
+          (e) => (disp.innerText = e.target.value)
+        );
+        updateProPhysics();
+      });
+
+      function switchMode(mode) {
+        currentMode = mode;
+        document
+          .querySelectorAll(".mode-panel")
+          .forEach((el) => el.classList.remove("active"));
+        document.getElementById(`panel-${mode}`).classList.add("active");
+
+        const btnQuick = document.getElementById("btn-quick");
+        const btnPro = document.getElementById("btn-pro");
+
+        if (mode === "quick") {
+          btnQuick.className =
+            "px-4 py-1.5 rounded-md text-xs font-bold transition-all bg-white text-ham-900 shadow-sm";
+          btnPro.className =
+            "px-4 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white";
+        } else {
+          btnPro.className =
+            "px-4 py-1.5 rounded-md text-xs font-bold transition-all bg-white text-ham-900 shadow-sm";
+          btnQuick.className =
+            "px-4 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white";
+        }
+      }
+
+      function toggleProSpacingInput() {
+        const type = document.getElementById("proSpacingType").value;
+        const input = document.getElementById("proUniformInput");
+        if (type === "uniform") input.classList.remove("hidden");
+        else input.classList.add("hidden");
+      }
+
+      // 统一变量名：B = Boom Dia, d = Element Dia
+      function updateProPhysics() {
+        const d = parseFloat(document.getElementById("proElDia").value) || 0;
+        const B = parseFloat(document.getElementById("proBoomDia").value) || 0;
+        const mount = document.getElementById("proMountType").value;
+        const bcInput = document.getElementById("proBCFactor");
+
+        // 显示 B/d Ratio
+        let ratio = d > 0 ? B / d : 0;
+        document.getElementById("bdRatioDisplay").innerText =
+          `B/d = ${ratio.toFixed(2)}`;
+
+        let k = 0;
+        if (mount === "none") k = 0;
+        else if (mount === "above") k = 0.05;
+        else if (mount === "insulated") k = 0.3;
+        else if (mount === "bonded") {
+          if (ratio > 1) {
+            k = 0.35 + 0.23 * Math.log(ratio);
+            if (k > 1) k = 1.0;
+          }
+        }
+        bcInput.value = k.toFixed(3);
+      }
+
+      function runCalculation(params) {
+        const {
+          freq,
+          elements,
+          elDia,
+          boomDia,
+          bcFactor,
+          deType,
+          feedGap,
+          spacingType,
+          spacingVal,
+        } = params;
+
+        if (!freq || freq <= 0) {
+          alert("请输入有效的频率");
+          return;
+        }
+
+        const lambda = 299792.458 / freq;
+        const boomCorrection = boomDia * bcFactor;
+
+        // 更新提示信息
+        const infoBox = document.getElementById("correctionInfo");
+        if (boomCorrection > 0.1) {
+          infoBox.classList.remove("hidden");
+          document.getElementById("bcVal").innerText =
+            boomCorrection.toFixed(2);
+          document.getElementById("infoK").innerText = bcFactor.toFixed(3);
+          if (elDia > 0)
+            document.getElementById("infoBD").innerText =
+              `B/d=${(boomDia / elDia).toFixed(2)}`;
+        } else {
+          infoBox.classList.add("hidden");
+        }
+
+        let resultData = [];
+        let currentPos = 0;
+
+        let refLen = 0.495 * lambda + boomCorrection;
+        resultData.push({
+          name: "Reflector",
+          pos: 0,
+          spacing: 0,
+          len: refLen,
+          type: "REF",
+        });
+
+        let spaceRefToDE = 0.2 * lambda;
+        if (spacingType === "uniform") spaceRefToDE = spacingVal * lambda;
+
+        currentPos += spaceRefToDE;
+
+        let baseLen = 0.473 * lambda;
+        let deLen = baseLen + boomCorrection - elDia * 0.5;
+
+        resultData.push({
+          name: "Driven Element",
+          pos: currentPos,
+          spacing: spaceRefToDE,
+          len: deLen,
+          type: "DE",
+          style: deType,
+          gap: feedGap,
+        });
+
+        for (let i = 1; i <= elements - 2; i++) {
+          let spacing = 0;
+
+          if (spacingType === "uniform") {
+            spacing = spacingVal * lambda;
+          } else {
+            if (i === 1) spacing = 0.075 * lambda;
+            else if (i === 2) spacing = 0.18 * lambda;
+            else if (i === 3) spacing = 0.215 * lambda;
+            else if (i === 4) spacing = 0.25 * lambda;
+            else {
+              let factor = 0.28 + (i - 5) * 0.01;
+              if (factor > 0.35) factor = 0.35;
+              spacing = factor * lambda;
+            }
+          }
+          currentPos += spacing;
+
+          let lenFactor = 0.455 - (i - 1) * 0.005;
+          if (lenFactor < 0.405) lenFactor = 0.405;
+          let dirLen = lenFactor * lambda + boomCorrection;
+
+          resultData.push({
+            name: `Director ${i}`,
+            pos: currentPos,
+            spacing: spacing,
+            len: dirLen,
+            type: "DIR",
+          });
+        }
+
+        const gain = elements * 1.2 + 2.15;
+        lastResult = { elements: resultData, totalLen: currentPos, gain };
+        lastConfig = { freq, boomDia, elDia };
+
+        renderTable();
+        renderSvg();
+
+        document.getElementById("resultCard").classList.remove("hidden");
+        document.getElementById("placeholder").classList.add("hidden");
+        document.getElementById("antennaSvg").classList.remove("hidden");
+      }
+
+      function calculateQuick() {
+        const freq = parseFloat(document.getElementById("freq").value);
+        const elements = parseInt(
+          document.getElementById("elementsRange").value
+        );
+        const preset = document.getElementById("quickPreset").value;
+
+        const elDia = 4.0;
+        const boomDia = 20.0;
+        let bcFactor = 0;
+
+        if (preset === "metal_bonded") bcFactor = 0.7;
+        else if (preset === "metal_insulated") bcFactor = 0.3;
+        else bcFactor = 0.0;
+
+        runCalculation({
+          freq,
+          elements,
+          elDia,
+          boomDia,
+          bcFactor,
+          deType: "folded",
+          feedGap: 10,
+          spacingType: "dl6wu",
+          spacingVal: 0,
+        });
+      }
+
+      function calculatePro() {
+        const freq = parseFloat(document.getElementById("freq").value);
+        const elements = parseInt(
+          document.getElementById("elementsRange").value
+        );
+
+        const elDia = parseFloat(document.getElementById("proElDia").value);
+        const boomDia = parseFloat(document.getElementById("proBoomDia").value);
+        const bcFactor = parseFloat(
+          document.getElementById("proBCFactor").value
+        );
+        const deType = document.getElementById("proDeType").value;
+        const feedGap = parseFloat(document.getElementById("proFeedGap").value);
+        const spacingType = document.getElementById("proSpacingType").value;
+        const spacingVal = parseFloat(
+          document.getElementById("proManualSpacing").value
+        );
+
+        runCalculation({
+          freq,
+          elements,
+          elDia,
+          boomDia,
+          bcFactor,
+          deType,
+          feedGap,
+          spacingType,
+          spacingVal,
+        });
+      }
+
+      function renderTable() {
+        const tbody = document.getElementById("resultBody");
+        tbody.innerHTML = "";
+
+        lastResult.elements.forEach((item) => {
+          const isDE = item.type === "DE";
+          const rowClass = isDE ? "bg-sky-50 font-medium" : "";
+          let cutLen = item.len;
+          let note = "-";
+          if (isDE) {
+            if (item.style === "folded") note = "折合环路 (Folded)";
+            else {
+              cutLen = item.len - item.gap;
+              note = `Gap: ${item.gap}mm`;
+            }
+          }
+          const row = `
+                    <tr class="${rowClass} hover:bg-slate-50 transition">
+                        <td class="px-5 py-2 border-l-4 ${isDE ? "border-ham-500" : "border-transparent"}">${item.name}</td>
+                        <td class="px-5 py-2 font-mono text-slate-600">${item.pos.toFixed(1)}</td>
+                        <td class="px-5 py-2 text-slate-400">${item.spacing === 0 ? "-" : item.spacing.toFixed(1)}</td>
+                        <td class="px-5 py-2 font-mono text-slate-500">${(item.len / 2).toFixed(1)}</td>
+                        <td class="px-5 py-2 font-mono font-bold text-ham-700">${cutLen.toFixed(1)}</td>
+                        <td class="px-5 py-2 text-xs text-slate-400 italic">${note}</td>
+                    </tr>
+                `;
+          tbody.innerHTML += row;
+        });
+        document.getElementById("resBoomLen").innerText =
+          `总动臂长: ${(lastResult.totalLen + 60).toFixed(0)} mm`;
+        document.getElementById("resGain").innerText =
+          `增益: ~${lastResult.gain.toFixed(1)} dBi`;
+      }
+
+      function renderSvg() {
+        refreshSvg();
+      }
+
+      function refreshSvg() {
+        if (!lastResult) return;
+        const showDims = document.getElementById("showDims").checked;
+        const data = lastResult.elements;
+        const totalLen = lastResult.totalLen;
+        const boomDia = lastConfig.boomDia;
+
+        const svg = document.getElementById("antennaSvg");
+        const w = 1000;
+        const h = 500;
+        const padX = 60;
+        const padY = 80;
+        const maxLen = data[0].len * 1.2;
+        const scaleX = (w - padX * 2) / totalLen;
+        const scaleY = (h - padY * 2) / maxLen;
+        const midY = h / 2;
+
+        svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+        svg.innerHTML = `
+                <defs>
+                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#334155" stroke-width="0.5" opacity="0.3"/></pattern>
+                    <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#64748b" /></marker>
+                </defs>
+                <rect width="100%" height="100%" fill="#1e293b"/>
+                <rect width="100%" height="100%" fill="url(#grid)"/>
+            `;
+
+        const boomLine = `<line x1="${padX - 20}" y1="${midY}" x2="${padX + totalLen * scaleX + 20}" y2="${midY}" stroke="#475569" stroke-width="${Math.max(6, boomDia * scaleY)}" stroke-linecap="round" />`;
+        svg.innerHTML += boomLine;
+
+        if (showDims) {
+          const dimY = midY + (maxLen / 2) * scaleY + 40;
+          svg.innerHTML += `<line x1="${padX}" y1="${dimY}" x2="${padX + totalLen * scaleX}" y2="${dimY}" stroke="#64748b" stroke-width="1" />`;
+          svg.innerHTML += `<line x1="${padX}" y1="${dimY - 5}" x2="${padX}" y2="${dimY + 5}" stroke="#64748b" stroke-width="2" />`;
+          svg.innerHTML += `<text x="${padX}" y="${dimY + 20}" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="monospace">0.0</text>`;
+        }
+
+        data.forEach((item, idx) => {
+          const cx = padX + item.pos * scaleX;
+          const half = (item.len / 2) * scaleY;
+          const y1 = midY - half;
+          const y2 = midY + half;
+          let elSvg = "";
+
+          if (item.type === "DE") {
+            if (item.style === "folded") {
+              const r = 5;
+              const w = 14;
+              elSvg += `<path d="M${cx - w / 2},${y1 + r} A${w / 2},${w / 2} 0 0 1 ${cx + w / 2},${y1 + r} L${cx + w / 2},${y2 - r} A${w / 2},${w / 2} 0 0 1 ${cx - w / 2},${y2 - r} L${cx - w / 2},${midY + 4} M${cx - w / 2},${midY - 4} L${cx - w / 2},${y1 + r}" stroke="#38bdf8" stroke-width="4" fill="none" />`;
+              elSvg += `<circle cx="${cx - w / 2}" cy="${midY - 4}" r="2" fill="white"/> <circle cx="${cx - w / 2}" cy="${midY + 4}" r="2" fill="white"/>`;
+            } else {
+              const gapPx = item.gap * scaleY;
+              elSvg += `<line x1="${cx}" y1="${y1}" x2="${cx}" y2="${midY - gapPx / 2}" stroke="#38bdf8" stroke-width="4" />`;
+              elSvg += `<line x1="${cx}" y1="${midY + gapPx / 2}" x2="${cx}" y2="${y2}" stroke="#38bdf8" stroke-width="4" />`;
+              elSvg += `<circle cx="${cx}" cy="${midY - gapPx / 2}" r="2" fill="white"/> <circle cx="${cx}" cy="${midY + gapPx / 2}" r="2" fill="white"/>`;
+            }
+          } else {
+            const col = item.type === "REF" ? "#f472b6" : "#cbd5e1";
+            elSvg += `<line x1="${cx}" y1="${y1}" x2="${cx}" y2="${y2}" stroke="${col}" stroke-width="3" />`;
+          }
+
+          elSvg += `<text x="${cx}" y="${y2 + 20}" text-anchor="middle" fill="#64748b" font-size="10" font-weight="bold">${item.name.split(" ")[0].replace("Director", "D")}</text>`;
+
+          if (showDims) {
+            let cutLen = item.len;
+            if (item.type === "DE" && item.style !== "folded")
+              cutLen -= item.gap;
+            const dimX = cx + 15;
+            elSvg += `<line x1="${dimX}" y1="${y1}" x2="${dimX}" y2="${y2}" stroke="#475569" stroke-width="1" marker-start="url(#arrow)" marker-end="url(#arrow)" />`;
+            elSvg += `<text x="${dimX + 12}" y="${midY}" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="monospace" transform="rotate(-90, ${dimX + 12}, ${midY})">${cutLen.toFixed(1)}</text>`;
+            if (idx > 0) {
+              const dimY = midY + (maxLen / 2) * scaleY + 40;
+              elSvg += `<line x1="${cx}" y1="${dimY - 3}" x2="${cx}" y2="${dimY + 3}" stroke="#64748b" stroke-width="1" />`;
+              elSvg += `<text x="${cx}" y="${dimY + 20}" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="monospace">${item.pos.toFixed(1)}</text>`;
+              elSvg += `<line x1="${cx}" y1="${y2 + 25}" x2="${cx}" y2="${dimY - 5}" stroke="#334155" stroke-width="1" stroke-dasharray="2,2" />`;
+            }
+          }
+          svg.innerHTML += elSvg;
+        });
+      }
+
+      function copyTable() {
+        const rows = document.querySelectorAll("#resultBody tr");
+        let txt = "Element\tPos\tSpace\tHalf\tCut\tNote\n";
+        rows.forEach((r) => {
+          const d = Array.from(r.querySelectorAll("td"))
+            .map((c) => c.innerText)
+            .join("\t");
+          txt += d + "\n";
+        });
+        navigator.clipboard.writeText(txt).then(() => alert("已复制"));
+      }
+
+      // --- NEW DOWNLOAD FUNCTION ---
+      function downloadPng() {
+        if (!lastResult) return;
+        const svg = document.getElementById("antennaSvg");
+        const serializer = new XMLSerializer();
+        let source = serializer.serializeToString(svg);
+        if (
+          !source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)
+        ) {
+          source = source.replace(
+            /^<svg/,
+            '<svg xmlns="http://www.w3.org/2000/svg"'
+          );
+        }
+        if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
+          source = source.replace(
+            /^<svg/,
+            '<svg xmlns:xlink="http://www.w3.org/1999/xlink"'
+          );
+        }
+
+        // Dimensions
+        const scale = 2;
+        const w = 1000;
+        const h_svg = 600;
+
+        // Table calculation
+        const startY = h_svg;
+        const rowHeight = 30;
+        const headerHeight = 80;
+        const footerHeight = 50;
+        const tableContentHeight = lastResult.elements.length * rowHeight;
+        const totalH = h_svg + headerHeight + tableContentHeight + footerHeight;
+
+        const canvas = document.createElement("canvas");
+        canvas.width = w * scale;
+        canvas.height = totalH * scale;
+        const ctx = canvas.getContext("2d");
+
+        ctx.scale(scale, scale);
+        ctx.fillStyle = "#1e293b";
+        ctx.fillRect(0, 0, w, totalH);
+
+        const img = new Image();
+        img.src =
+          "data:image/svg+xml;base64," +
+          btoa(unescape(encodeURIComponent(source)));
+        img.onload = () => {
+          // 1. Draw Blueprint
+          ctx.drawImage(img, 0, 0, w, h_svg);
+
+          // 2. Draw Table Header
+          ctx.fillStyle = "#e2e8f0";
+          ctx.font = "bold 20px sans-serif";
+          ctx.fillText("CUT LIST & SPECIFICATIONS", 40, startY + 40);
+
+          ctx.strokeStyle = "#475569";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(40, startY + 55);
+          ctx.lineTo(w - 40, startY + 55);
+          ctx.stroke();
+
+          const headers = [
+            "Element",
+            "Pos (mm)",
+            "Space (mm)",
+            "Half Len (mm)",
+            "Cut Len (mm)",
+            "Notes",
+          ];
+          const colX = [40, 200, 350, 500, 650, 800];
+
+          ctx.fillStyle = "#94a3b8";
+          ctx.font = "bold 12px monospace";
+          let y = startY + 75;
+          headers.forEach((h, i) => ctx.fillText(h.toUpperCase(), colX[i], y));
+
+          // 3. Draw Table Rows (The Missing Part!)
+          ctx.font = "12px monospace";
+          y += 10;
+
+          lastResult.elements.forEach((item) => {
+            y += rowHeight;
+            const isDE = item.type === "DE";
+            ctx.fillStyle = isDE ? "#38bdf8" : "#cbd5e1";
+
+            let cutLen = item.len;
+            let note = "-";
+            if (isDE) {
+              if (item.style === "folded") {
+                note = "Folded Loop";
+              } else if (item.gap > 0) {
+                cutLen = item.len - item.gap;
+                note = `Gap: ${item.gap}mm`;
+              }
+            }
+
+            const rowData = [
+              item.name,
+              item.pos.toFixed(1),
+              item.spacing === 0 ? "-" : item.spacing.toFixed(1),
+              (item.len / 2).toFixed(1),
+              cutLen.toFixed(1),
+              note,
+            ];
+
+            rowData.forEach((text, i) => {
+              if (i === 4) ctx.font = "bold 12px monospace";
+              else ctx.font = "12px monospace";
+              ctx.fillText(text, colX[i], y);
+            });
+
+            // Subtle line
+            ctx.strokeStyle = "#334155";
+            ctx.beginPath();
+            ctx.moveTo(40, y + 5);
+            ctx.lineTo(w - 40, y + 5);
+            ctx.stroke();
+          });
+
+          // 4. Footer
+          y += 40;
+          ctx.fillStyle = "#64748b";
+          ctx.font = "italic 10px sans-serif";
+          ctx.fillText(
+            "Generated by DL6WU Yagi Calculator Ultimate | " +
+              new Date().toISOString().split("T")[0],
+            40,
+            y
+          );
+
+          const a = document.createElement("a");
+          a.download = `yagi_design_${lastConfig.freq}MHz.png`;
+          a.href = canvas.toDataURL("image/png");
+          a.click();
+        };
+      }
+
+      function toggleDimensions() {
+        if (lastResult)
+          renderSvg(lastResult.elements, lastResult.totalLen, lastConfig);
+      }
+    </script>
+  </body>
+</html>

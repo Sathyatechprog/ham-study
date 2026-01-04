@@ -3,6 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { useMemo, useState } from "react";
 import { SphereGeometry, Vector3 } from "three";
 import { Label } from "~/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Slider } from "~/components/ui/slider";
 import { Switch } from "~/components/ui/switch";
 import { RadialWaveLines } from "./radial-wave-lines";
@@ -73,14 +74,25 @@ function RadiationPattern({ ampY, ampZ }: { ampY: number; ampZ: number }) {
 
 export default function EllipticalPolarizationScene({
   isThumbnail = false,
+  isHovered = false,
 }: {
   isThumbnail?: boolean;
+  isHovered?: boolean;
 }) {
   const [ampY, setAmpY] = useState(1.5);
   const [ampZ, setAmpZ] = useState(0.8);
   const [phaseShift, setPhaseShift] = useState(90);
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
+  const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
+    "medium",
+  );
+
+  const speedMultiplier = {
+    slow: 0.3,
+    medium: 0.6,
+    fast: 1.0,
+  }[speedMode];
 
   const LegendContent = () => (
     <>
@@ -121,7 +133,7 @@ export default function EllipticalPolarizationScene({
       >
         <Canvas
           camera={{ position: [10, 5, 10], fov: 45 }}
-          frameloop={isThumbnail ? "demand" : "always"}
+          frameloop={isThumbnail && !isHovered ? "demand" : "always"}
         >
           <color attach="background" args={["#111111"]} />
           <fog attach="fog" args={["#111111", 10, 50]} />
@@ -150,6 +162,8 @@ export default function EllipticalPolarizationScene({
               antennaType="elliptical"
               polarizationType="elliptical"
               isThumbnail={isThumbnail}
+              speed={speedMultiplier}
+              forceAnimation={isHovered}
             />
           )}
         </Canvas>
@@ -174,9 +188,21 @@ export default function EllipticalPolarizationScene({
                 </div>
                 <div className="flex items-center space-x-2">
                   <Switch
+                    id="wave-mode"
+                    checked={showWaves}
+                    onCheckedChange={setShowWaves}
+                    className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+                  />
+                  <Label htmlFor="wave-mode" className="text-xs md:text-sm">
+                    显示电波 (Show Waves)
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Switch
                     id="pattern-mode"
                     checked={showPattern}
                     onCheckedChange={setShowPattern}
+                    className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
                   />
                   <Label htmlFor="pattern-mode" className="text-xs md:text-sm">
                     显示方向图 (Show Pattern)
@@ -223,6 +249,60 @@ export default function EllipticalPolarizationScene({
                     step={1}
                     onValueChange={(vals: number[]) => setPhaseShift(vals[0])}
                   />
+                </div>
+
+                <div className="pt-3 border-t border-white/10">
+                  <div className="mb-2 text-xs md:text-sm font-medium">
+                    电波速度 (Speed)
+                  </div>
+                  <RadioGroup
+                    defaultValue="medium"
+                    value={speedMode}
+                    onValueChange={(v) =>
+                      setSpeedMode(v as "slow" | "medium" | "fast")
+                    }
+                    className="flex gap-4"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        value="slow"
+                        id="r-slow"
+                        className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
+                      />
+                      <Label
+                        htmlFor="r-slow"
+                        className="text-xs cursor-pointer"
+                      >
+                        慢
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        value="medium"
+                        id="r-medium"
+                        className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
+                      />
+                      <Label
+                        htmlFor="r-medium"
+                        className="text-xs cursor-pointer"
+                      >
+                        中
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        value="fast"
+                        id="r-fast"
+                        className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
+                      />
+                      <Label
+                        htmlFor="r-fast"
+                        className="text-xs cursor-pointer"
+                      >
+                        快
+                      </Label>
+                    </div>
+                  </RadioGroup>
                 </div>
               </div>
             </div>

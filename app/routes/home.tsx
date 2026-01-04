@@ -1,8 +1,9 @@
-import { GithubLogoIcon } from "@phosphor-icons/react";
-import { lazy, Suspense } from "react";
+import { CalculatorIcon, GithubLogoIcon } from "@phosphor-icons/react";
+import { lazy, Suspense, useState } from "react";
 import { Link, type MetaFunction } from "react-router";
-import { ClientOnly } from "../components/client-only";
-import { Button } from "../components/ui/button";
+import { ClientOnly } from "~/components/client-only";
+import { YagiSvgRenderer } from "~/components/tools/yagi-calculator/YagiSvgRenderer";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,36 +11,37 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../components/ui/card";
+} from "~/components/ui/card";
+import { calculateYagi } from "~/lib/yagi-calc";
 
 // Lazy load heavy 3D components
 const CircularPolarizationScene = lazy(
-  () => import("../components/circular-polarization-scene"),
+  () => import("~/components/circular-polarization-scene"),
 );
 const EllipticalPolarizationScene = lazy(
-  () => import("../components/elliptical-polarization-scene"),
+  () => import("~/components/elliptical-polarization-scene"),
 );
-const GPAntennaScene = lazy(() => import("../components/gp-antenna-scene"));
+const GPAntennaScene = lazy(() => import("~/components/gp-antenna-scene"));
 const HorizontalPolarizationScene = lazy(
-  () => import("../components/horizontal-polarization-scene"),
+  () => import("~/components/horizontal-polarization-scene"),
 );
 const InvertedVAntennaScene = lazy(
-  () => import("../components/inverted-v-scene"),
+  () => import("~/components/inverted-v-scene"),
 );
 const MoxonAntennaScene = lazy(
-  () => import("../components/moxon-antenna-scene"),
+  () => import("~/components/moxon-antenna-scene"),
 );
 const EndFedAntennaScene = lazy(
-  () => import("../components/end-fed-antenna-scene"),
+  () => import("~/components/end-fed-antenna-scene"),
 );
 const PositiveVAntennaScene = lazy(
-  () => import("../components/positive-v-scene"),
+  () => import("~/components/positive-v-scene"),
 );
-const QuadAntennaScene = lazy(() => import("../components/quad-antenna-scene"));
+const QuadAntennaScene = lazy(() => import("~/components/quad-antenna-scene"));
 const VerticalPolarizationScene = lazy(
-  () => import("../components/vertical-polarization-scene"),
+  () => import("~/components/vertical-polarization-scene"),
 );
-const YagiAntennaScene = lazy(() => import("../components/yagi-antenna-scene"));
+const YagiAntennaScene = lazy(() => import("~/components/yagi-antenna-scene"));
 
 export const meta: MetaFunction = () => {
   return [
@@ -68,6 +70,99 @@ export const meta: MetaFunction = () => {
     },
   ];
 };
+
+interface Demo {
+  title: string;
+  description: string;
+  href: string;
+  component: React.ComponentType<{
+    isThumbnail?: boolean;
+    isHovered?: boolean;
+  }>;
+}
+
+interface Tool {
+  title: string;
+  description: string;
+  href: string;
+  preview: React.ReactNode;
+}
+
+function ToolCard({ tool }: { tool: Tool }) {
+  return (
+    <Card className="border ring-offset-4 ring-border/50 ring-offset-gray-50 hover:ring-offset-gray-100 transition duration-300 hover:shadow-lg group">
+      <CardHeader className="flex-1">
+        <CardTitle className="group-hover:text-primary transition-colors">
+          {tool.title}
+        </CardTitle>
+        <CardDescription>{tool.description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Link to={tool.href} className="flex-1 flex flex-col gap-y-6">
+          <div className="bg-slate-950 h-[200px] rounded-md overflow-hidden flex items-center justify-center relative">
+            {tool.preview}
+          </div>
+        </Link>
+      </CardContent>
+      <CardFooter>
+        <Button asChild className="w-full">
+          <Link to={tool.href}>打开工具</Link>
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+}
+
+function DemoCard({ demo }: { demo: Demo }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <Card
+      className="border ring-offset-4 ring-border/50 ring-offset-gray-50 hover:ring-offset-gray-100 transition duration-300 hover:shadow-lg group"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <CardHeader className="flex-1">
+        <CardTitle className="group-hover:text-primary transition-colors">
+          {demo.title}
+        </CardTitle>
+        <CardDescription>{demo.description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Link to={demo.href} className="flex-1 flex flex-col gap-y-6">
+          <div className="bg-slate-100 grid dark:bg-slate-800 h-[200px] rounded-md overflow-hidden text-muted-foreground text-sm relative">
+            <ClientOnly
+              fallback={
+                <div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />
+              }
+            >
+              <Suspense
+                fallback={
+                  <div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />
+                }
+              >
+                <demo.component isThumbnail={true} isHovered={isHovered} />
+              </Suspense>
+            </ClientOnly>
+            {/* Overlay hint */}
+            <div
+              className={`absolute inset-0 bg-black/5 flex items-center justify-center transition-opacity duration-300 ${
+                isHovered ? "opacity-0" : "opacity-0"
+              }`}
+            >
+              {/* Optional: Add icon or text if needed, but the animation itself is the feedback */}
+            </div>
+          </div>
+        </Link>
+      </CardContent>
+      <CardFooter>
+        <Button asChild className="w-full">
+          <Link to={demo.href}>查看演示</Link>
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+}
 
 export default function Home() {
   const demos = [
@@ -141,6 +236,35 @@ export default function Home() {
     },
   ];
 
+  const tools: Tool[] = [
+    {
+      title: "八木天线计算器 (Yagi Calculator)",
+      description:
+        "基于 DL6WU 长动臂设计模型 & VK5DJ 修正算法的八木天线设计工具。",
+      href: "/tools/yagi-calculator",
+      preview: (
+        <YagiSvgRenderer
+          design={calculateYagi({
+            frequency: 435.0,
+            elementCount: 5,
+            elementDiameter: 4.0,
+            boomDiameter: 20.0,
+            boomShape: "round",
+            mountMethod: "bonded",
+            feedGap: 10,
+            drivenElementType: "folded",
+            spacingType: "dl6wu",
+            manualSpacing: 0,
+            manualBCFactor: 0.7,
+          })}
+          width={600}
+          height={350}
+          minimal={true}
+        />
+      ),
+    },
+  ];
+
   return (
     <div className="container mx-auto py-10 px-4 md:px-6">
       <h1 className="text-3xl font-bold mb-4">业余无线电可视化</h1>
@@ -165,38 +289,20 @@ export default function Home() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {demos.map((demo) => (
-          <Card
-            key={demo.href}
-            className="border flex flex-col ring-offset-4 ring-border/50 ring-offset-gray-50 hover:ring-offset-gray-100 transition duration-300 hover:shadow-lg"
-          >
-            <CardHeader className="flex-1">
-              <CardTitle>{demo.title}</CardTitle>
-              <CardDescription>{demo.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="bg-slate-100 grid dark:bg-slate-800 h-[200px] rounded-md overflow-hidden text-muted-foreground text-sm">
-                <ClientOnly
-                  fallback={
-                    <div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />
-                  }
-                >
-                  <Suspense
-                    fallback={
-                      <div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />
-                    }
-                  >
-                    <demo.component isThumbnail={true} />
-                  </Suspense>
-                </ClientOnly>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button asChild className="w-full">
-                <Link to={demo.href}>查看演示</Link>
-              </Button>
-            </CardFooter>
-          </Card>
+          <DemoCard key={demo.href} demo={demo} />
         ))}
+      </div>
+
+      <div className="mt-16">
+        <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+          <CalculatorIcon className="w-8 h-8 text-primary" />
+          实用工具 (Tools)
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {tools.map((tool) => (
+            <ToolCard key={tool.href} tool={tool} />
+          ))}
+        </div>
       </div>
 
       {/* JSON-LD Structured Data for CollectionPage */}

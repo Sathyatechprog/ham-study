@@ -25,12 +25,20 @@ interface RadialWaveLinesProps {
     | "end-fed";
   polarizationType: "vertical" | "horizontal" | "circular" | "elliptical";
   isThumbnail?: boolean;
+  speed?: number;
+  phaseOffset?: number;
+  amplitudeScale?: number;
+  forceAnimation?: boolean;
 }
 
 export function RadialWaveLines({
   antennaType,
   polarizationType,
   isThumbnail = false,
+  speed = 1.0,
+  phaseOffset = 0,
+  amplitudeScale = 1.0,
+  forceAnimation = false,
 }: RadialWaveLinesProps) {
   const lineCount = 20; // Increased line count for better density
   const segments = 250; // Increased segments for smoother high-freq waves
@@ -66,10 +74,11 @@ export function RadialWaveLines({
   }, []);
 
   const groupRef = useRef<Group>(null);
+  const timeRef = useRef(0);
 
   // Initialize static snapshot for thumbnails
   useState(() => {
-    if (isThumbnail) {
+    if (isThumbnail && !forceAnimation) {
       const t = 8.0; // Static time for thumbnail
       lines.forEach((line) => {
         updateLinePositions(line, t);
@@ -77,11 +86,13 @@ export function RadialWaveLines({
     }
   });
 
-  useFrame(({ clock }) => {
-    if (isThumbnail) return;
+  useFrame((_, delta) => {
+    if (isThumbnail && !forceAnimation) return;
 
-    // Match example.html time increment logic
-    const time = clock.getElapsedTime() * 3.0;
+    // Match example.html time increment logic but use delta for speed control
+    timeRef.current += delta * 3.0 * speed;
+    const time = timeRef.current;
+
     lines.forEach((line) => {
       updateLinePositions(line, time);
     });
@@ -108,7 +119,7 @@ export function RadialWaveLines({
       // Physics parameters from example.html
       const k = 2.0;
       const w = 6.0;
-      const phase = k * r - time * w;
+      const phase = k * r - time * w + phaseOffset;
 
       // Removed start envelope for "instant out" effect
       // End envelope for natural fade out
@@ -116,7 +127,7 @@ export function RadialWaveLines({
 
       const decay = 4.0 / (r + 1.0);
 
-      const amp = decay * gain * endEnvelope;
+      const amp = decay * gain * endEnvelope * amplitudeScale;
       const waveVal = Math.sin(phase);
 
       let x = baseX;
@@ -157,6 +168,7 @@ export function RadialWaveLines({
       let intensity = Math.abs(waveVal) ** 3.0;
       intensity *= Math.min(1.0, r * 0.5); // Prevent start artifact
       intensity *= endEnvelope;
+      intensity *= amplitudeScale;
 
       // Cyan color (0, 1, 1)
       colors[j * 3] = 0.0 * intensity; // R
@@ -196,9 +208,13 @@ export function RadialWaveLines({
         if (gain < 0.2) gain = 0;
         break;
 
-      case "circular":
       case "elliptical":
         gain = 1.0;
+        break;
+
+      case "circular":
+        // Helical antenna (Axial mode) - directional along X
+        gain = dirVec.x > 0 ? dirVec.x ** 2 : 0;
         break;
 
       case "end-fed":

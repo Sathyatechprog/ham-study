@@ -10,7 +10,7 @@ export default [
   route("sitemap.xml", "routes/sitemap.xml.ts"),
   route("robots.txt", "routes/robots.txt.ts"),
   // Demos
-  layout("routes/demos/layout.tsx", [
+  layout("routes/layout.tsx", [
     route(
       "demos/vertical-polarization",
       "routes/demos/vertical-polarization.tsx",
@@ -34,5 +34,6 @@ export default [
     route("demos/quad-antenna", "routes/demos/quad-antenna.tsx"),
     route("demos/moxon-antenna", "routes/demos/moxon-antenna.tsx"),
     route("demos/end-fed-antenna", "routes/demos/end-fed-antenna.tsx"),
+    route("tools/yagi-calculator", "routes/tools/yagi-calculator.tsx"),
   ]),
 ] satisfies RouteConfig;
