@@ -29,7 +29,7 @@ export function MathOmega(props: SVGProps<SVGSVGElement>) {
 export function MathInfinity(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
-      viewBox="0 0 24 16"
+      viewBox="0 0 16 16"
       className={cn(commonClassName, props.className)}
       {...props}
     >
@@ -72,7 +72,7 @@ export function MathETheta(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="0 0 24 20"
-      className={cn(commonClassName, props.className)}
+      className={cn(commonClassName, "h-[1.5em]", props.className)}
       {...props}
     >
       <title>Eθ</title>
