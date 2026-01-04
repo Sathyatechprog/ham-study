@@ -28,6 +28,7 @@ interface RadialWaveLinesProps {
   speed?: number;
   phaseOffset?: number;
   amplitudeScale?: number;
+  forceAnimation?: boolean;
 }
 
 export function RadialWaveLines({
@@ -37,6 +38,7 @@ export function RadialWaveLines({
   speed = 1.0,
   phaseOffset = 0,
   amplitudeScale = 1.0,
+  forceAnimation = false,
 }: RadialWaveLinesProps) {
   const lineCount = 20; // Increased line count for better density
   const segments = 250; // Increased segments for smoother high-freq waves
@@ -76,7 +78,7 @@ export function RadialWaveLines({
 
   // Initialize static snapshot for thumbnails
   useState(() => {
-    if (isThumbnail) {
+    if (isThumbnail && !forceAnimation) {
       const t = 8.0; // Static time for thumbnail
       lines.forEach((line) => {
         updateLinePositions(line, t);
@@ -85,7 +87,7 @@ export function RadialWaveLines({
   });
 
   useFrame((_, delta) => {
-    if (isThumbnail) return;
+    if (isThumbnail && !forceAnimation) return;
 
     // Match example.html time increment logic but use delta for speed control
     timeRef.current += delta * 3.0 * speed;

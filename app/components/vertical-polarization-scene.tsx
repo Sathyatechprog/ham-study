@@ -63,8 +63,10 @@ function RadiationPattern() {
 
 export default function VerticalPolarizationScene({
   isThumbnail = false,
+  isHovered = false,
 }: {
   isThumbnail?: boolean;
+  isHovered?: boolean;
 }) {
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
@@ -117,7 +119,7 @@ export default function VerticalPolarizationScene({
       >
         <Canvas
           camera={{ position: [10, 5, 10], fov: 45 }}
-          frameloop={isThumbnail ? "demand" : "always"}
+          frameloop={isThumbnail && !isHovered ? "demand" : "always"}
         >
           <color attach="background" args={["#111111"]} />
           <fog attach="fog" args={["#111111", 10, 50]} />
@@ -147,6 +149,7 @@ export default function VerticalPolarizationScene({
               polarizationType="vertical"
               isThumbnail={isThumbnail}
               speed={speedMultiplier}
+              forceAnimation={isHovered}
             />
           )}
         </Canvas>

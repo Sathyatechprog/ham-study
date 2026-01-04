@@ -65,8 +65,10 @@ function RadiationPattern() {
 
 export default function HorizontalPolarizationScene({
   isThumbnail = false,
+  isHovered = false,
 }: {
   isThumbnail?: boolean;
+  isHovered?: boolean;
 }) {
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
@@ -119,7 +121,7 @@ export default function HorizontalPolarizationScene({
       >
         <Canvas
           camera={{ position: [10, 5, 10], fov: 45 }}
-          frameloop={isThumbnail ? "demand" : "always"}
+          frameloop={isThumbnail && !isHovered ? "demand" : "always"}
         >
           <color attach="background" args={["#111111"]} />
           <fog attach="fog" args={["#111111", 10, 50]} />
@@ -149,6 +151,7 @@ export default function HorizontalPolarizationScene({
               polarizationType="horizontal"
               isThumbnail={isThumbnail}
               speed={speedMultiplier}
+              forceAnimation={isHovered}
             />
           )}
         </Canvas>

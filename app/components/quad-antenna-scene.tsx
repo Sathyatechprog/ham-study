@@ -177,8 +177,10 @@ function RadiationPattern({
 
 export default function QuadAntennaScene({
   isThumbnail = false,
+  isHovered = false,
 }: {
   isThumbnail?: boolean;
+  isHovered?: boolean;
 }) {
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
@@ -233,7 +235,7 @@ export default function QuadAntennaScene({
       >
         <Canvas
           camera={{ position: [8, 5, 8], fov: 50 }}
-          frameloop={isThumbnail ? "demand" : "always"}
+          frameloop={isThumbnail && !isHovered ? "demand" : "always"}
         >
           <color attach="background" args={["#111111"]} />
           <fog attach="fog" args={["#111111", 10, 50]} />
@@ -261,7 +263,7 @@ export default function QuadAntennaScene({
           />
 
           <QuadAntenna polarization={polarization} />
-          {showPattern && <RadiationPattern polarization={polarization} />}
+          {showPattern && <RadiationPattern _polarization={polarization} />}
           {showWaves && (
             <group position={[1, 2, 0]}>
               <RadialWaveLines
@@ -269,6 +271,7 @@ export default function QuadAntennaScene({
                 polarizationType={polarization}
                 isThumbnail={isThumbnail}
                 speed={speedMultiplier}
+                forceAnimation={isHovered}
               />
             </group>
           )}

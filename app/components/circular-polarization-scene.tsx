@@ -95,8 +95,10 @@ function RadiationPattern() {
 
 export default function CircularPolarizationScene({
   isThumbnail = false,
+  isHovered = false,
 }: {
   isThumbnail?: boolean;
+  isHovered?: boolean;
 }) {
   const [isRHCP, setIsRHCP] = useState(true);
   const [showWaves, setShowWaves] = useState(true);
@@ -150,7 +152,7 @@ export default function CircularPolarizationScene({
       >
         <Canvas
           camera={{ position: [5, 5, 10], fov: 50 }}
-          frameloop={isThumbnail ? "demand" : "always"}
+          frameloop={isThumbnail && !isHovered ? "demand" : "always"}
         >
           <color attach="background" args={["#111111"]} />
           <fog attach="fog" args={["#111111", 10, 50]} />
@@ -180,6 +182,7 @@ export default function CircularPolarizationScene({
               polarizationType="circular"
               isThumbnail={isThumbnail}
               speed={speedMultiplier}
+              forceAnimation={isHovered}
             />
           )}
         </Canvas>

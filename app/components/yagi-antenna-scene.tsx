@@ -98,8 +98,10 @@ function RadiationPattern() {
 
 export default function YagiAntennaScene({
   isThumbnail = false,
+  isHovered = false,
 }: {
   isThumbnail?: boolean;
+  isHovered?: boolean;
 }) {
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
@@ -150,7 +152,7 @@ export default function YagiAntennaScene({
       >
         <Canvas
           camera={{ position: [5, 10, 15], fov: 45 }}
-          frameloop={isThumbnail ? "demand" : "always"}
+          frameloop={isThumbnail && !isHovered ? "demand" : "always"}
         >
           <color attach="background" args={["#111111"]} />
           <fog attach="fog" args={["#111111", 10, 50]} />
@@ -183,6 +185,7 @@ export default function YagiAntennaScene({
                 isThumbnail={isThumbnail}
                 amplitudeScale={1.0}
                 speed={speedMultiplier}
+                forceAnimation={isHovered}
               />
 
               {/* Reflector Radiation (Lagging phase) */}
@@ -194,6 +197,7 @@ export default function YagiAntennaScene({
                   amplitudeScale={0.3}
                   phaseOffset={-4.0}
                   speed={speedMultiplier}
+                  forceAnimation={isHovered}
                 />
               </group>
 
@@ -206,6 +210,7 @@ export default function YagiAntennaScene({
                   amplitudeScale={0.3}
                   phaseOffset={-2.0}
                   speed={speedMultiplier}
+                  forceAnimation={isHovered}
                 />
               </group>
             </>

@@ -265,8 +265,10 @@ function RadiationPattern() {
 
 export default function EndFedAntennaScene({
   isThumbnail = false,
+  isHovered = false,
 }: {
   isThumbnail?: boolean;
+  isHovered?: boolean;
 }) {
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
@@ -317,7 +319,7 @@ export default function EndFedAntennaScene({
       >
         <Canvas
           camera={{ position: [5, 4, 8], fov: 50 }}
-          frameloop={isThumbnail ? "demand" : "always"}
+          frameloop={isThumbnail && !isHovered ? "demand" : "always"}
         >
           <color attach="background" args={["#111111"]} />
           <fog attach="fog" args={["#111111", 10, 50]} />
@@ -355,6 +357,7 @@ export default function EndFedAntennaScene({
                 polarizationType="horizontal" // Mostly horizontal if sloper is slight
                 isThumbnail={isThumbnail}
                 speed={speedMultiplier}
+                forceAnimation={isHovered}
               />
             </group>
           )}

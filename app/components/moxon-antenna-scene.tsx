@@ -156,8 +156,10 @@ function RadiationPattern() {
 
 export default function MoxonAntennaScene({
   isThumbnail = false,
+  isHovered = false,
 }: {
   isThumbnail?: boolean;
+  isHovered?: boolean;
 }) {
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
@@ -207,7 +209,7 @@ export default function MoxonAntennaScene({
       >
         <Canvas
           camera={{ position: [5, 6, 5], fov: 50 }}
-          frameloop={isThumbnail ? "demand" : "always"}
+          frameloop={isThumbnail && !isHovered ? "demand" : "always"}
         >
           <color attach="background" args={["#111111"]} />
           <fog attach="fog" args={["#111111", 10, 50]} />
@@ -243,6 +245,7 @@ export default function MoxonAntennaScene({
                 polarizationType="horizontal"
                 isThumbnail={isThumbnail}
                 speed={speedMultiplier}
+                forceAnimation={isHovered}
               />
             </group>
           )}
