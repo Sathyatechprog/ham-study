@@ -25,12 +25,14 @@ interface RadialWaveLinesProps {
     | "end-fed";
   polarizationType: "vertical" | "horizontal" | "circular" | "elliptical";
   isThumbnail?: boolean;
+  speed?: number;
 }
 
 export function RadialWaveLines({
   antennaType,
   polarizationType,
   isThumbnail = false,
+  speed = 1.0,
 }: RadialWaveLinesProps) {
   const lineCount = 20; // Increased line count for better density
   const segments = 250; // Increased segments for smoother high-freq waves
@@ -66,6 +68,7 @@ export function RadialWaveLines({
   }, []);
 
   const groupRef = useRef<Group>(null);
+  const timeRef = useRef(0);
 
   // Initialize static snapshot for thumbnails
   useState(() => {
@@ -77,11 +80,13 @@ export function RadialWaveLines({
     }
   });
 
-  useFrame(({ clock }) => {
+  useFrame((_, delta) => {
     if (isThumbnail) return;
 
-    // Match example.html time increment logic
-    const time = clock.getElapsedTime() * 3.0;
+    // Match example.html time increment logic but use delta for speed control
+    timeRef.current += delta * 3.0 * speed;
+    const time = timeRef.current;
+
     lines.forEach((line) => {
       updateLinePositions(line, time);
     });
