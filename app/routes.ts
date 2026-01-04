@@ -34,5 +34,6 @@ export default [
     route("demos/quad-antenna", "routes/demos/quad-antenna.tsx"),
     route("demos/moxon-antenna", "routes/demos/moxon-antenna.tsx"),
     route("demos/end-fed-antenna", "routes/demos/end-fed-antenna.tsx"),
+    route("tools/yagi-calculator", "routes/tools/yagi-calculator.tsx"),
   ]),
 ] satisfies RouteConfig;
