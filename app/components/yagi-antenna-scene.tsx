@@ -116,6 +116,8 @@ export default function YagiAntennaScene({
     fast: 1.0,
   }[speedMode];
 
+  const effectiveSpeed = isThumbnail && !isHovered ? 0 : speedMultiplier;
+
   const LegendContent = () => (
     <>
       <h2 className="text-lg md:text-xl font-bold mb-2">八木天线 (Yagi-Uda)</h2>
@@ -182,7 +184,7 @@ export default function YagiAntennaScene({
             <ElectricFieldInstanced
               antennaType="yagi"
               polarizationType="horizontal"
-              speed={speedMultiplier}
+              speed={effectiveSpeed}
               amplitudeScale={1.5}
             />
           )}

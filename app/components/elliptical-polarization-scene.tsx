@@ -97,6 +97,8 @@ export default function EllipticalPolarizationScene({
     fast: 1.0,
   }[speedMode];
 
+  const effectiveSpeed = isThumbnail && !isHovered ? 0 : speedMultiplier;
+
   const LegendContent = () => (
     <>
       <h2 className="text-lg md:text-xl font-bold mb-2">
@@ -164,7 +166,7 @@ export default function EllipticalPolarizationScene({
             <ElectricFieldInstanced
               antennaType="helical" // Reusing helical type for now as elliptical is similar in implementation
               polarizationType="elliptical"
-              speed={speedMultiplier}
+              speed={effectiveSpeed}
               amplitudeScale={1.5}
               isRHCP={isRHCP}
               axialRatio={axialRatio}

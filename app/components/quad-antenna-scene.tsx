@@ -198,6 +198,8 @@ export default function QuadAntennaScene({
     fast: 1.0,
   }[speedMode];
 
+  const effectiveSpeed = isThumbnail && !isHovered ? 0 : speedMultiplier;
+
   const LegendContent = () => (
     <>
       <h2 className="text-lg md:text-xl font-bold mb-2">
@@ -271,7 +273,7 @@ export default function QuadAntennaScene({
               <ElectricFieldInstanced
                 antennaType="quad"
                 polarizationType="horizontal"
-                speed={speedMultiplier}
+                speed={effectiveSpeed}
                 amplitudeScale={1.5}
               />
             </group>

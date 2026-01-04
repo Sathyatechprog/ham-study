@@ -174,6 +174,8 @@ export default function MoxonAntennaScene({
     fast: 1.0,
   }[speedMode];
 
+  const effectiveSpeed = isThumbnail && !isHovered ? 0 : speedMultiplier;
+
   const LegendContent = () => (
     <>
       <h2 className="text-lg md:text-xl font-bold mb-2">莫克森天线 (Moxon)</h2>
@@ -244,7 +246,7 @@ export default function MoxonAntennaScene({
             <ElectricFieldInstanced
               antennaType="moxon"
               polarizationType="horizontal"
-              speed={speedMultiplier}
+              speed={effectiveSpeed}
               amplitudeScale={1.5}
             />
           )}

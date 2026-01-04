@@ -283,6 +283,8 @@ export default function EndFedAntennaScene({
     fast: 1.0,
   }[speedMode];
 
+  const effectiveSpeed = isThumbnail && !isHovered ? 0 : speedMultiplier;
+
   const LegendContent = () => (
     <>
       <h2 className="text-lg md:text-xl font-bold mb-2">端馈半波 (EFHW)</h2>
@@ -351,14 +353,14 @@ export default function EndFedAntennaScene({
             position={[0, -2, 0]}
           />
 
-          <EndFedAntenna speed={speedMultiplier} />
+          <EndFedAntenna speed={effectiveSpeed} />
           {showPattern && <RadiationPattern />}
           {showWaves && (
             <group position={[-2, 1, 0]} rotation={[0, 0, 0.2]}>
               <ElectricFieldInstanced
                 antennaType="end-fed"
                 polarizationType="horizontal"
-                speed={speedMultiplier}
+                speed={effectiveSpeed}
                 amplitudeScale={1.5}
               />
             </group>
