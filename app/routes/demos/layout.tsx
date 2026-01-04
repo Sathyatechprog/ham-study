@@ -28,9 +28,13 @@ export default function DemosLayout() {
     "moxon-antenna": "莫克森天线 (Moxon Antenna)",
     "quad-array-antenna": "四阵列天线 (Quad Array Antenna)",
   };
+  const toolNameMap: Record<string, string> = {
+    "yagi-calculator": "八木天线计算器 (Yagi Calculator)",
+  };
 
   const currentPath = location.pathname.split("/").pop() || "";
-  const currentName = demoNameMap[currentPath] || "演示";
+  const currentName =
+    demoNameMap[currentPath] || toolNameMap[currentPath] || "演示";
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6 space-y-6">

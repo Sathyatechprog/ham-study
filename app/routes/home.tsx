@@ -1,4 +1,4 @@
-import { GithubLogoIcon } from "@phosphor-icons/react";
+import { CalculatorIcon, GithubLogoIcon } from "@phosphor-icons/react";
 import { lazy, Suspense } from "react";
 import { Link, type MetaFunction } from "react-router";
 import { ClientOnly } from "../components/client-only";
@@ -11,6 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
+import { calculateYagi } from "../lib/yagi-calc";
+import { YagiSvgRenderer } from "../components/tools/yagi-calculator/YagiSvgRenderer";
 
 // Lazy load heavy 3D components
 const CircularPolarizationScene = lazy(
@@ -197,6 +199,50 @@ export default function Home() {
             </CardFooter>
           </Card>
         ))}
+      </div>
+
+      <div className="mt-16">
+        <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+          <CalculatorIcon className="w-8 h-8 text-primary" />
+          实用工具 (Tools)
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card className="border flex flex-col ring-offset-4 ring-border/50 ring-offset-gray-50 hover:ring-offset-gray-100 transition duration-300 hover:shadow-lg">
+            <CardHeader className="flex-1">
+              <CardTitle>八木天线计算器 (Yagi Calculator)</CardTitle>
+              <CardDescription>
+                基于 DL6WU 长动臂设计模型 & VK5DJ 修正算法的八木天线设计工具。
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="bg-slate-950 h-[200px] rounded-md overflow-hidden flex items-center justify-center relative">
+                <YagiSvgRenderer
+                  design={calculateYagi({
+                    frequency: 435.0,
+                    elementCount: 5,
+                    elementDiameter: 4.0,
+                    boomDiameter: 20.0,
+                    boomShape: "round",
+                    mountMethod: "bonded",
+                    feedGap: 10,
+                    drivenElementType: "folded",
+                    spacingType: "dl6wu",
+                    manualSpacing: 0,
+                    manualBCFactor: 0.7,
+                  })}
+                  width={600}
+                  height={350}
+                  minimal={true}
+                />
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button asChild className="w-full">
+                <Link to="/tools/yagi-calculator">打开工具</Link>
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
       </div>
 
       {/* JSON-LD Structured Data for CollectionPage */}
