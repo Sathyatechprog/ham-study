@@ -18,8 +18,7 @@ import {
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Switch } from "~/components/ui/switch";
-import { ContinuousWaveSurface } from "./continuous-wave-surface";
-import { RadialWaveLines } from "./radial-wave-lines";
+import { ElectricFieldInstanced } from "./electric-field-instanced";
 
 const wireLength = 8;
 const wireHeight = 2;
@@ -276,7 +275,7 @@ export default function EndFedAntennaScene({
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
     "medium",
   );
-  const [vizMode, setVizMode] = useState<"waves" | "surface">("waves");
+  // Removed vizMode as we only have 'surface' + 'pattern' toggle now
 
   const speedMultiplier = {
     slow: 0.3,
@@ -309,6 +308,10 @@ export default function EndFedAntennaScene({
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 border-2 border-green-500 rounded-sm" />
           <span>辐射方向图 (Pattern)</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 bg-cyan-400 rounded-sm shadow-[0_0_5px_rgba(0,255,255,0.5)]" />
+          <span>电波 (Waves)</span>
         </div>
       </div>
     </>
@@ -350,24 +353,9 @@ export default function EndFedAntennaScene({
 
           <EndFedAntenna speed={speedMultiplier} />
           {showPattern && <RadiationPattern />}
-          {vizMode === "waves" && showWaves && (
+          {showWaves && (
             <group position={[-2, 1, 0]} rotation={[0, 0, 0.2]}>
-              {" "}
-              {/* Centered on wire approx */}
-              <RadialWaveLines
-                antennaType="end-fed"
-                polarizationType="horizontal" // Mostly horizontal if sloper is slight
-                isThumbnail={isThumbnail}
-                speed={speedMultiplier}
-                forceAnimation={isHovered}
-              />
-            </group>
-          )}
-
-          {/* Surface Mode */}
-          {vizMode === "surface" && (
-            <group position={[-2, 1, 0]} rotation={[0, 0, 0.2]}>
-              <ContinuousWaveSurface
+              <ElectricFieldInstanced
                 antennaType="end-fed"
                 polarizationType="horizontal"
                 speed={speedMultiplier}
@@ -385,121 +373,92 @@ export default function EndFedAntennaScene({
 
             <div className="absolute bottom-4 right-4 p-4 bg-black/70 text-white rounded-lg pointer-events-auto">
               <div className="flex flex-col space-y-3">
-                {/* Visualization Mode */}
-                <div className="mb-2">
+                <div className="pt-3 border-t border-white/10">
                   <div className="mb-2 text-xs md:text-sm font-medium">
                     显示模式 (Visualization)
                   </div>
+                  <div className="flex flex-col space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="wave-mode"
+                        checked={showWaves}
+                        onCheckedChange={setShowWaves}
+                        className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+                      />
+                      <Label htmlFor="wave-mode" className="text-xs md:text-sm">
+                        显示电波 (Show Waves)
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="pattern-mode"
+                        checked={showPattern}
+                        onCheckedChange={setShowPattern}
+                        className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+                      />
+                      <Label
+                        htmlFor="pattern-mode"
+                        className="text-xs md:text-sm"
+                      >
+                        显示方向图 (Show Pattern)
+                      </Label>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-white/10">
+                  <div className="mb-2 text-xs md:text-sm font-medium">
+                    电波速度 (Speed)
+                  </div>
                   <RadioGroup
-                    defaultValue="waves"
-                    value={vizMode}
-                    onValueChange={(v) => setVizMode(v as "waves" | "surface")}
+                    defaultValue="medium"
+                    value={speedMode}
+                    onValueChange={(v) =>
+                      setSpeedMode(v as "slow" | "medium" | "fast")
+                    }
                     className="flex gap-4"
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem
-                        value="waves"
-                        id="v-waves"
-                        className="border-zinc-400 text-primary-foreground"
+                        value="slow"
+                        id="r-slow"
+                        className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
                       />
                       <Label
-                        htmlFor="v-waves"
+                        htmlFor="r-slow"
                         className="text-xs cursor-pointer"
                       >
-                        电波 (Waves)
+                        慢
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem
-                        value="surface"
-                        id="v-surface"
-                        className="border-zinc-400 text-primary-foreground"
+                        value="medium"
+                        id="r-medium"
+                        className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
                       />
                       <Label
-                        htmlFor="v-surface"
+                        htmlFor="r-medium"
                         className="text-xs cursor-pointer"
                       >
-                        场面 (Surface)
+                        中
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        value="fast"
+                        id="r-fast"
+                        className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
+                      />
+                      <Label
+                        htmlFor="r-fast"
+                        className="text-xs cursor-pointer"
+                      >
+                        快
                       </Label>
                     </div>
                   </RadioGroup>
                 </div>
-
-                <div className="flex flex-col space-y-2 mt-2">
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      id="wave-mode"
-                      checked={showWaves}
-                      onCheckedChange={setShowWaves}
-                      className="data-[state=checked]:bg-input data-[state=unchecked]:bg-zinc-700 border-zinc-500"
-                    />
-                    <Label htmlFor="wave-mode" className="text-xs md:text-sm">
-                      显示电波 (Show Waves)
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      id="pattern-mode"
-                      checked={showPattern}
-                      onCheckedChange={setShowPattern}
-                      className="data-[state=checked]:bg-input data-[state=unchecked]:bg-zinc-700 border-zinc-500"
-                    />
-                    <Label
-                      htmlFor="pattern-mode"
-                      className="text-xs md:text-sm"
-                    >
-                      显示方向图 (Show Pattern)
-                    </Label>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-3 border-t border-white/10">
-                <div className="mb-2 text-xs md:text-sm font-medium">
-                  电波速度 (Speed)
-                </div>
-                <RadioGroup
-                  defaultValue="medium"
-                  value={speedMode}
-                  onValueChange={(v) =>
-                    setSpeedMode(v as "slow" | "medium" | "fast")
-                  }
-                  className="flex gap-4"
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem
-                      value="slow"
-                      id="r-slow"
-                      className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input!"
-                    />
-                    <Label htmlFor="r-slow" className="text-xs cursor-pointer">
-                      慢
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem
-                      value="medium"
-                      id="r-medium"
-                      className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input!"
-                    />
-                    <Label
-                      htmlFor="r-medium"
-                      className="text-xs cursor-pointer"
-                    >
-                      中
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem
-                      value="fast"
-                      id="r-fast"
-                      className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
-                    />
-                    <Label htmlFor="r-fast" className="text-xs cursor-pointer">
-                      快
-                    </Label>
-                  </div>
-                </RadioGroup>
               </div>
             </div>
 
