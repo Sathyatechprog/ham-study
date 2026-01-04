@@ -2,7 +2,6 @@ import type { SVGProps } from "react";
 import { cn } from "~/lib/utils";
 
 const commonClassName = "inline-block h-[1.25em] w-auto fill-current";
-const commonStyle = { verticalAlign: "-0.3em" };
 
 export function MathOmega(props: SVGProps<SVGSVGElement>) {
   return (

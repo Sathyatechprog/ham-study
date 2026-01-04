@@ -3,8 +3,8 @@ import { Canvas } from "@react-three/fiber";
 import { useMemo, useState } from "react";
 import { SphereGeometry, Vector3 } from "three";
 import { Label } from "~/components/ui/label";
-import { Slider } from "~/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { Slider } from "~/components/ui/slider";
 import { Switch } from "~/components/ui/switch";
 import { RadialWaveLines } from "./radial-wave-lines";
 
@@ -82,7 +82,9 @@ export default function EllipticalPolarizationScene({
   const [phaseShift, setPhaseShift] = useState(90);
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
-  const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">("medium");
+  const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
+    "medium",
+  );
 
   const speedMultiplier = {
     slow: 0.3,

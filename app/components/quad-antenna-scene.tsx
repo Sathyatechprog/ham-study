@@ -9,8 +9,8 @@ import {
   Vector3,
 } from "three";
 import { Label } from "~/components/ui/label";
-import { Switch } from "~/components/ui/switch";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { Switch } from "~/components/ui/switch";
 import { RadialWaveLines } from "./radial-wave-lines";
 
 interface QuadElementProps {
@@ -57,7 +57,7 @@ function QuadElement({
   }, [lineGeo, color]);
 
   return (
-    <group position={position} rotation={rotation as any}>
+    <group position={position} rotation={rotation}>
       {/* X shape spreaders support */}
       <mesh rotation={[0, 0, Math.PI / 4]}>
         <cylinderGeometry args={[0.02, 0.02, size * Math.sqrt(2), 8]} />
@@ -126,9 +126,9 @@ function QuadAntenna({
 }
 
 function RadiationPattern({
-  polarization,
+  _polarization,
 }: {
-  polarization: "horizontal" | "vertical";
+  _polarization: "horizontal" | "vertical";
 }) {
   const geometry = useMemo(() => {
     const geo = new SphereGeometry(1, 60, 40);
@@ -185,7 +185,9 @@ export default function QuadAntennaScene({
   const [polarization, setPolarization] = useState<"horizontal" | "vertical">(
     "horizontal",
   );
-  const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">("medium");
+  const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
+    "medium",
+  );
 
   const speedMultiplier = {
     slow: 0.3,

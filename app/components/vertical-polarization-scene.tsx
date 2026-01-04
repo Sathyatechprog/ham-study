@@ -3,8 +3,8 @@ import { Canvas } from "@react-three/fiber";
 import { useMemo, useState } from "react";
 import { SphereGeometry, Vector3 } from "three";
 import { Label } from "~/components/ui/label";
-import { Switch } from "~/components/ui/switch";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { Switch } from "~/components/ui/switch";
 import { RadialWaveLines } from "./radial-wave-lines";
 
 function Antenna() {
@@ -68,7 +68,9 @@ export default function VerticalPolarizationScene({
 }) {
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
-  const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">("medium");
+  const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
+    "medium",
+  );
 
   const speedMultiplier = {
     slow: 0.3,
