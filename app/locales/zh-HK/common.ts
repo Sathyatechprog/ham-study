@@ -83,6 +83,7 @@ export default {
       githubTitle: "View on GitHub",
     },
     copyright: "© {{year}} BG8ROM. All rights reserved.",
+    credits: "特別感謝",
   },
 
   meta: {

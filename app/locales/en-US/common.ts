@@ -92,6 +92,7 @@ export default {
       githubTitle: "View on GitHub",
     },
     copyright: "© {{year}} BG8ROM. All rights reserved.",
+    credits: "Special Thanks",
   },
 
   meta: {
