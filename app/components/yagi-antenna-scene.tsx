@@ -1,11 +1,12 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useMemo, useState } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import { SphereGeometry, Vector3 } from "three";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Switch } from "~/components/ui/switch";
-import { RadialWaveLines } from "./radial-wave-lines";
+import { ElectricFieldInstanced } from "./electric-field-instanced";
 
 function YagiAntenna() {
   return (
@@ -103,6 +104,7 @@ export default function YagiAntennaScene({
   isThumbnail?: boolean;
   isHovered?: boolean;
 }) {
+  const { t } = useTranslation("scene");
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
@@ -115,34 +117,139 @@ export default function YagiAntennaScene({
     fast: 1.0,
   }[speedMode];
 
+  const effectiveSpeed = isThumbnail && !isHovered ? 0 : speedMultiplier;
+
   const LegendContent = () => (
     <>
-      <h2 className="text-lg md:text-xl font-bold mb-2">八木天线 (Yagi-Uda)</h2>
+      <h2 className="text-lg md:text-xl font-bold mb-2">
+        {t("yagiAntenna.title")}
+      </h2>
       <p className="text-xs md:text-sm text-muted-foreground mb-2">
-        具有高增益和强方向性。常用于远距离通信、卫星追踪。
-        <br />
-        High gain and directional. Used for DXing and satellite tracking.
+        <Trans
+          ns="scene"
+          i18nKey="yagiAntenna.desc"
+          components={{ br: <br /> }}
+        />
       </p>
 
       <div className="mt-3 mb-2 space-y-1.5 text-xs border-t border-gray-600 pt-2">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-red-500 rounded-sm" />
-          <span>振子 (有源元件 / Driven)</span>
+          <span>{t("yagiAntenna.driven")}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-blue-500 rounded-sm" />
-          <span>反射器/引向器 (无源 / Passive)</span>
+          <span>{t("yagiAntenna.passive")}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 border-2 border-green-500 rounded-sm" />
-          <span>辐射方向图 (Pattern)</span>
+          <span>{t("yagiAntenna.pattern")}</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-cyan-400 rounded-sm shadow-[0_0_5px_rgba(0,255,255,0.5)]" />
-          <span>电场 (E-field)</span>
+          {/* Gradient Legend for E-field Strength */}
+          <div
+            className="w-16 h-3 rounded-sm"
+            style={{
+              background:
+                "linear-gradient(to right, #ef4444, #eab308, #22c55e, #3b82f6)",
+            }}
+          />
+          <span>{t("yagiAntenna.strength")}</span>
         </div>
       </div>
     </>
+  );
+
+  const ControlsContent = () => (
+    <div className="flex flex-col space-y-3">
+      <div className="pt-3 border-t border-white/10 md:border-none md:pt-0">
+        <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
+          {t("common.controls.visualization")}
+        </div>
+        <div className="flex flex-col space-y-2">
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="wave-mode"
+              checked={showWaves}
+              onCheckedChange={setShowWaves}
+              className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+            />
+            <Label
+              htmlFor="wave-mode"
+              className="text-xs md:text-sm text-zinc-300"
+            >
+              {t("common.controls.showWaves")}
+            </Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="pattern-mode"
+              checked={showPattern}
+              onCheckedChange={setShowPattern}
+              className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+            />
+            <Label
+              htmlFor="pattern-mode"
+              className="text-xs md:text-sm text-zinc-300"
+            >
+              {t("common.controls.showPattern")}
+            </Label>
+          </div>
+        </div>
+      </div>
+
+      <div className="pt-3 border-t border-white/10">
+        <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
+          {t("common.controls.speed")}
+        </div>
+        <RadioGroup
+          defaultValue="medium"
+          value={speedMode}
+          onValueChange={(v) => setSpeedMode(v as "slow" | "medium" | "fast")}
+          className="flex gap-4"
+        >
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem
+              value="slow"
+              id="r-slow"
+              className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
+            />
+            <Label
+              htmlFor="r-slow"
+              className="text-xs cursor-pointer text-zinc-300"
+            >
+              {t("common.controls.slow")}
+            </Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem
+              value="medium"
+              id="r-medium"
+              className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
+            />
+            <Label
+              htmlFor="r-medium"
+              className="text-xs cursor-pointer text-zinc-300"
+            >
+              {t("common.controls.medium")}
+            </Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem
+              value="fast"
+              id="r-fast"
+              className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
+            />
+            <Label
+              htmlFor="r-fast"
+              className="text-xs cursor-pointer text-zinc-300"
+            >
+              {t("common.controls.fast")}
+            </Label>
+          </div>
+        </RadioGroup>
+      </div>
+    </div>
   );
 
   return (
@@ -176,44 +283,14 @@ export default function YagiAntennaScene({
 
           <YagiAntenna />
           {showPattern && <RadiationPattern />}
+          {/* Surface/Field Mode */}
           {showWaves && (
-            <>
-              {/* Driven Element (Main Beam) */}
-              <RadialWaveLines
-                antennaType="yagi"
-                polarizationType="horizontal"
-                isThumbnail={isThumbnail}
-                amplitudeScale={1.0}
-                speed={speedMultiplier}
-                forceAnimation={isHovered}
-              />
-
-              {/* Reflector Radiation (Lagging phase) */}
-              <group position={[-1.5, 0, 0]}>
-                <RadialWaveLines
-                  antennaType="horizontal"
-                  polarizationType="horizontal"
-                  isThumbnail={isThumbnail}
-                  amplitudeScale={0.3}
-                  phaseOffset={-4.0}
-                  speed={speedMultiplier}
-                  forceAnimation={isHovered}
-                />
-              </group>
-
-              {/* Director Radiation (Leading phase) */}
-              <group position={[1.5, 0, 0]}>
-                <RadialWaveLines
-                  antennaType="horizontal"
-                  polarizationType="horizontal"
-                  isThumbnail={isThumbnail}
-                  amplitudeScale={0.3}
-                  phaseOffset={-2.0}
-                  speed={speedMultiplier}
-                  forceAnimation={isHovered}
-                />
-              </group>
-            </>
+            <ElectricFieldInstanced
+              antennaType="yagi"
+              polarizationType="horizontal"
+              speed={effectiveSpeed}
+              amplitudeScale={1.5}
+            />
           )}
         </Canvas>
 
@@ -223,97 +300,28 @@ export default function YagiAntennaScene({
               <LegendContent />
             </div>
 
-            <div className="absolute bottom-4 right-4 p-4 bg-black/70 text-white rounded-lg pointer-events-auto">
-              <div className="flex flex-col space-y-3">
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="wave-mode"
-                    checked={showWaves}
-                    onCheckedChange={setShowWaves}
-                    className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
-                  />
-                  <Label htmlFor="wave-mode" className="text-xs md:text-sm">
-                    显示电波 (Show Waves)
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="pattern-mode"
-                    checked={showPattern}
-                    onCheckedChange={setShowPattern}
-                    className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
-                  />
-                  <Label htmlFor="pattern-mode" className="text-xs md:text-sm">
-                    显示方向图 (Show Pattern)
-                  </Label>
-                </div>
-
-                <div className="pt-3 border-t border-white/10">
-                  <div className="mb-2 text-xs md:text-sm font-medium">
-                    电波速度 (Speed)
-                  </div>
-                  <RadioGroup
-                    defaultValue="medium"
-                    value={speedMode}
-                    onValueChange={(v) =>
-                      setSpeedMode(v as "slow" | "medium" | "fast")
-                    }
-                    className="flex gap-4"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="slow"
-                        id="r-slow"
-                        className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
-                      />
-                      <Label
-                        htmlFor="r-slow"
-                        className="text-xs cursor-pointer"
-                      >
-                        慢
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="medium"
-                        id="r-medium"
-                        className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
-                      />
-                      <Label
-                        htmlFor="r-medium"
-                        className="text-xs cursor-pointer"
-                      >
-                        中
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="fast"
-                        id="r-fast"
-                        className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
-                      />
-                      <Label
-                        htmlFor="r-fast"
-                        className="text-xs cursor-pointer"
-                      >
-                        快
-                      </Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-              </div>
+            <div className="hidden md:block absolute bottom-4 right-4 p-4 bg-black/70 text-white rounded-lg pointer-events-auto">
+              <ControlsContent />
             </div>
 
             <div className="absolute bottom-4 left-4 text-gray-400 text-xs pointer-events-none select-none">
-              Created by BG8ROM - For Ham Radio Education
+              {t("common.created")}
             </div>
           </>
         )}
       </div>
 
       {!isThumbnail && (
-        <div className="md:hidden bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4">
-          <LegendContent />
+        <div className="flex flex-col gap-4 md:hidden">
+          {/* Mobile Controls below chart */}
+          <div className="bg-zinc-900 border rounded-lg p-4">
+            <ControlsContent />
+          </div>
+
+          {/* Mobile Legend below chart */}
+          <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4">
+            <LegendContent />
+          </div>
         </div>
       )}
     </div>
