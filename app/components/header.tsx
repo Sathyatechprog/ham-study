@@ -20,23 +20,39 @@ export function Header() {
   ];
 
   const handleLanguageChange = (newLang: string) => {
-    const supportedLocales = ["zh", "zh-HK", "en-US"];
+    const prefixes = ["zh-HK", "en-US"];
     const segments = location.pathname.split("/").filter(Boolean);
+    const hasPrefix = segments.length > 0 && prefixes.includes(segments[0]);
 
-    // Check if the first segment is a supported locale
-    if (segments.length > 0 && supportedLocales.includes(segments[0])) {
-      segments[0] = newLang;
+    if (newLang === "zh") {
+      // Switching to default (Root)
+      if (hasPrefix) {
+        segments.shift(); // Remove the prefix (e.g. /en-US/foo -> /foo)
+      }
+      // If no prefix, we are already at root-based path or generic path, just use it.
     } else {
-      segments.unshift(newLang);
+      // Switching to a prefixed language
+      if (hasPrefix) {
+        segments[0] = newLang; // Replace existing prefix
+      } else {
+        segments.unshift(newLang); // Add new prefix
+      }
     }
     return `/${segments.join("/")}${location.search}`;
   };
+
+  // Determine home link
+  const prefixes = ["zh-HK", "en-US"];
+  const segments = location.pathname.split("/").filter(Boolean);
+  const currentPrefix =
+    segments.length > 0 && prefixes.includes(segments[0]) ? segments[0] : "";
+  const homeLink = currentPrefix ? `/${currentPrefix}` : "/";
 
   return (
     <header className="w-full border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md z-50 sticky top-0">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo / Title */}
-        <Link to="/" className="flex items-center gap-2">
+        <Link to={homeLink} className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
             <svg
               xmlns="http://www.w3.org/2000/svg"

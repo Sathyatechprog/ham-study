@@ -23,7 +23,19 @@ import { Footer } from "~/components/footer";
 
 export const middleware = [i18nextMiddleware];
 
-export async function loader({ context }: Route.LoaderArgs) {
+import { redirect } from "react-router";
+
+export async function loader({ context, request }: Route.LoaderArgs) {
+  const url = new URL(request.url);
+  const segments = url.pathname.split("/").filter(Boolean);
+
+  // Redirect /zh/... to /... (Remove 'zh' prefix for default language)
+  if (segments.length > 0 && segments[0] === "zh") {
+    segments.shift(); // Remove 'zh'
+    const newPath = `/${segments.join("/")}${url.search}`;
+    throw redirect(newPath, 301); // 301 Permanent Redirect
+  }
+
   const locale = getLocale(context);
   return data(
     { locale },

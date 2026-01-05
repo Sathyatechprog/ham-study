@@ -21,7 +21,10 @@ export const [i18nextMiddleware, getLocale, getInstance] =
       // Detect locale from URL pathname
       async findLocale(request) {
         const locale = new URL(request.url).pathname.split("/").at(1);
-        return locale ?? null;
+        if (locale === "en-US" || locale === "zh-HK") {
+          return locale;
+        }
+        return "zh";
       },
     },
     i18next: {
