@@ -1,4 +1,4 @@
-import { Link, useLocation, type LinkProps } from "react-router";
+import { Link, type LinkProps, useLocation } from "react-router";
 
 interface LocaleLinkProps extends Omit<LinkProps, "to"> {
   to: string;

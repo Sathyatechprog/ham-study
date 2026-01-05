@@ -11,15 +11,15 @@ import {
   ScrollRestoration,
   useLocation,
 } from "react-router";
-import type { Route } from "./+types/root";
 import {
   getLocale,
   i18nextMiddleware,
   localeCookie,
 } from "~/middleware/i18next";
+import type { Route } from "./+types/root";
 import "~/app.css";
-import { Header } from "~/components/header";
 import { Footer } from "~/components/footer";
+import { Header } from "~/components/header";
 
 export const middleware = [i18nextMiddleware];
 

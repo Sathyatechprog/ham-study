@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import type { MetaFunction } from "react-router";
-import { useTranslation, Trans } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
 
 const QuadAntennaScene = lazy(() => import("~/components/quad-antenna-scene"));
