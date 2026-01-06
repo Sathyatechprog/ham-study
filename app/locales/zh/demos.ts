@@ -201,6 +201,37 @@ export default {
       "正V天线 (Positive-V) 将高电压点（天线末端）抬高并远离地面或屋顶结构。这显著减少了由周围物体引起的电容效应和介质损耗，从而保持了较高的辐射效率。同时，V形结构会轻微改变远场辐射方向图，使'8字形'凹陷变浅。",
     physicsQuote:
       '"Raising the ends of the dipole in a V-shape keeps the high-voltage points away from lossy structures... minimizing ground losses."',
+
+    // New Content
+    definitionTitle: "1. 什么是“正V”？",
+    definitionContent:
+      "正V天线通常指<strong>刚性V型偶极子</strong>。它由两根金属管组成，呈 V 字形向上或向外张开，夹角通常为 90° 到 120°。",
+
+    principleTitle: "2. 为什么要把它掰弯？ (核心原理)",
+
+    impedanceTitle: "2.1 阻抗匹配 (最主要原因)",
+    impedanceProblem:
+      "<strong>问题</strong>：标准的直立半波偶极子（180°）阻抗约为 <strong>73Ω</strong>，而常用的同轴电缆是 <strong>50Ω</strong>。直接连接会有 1.5 的驻波比。",
+    impedanceSolution:
+      "<strong>解决</strong>：将振子折成 V 形，振子间的互阻抗会降低总辐射电阻。当夹角在 <strong>90°~120°</strong> 时，阻抗自然降至 <strong>50Ω</strong> 附近。",
+    impedanceConclusion:
+      "<strong>结论</strong>：<strong>正V天线自带“阻抗变换”功能，无需天调即可完美匹配 50Ω 电缆。</strong>",
+
+    directionalityTitle: "2.2 改善方向性",
+    directionalityDipole:
+      "<strong>直偶极子</strong>：方向图是“8字形”，两头是深零点（盲区）。",
+    directionalityPositiveV:
+      "<strong>正V天线</strong>：由于电流矢量方向改变，原本的零点被填充。方向图变得更圆润，接近全向天线。",
+
+    spaceTitle: "2.3 节省空间",
+    spaceContent:
+      "相比直立偶极子，V 型结构的旋转半径更小，更容易安装在楼顶受限空间。",
+
+    comparisonTitle: "3. 常见误区：正V vs. 倒V",
+    invertedV:
+      "<strong>倒V (Inverted V)</strong>：中间高两头低，软线架设，成本低，发射角高，适合近距离通信（省内）。",
+    positiveV:
+      "<strong>正V (Rigid V)</strong>：中间低两头高，铝管架设，抗风好，发射角低，适合远距离通信（DX）。",
   },
 
   quadAntenna: {

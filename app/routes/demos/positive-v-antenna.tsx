@@ -82,6 +82,81 @@ export default function PositiveVAntennaPage() {
             </li>
           </ul>
 
+          <h3>{t(`${pv}.definitionTitle`)}</h3>
+          <p>
+            <Trans
+              ns="demos"
+              i18nKey={`${pv}.definitionContent`}
+              components={{ strong: <strong /> }}
+            />
+          </p>
+
+          <h3>{t(`${pv}.principleTitle`)}</h3>
+
+          <h4>{t(`${pv}.impedanceTitle`)}</h4>
+          <ul className="list-disc pl-6 space-y-2 my-4">
+            <li>
+              <Trans
+                ns="demos"
+                i18nKey={`${pv}.impedanceProblem`}
+                components={{ strong: <strong /> }}
+              />
+            </li>
+            <li>
+              <Trans
+                ns="demos"
+                i18nKey={`${pv}.impedanceSolution`}
+                components={{ strong: <strong /> }}
+              />
+            </li>
+            <li>
+              <Trans
+                ns="demos"
+                i18nKey={`${pv}.impedanceConclusion`}
+                components={{ strong: <strong /> }}
+              />
+            </li>
+          </ul>
+
+          <h4>{t(`${pv}.directionalityTitle`)}</h4>
+          <ul className="list-disc pl-6 space-y-2 my-4">
+            <li>
+              <Trans
+                ns="demos"
+                i18nKey={`${pv}.directionalityDipole`}
+                components={{ strong: <strong /> }}
+              />
+            </li>
+            <li>
+              <Trans
+                ns="demos"
+                i18nKey={`${pv}.directionalityPositiveV`}
+                components={{ strong: <strong /> }}
+              />
+            </li>
+          </ul>
+
+          <h4>{t(`${pv}.spaceTitle`)}</h4>
+          <p>{t(`${pv}.spaceContent`)}</p>
+
+          <h3>{t(`${pv}.comparisonTitle`)}</h3>
+          <ul className="list-disc pl-6 space-y-2 my-4">
+            <li>
+              <Trans
+                ns="demos"
+                i18nKey={`${pv}.invertedV`}
+                components={{ strong: <strong /> }}
+              />
+            </li>
+            <li>
+              <Trans
+                ns="demos"
+                i18nKey={`${pv}.positiveV`}
+                components={{ strong: <strong /> }}
+              />
+            </li>
+          </ul>
+
           <h3>{t(`${pv}.polarizationTitle`)}</h3>
 
           <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">

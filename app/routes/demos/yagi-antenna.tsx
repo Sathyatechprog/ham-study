@@ -1,8 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
-import { getInstance } from "~/middleware/i18next";
 import { InlineMath } from "~/components/math";
+import { getInstance } from "~/middleware/i18next";
 import type { Route } from "./+types/yagi-antenna";
 
 const YagiAntennaScene = lazy(() => import("~/components/yagi-antenna-scene"));
@@ -124,18 +124,16 @@ export default function YagiAntennaPage() {
             <li>
               <strong>{t(`${yagi}.theorySection2.drivenElement.title`)}</strong>
               <ul className="list-[circle] pl-5 mt-2">
-                {(
+                {Object.keys(
                   t(`${yagi}.theorySection2.drivenElement.items`, {
                     returnObjects: true,
-                  }) as string[]
-                ).map((_item, i) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: Static content from translation
-                  <li key={i}>
+                  }) as string[],
+                ).map((key) => (
+                  <li key={key}>
                     <Trans
                       ns="demos"
-                      // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
                       i18nKey={
-                        `${yagi}.theorySection2.drivenElement.items.${i}` as any
+                        `${yagi}.theorySection2.drivenElement.items.${key}` as never
                       }
                       components={{ strong: <strong />, M: <InlineMath /> }}
                     />
@@ -146,18 +144,16 @@ export default function YagiAntennaPage() {
             <li>
               <strong>{t(`${yagi}.theorySection2.reflector.title`)}</strong>
               <ul className="list-[circle] pl-5 mt-2">
-                {(
+                {Object.keys(
                   t(`${yagi}.theorySection2.reflector.items`, {
                     returnObjects: true,
-                  }) as string[]
-                ).map((_item, i) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: Static content from translation
-                  <li key={i}>
+                  }) as string[],
+                ).map((key) => (
+                  <li key={key}>
                     <Trans
                       ns="demos"
-                      // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
                       i18nKey={
-                        `${yagi}.theorySection2.reflector.items.${i}` as any
+                        `${yagi}.theorySection2.reflector.items.${key}` as never
                       }
                       components={{ strong: <strong />, M: <InlineMath /> }}
                     />
@@ -168,18 +164,16 @@ export default function YagiAntennaPage() {
             <li>
               <strong>{t(`${yagi}.theorySection2.director.title`)}</strong>
               <ul className="list-[circle] pl-5 mt-2">
-                {(
+                {Object.keys(
                   t(`${yagi}.theorySection2.director.items`, {
                     returnObjects: true,
-                  }) as string[]
-                ).map((_item, i) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: Static content from translation
-                  <li key={i}>
+                  }) as string[],
+                ).map((key) => (
+                  <li key={key}>
                     <Trans
                       ns="demos"
-                      // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
                       i18nKey={
-                        `${yagi}.theorySection2.director.items.${i}` as any
+                        `${yagi}.theorySection2.director.items.${key}` as never
                       }
                       components={{ strong: <strong />, M: <InlineMath /> }}
                     />
@@ -197,18 +191,17 @@ export default function YagiAntennaPage() {
               components={{ strong: <strong /> }}
             />
           </p>
+
           <ul>
-            {(
+            {Object.keys(
               t(`${yagi}.theorySection3.items`, {
                 returnObjects: true,
-              }) as string[]
-            ).map((_item, i) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: Static content from translation
-              <li key={i}>
+              }) as string[],
+            ).map((key) => (
+              <li key={key}>
                 <Trans
                   ns="demos"
-                  // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
-                  i18nKey={`${yagi}.theorySection3.items.${i}` as any}
+                  i18nKey={`${yagi}.theorySection3.items.${key}` as never}
                   components={{ strong: <strong />, M: <InlineMath /> }}
                 />
               </li>
@@ -220,14 +213,13 @@ export default function YagiAntennaPage() {
             <table className="w-full border-collapse border border-zinc-200 dark:border-zinc-700 text-sm">
               <thead>
                 <tr className="bg-zinc-100 dark:bg-zinc-800">
-                  {(
+                  {Object.entries(
                     t(`${yagi}.theorySummaryTable.headers`, {
                       returnObjects: true,
-                    }) as string[]
-                  ).map((header, i) => (
-                    // biome-ignore lint/suspicious/noArrayIndexKey: Static headers
+                    }) as string[],
+                  ).map(([key, header]) => (
                     <th
-                      key={i}
+                      key={key}
                       className="border border-zinc-200 dark:border-zinc-700 p-2 text-left font-semibold"
                     >
                       {header}
@@ -236,22 +228,20 @@ export default function YagiAntennaPage() {
                 </tr>
               </thead>
               <tbody>
-                {(
+                {Object.entries(
                   t(`${yagi}.theorySummaryTable.rows`, {
                     returnObjects: true,
-                  }) as any[]
-                ).map((_row, i) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: Static table data
+                  }),
+                ).map(([key]) => (
                   <tr
-                    key={i}
+                    key={key}
                     className="even:bg-zinc-50 dark:even:bg-zinc-900/50"
                   >
                     <td className="border border-zinc-200 dark:border-zinc-700 p-2">
                       <Trans
                         ns="demos"
-                        // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
                         i18nKey={
-                          `${yagi}.theorySummaryTable.rows.${i}.type` as any
+                          `${yagi}.theorySummaryTable.rows.${key}.type` as never
                         }
                         components={{
                           strong: <strong />,
@@ -262,9 +252,8 @@ export default function YagiAntennaPage() {
                     <td className="border border-zinc-200 dark:border-zinc-700 p-2">
                       <Trans
                         ns="demos"
-                        // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
                         i18nKey={
-                          `${yagi}.theorySummaryTable.rows.${i}.length` as any
+                          `${yagi}.theorySummaryTable.rows.${key}.length` as never
                         }
                         components={{ M: <InlineMath /> }}
                       />
@@ -272,9 +261,8 @@ export default function YagiAntennaPage() {
                     <td className="border border-zinc-200 dark:border-zinc-700 p-2">
                       <Trans
                         ns="demos"
-                        // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
                         i18nKey={
-                          `${yagi}.theorySummaryTable.rows.${i}.reactance` as any
+                          `${yagi}.theorySummaryTable.rows.${key}.reactance` as never
                         }
                         components={{ M: <InlineMath /> }}
                       />
@@ -282,9 +270,8 @@ export default function YagiAntennaPage() {
                     <td className="border border-zinc-200 dark:border-zinc-700 p-2">
                       <Trans
                         ns="demos"
-                        // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
                         i18nKey={
-                          `${yagi}.theorySummaryTable.rows.${i}.phase` as any
+                          `${yagi}.theorySummaryTable.rows.${key}.phase` as never
                         }
                         components={{ M: <InlineMath /> }}
                       />
@@ -292,9 +279,8 @@ export default function YagiAntennaPage() {
                     <td className="border border-zinc-200 dark:border-zinc-700 p-2">
                       <Trans
                         ns="demos"
-                        // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
                         i18nKey={
-                          `${yagi}.theorySummaryTable.rows.${i}.function` as any
+                          `${yagi}.theorySummaryTable.rows.${key}.function` as never
                         }
                         components={{ M: <InlineMath /> }}
                       />

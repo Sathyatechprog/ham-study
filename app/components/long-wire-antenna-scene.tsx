@@ -17,7 +17,6 @@ import {
 } from "three";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
-import { Slider } from "~/components/ui/slider";
 import { Switch } from "~/components/ui/switch";
 import { calculateField } from "~/utils/antenna-physics";
 import { ElectricFieldInstanced } from "./electric-field-instanced";
@@ -372,7 +371,7 @@ export default function LongWireAntennaScene({
         </div>
         <RadioGroup
           value={length.toString()}
-          onValueChange={(v) => setLength(Number.parseInt(v))}
+          onValueChange={(v) => setLength(Number.parseInt(v, 10))}
           className="flex gap-4"
         >
           <div className="flex items-center space-x-2">
