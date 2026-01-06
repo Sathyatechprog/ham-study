@@ -9,6 +9,7 @@ interface ElectricFieldInstancedProps {
   amplitudeScale?: number;
   isRHCP?: boolean;
   axialRatio?: number;
+  antennaLength?: number;
 }
 
 export function ElectricFieldInstanced({
@@ -17,6 +18,7 @@ export function ElectricFieldInstanced({
   speed = 1.0,
   amplitudeScale = 1.0,
   isRHCP = true,
+  antennaLength = 2.5,
 }: ElectricFieldInstancedProps) {
   // Dense Grid for "Field Fabric"
   const gridSize = 100; // 100x100 = 10,000 particles
@@ -34,6 +36,8 @@ export function ElectricFieldInstanced({
   );
 
   const timeRef = useRef(0);
+  const lengthRef = useRef(antennaLength);
+  lengthRef.current = antennaLength;
 
   useFrame((_state, delta) => {
     if (!meshRef.current) return;
@@ -104,6 +108,7 @@ export function ElectricFieldInstanced({
             dirGain = front ** 2.0 + 0.1; // Sharper beam
           } else if (antennaType === "moxon") {
             // Moxon: Handled slightly differently?
+            // Usually Moxon scene has geometry along X/Z?
             // Actually Moxon scene has geometry along X/Z?
             // Let's check: Moxon boom is X, elements are Z-ish?
             // Wait, Moxon scene: drivenRight/Left are Z points? No, points are (x,0,z).
@@ -115,18 +120,42 @@ export function ElectricFieldInstanced({
             // Moxon: Reflector is back, Driven is front. Fires +Z.
             // So we need beam along +Z.
             // Angle is from X. sin(angle) ~ Z.
+            // So we need beam along +Z.
             const sinDir = Math.sin(angle);
             const front = Math.max(0, sinDir);
             dirGain = front ** 2.0 + 0.1;
           } else if (antennaType === "long-wire") {
-            const k = 2.5 * Math.PI;
-            // n=5 (odd) -> Use Cosine
-            const cosPsi = Math.cos(k * Math.cos(angle));
-            const sinTheta = Math.sin(angle);
+            // Physics-inspired simplified lobe generator for shader-like speed
+            // |sin( PI * L * cos(theta - rotation) )| creates main lobes.
+            // antennaLength likely passed in wavelengths.
+            // In our coordinate system here, angle=0 is X axis.
+            // Wire logic is X-aligned in long-wire-antenna-scene.
 
-            // E ~ cos(2.5pi * cos(theta)) / sin(theta)
-            const pattern = Math.abs(sinTheta > 0.01 ? cosPsi / sinTheta : 0);
-            dirGain = pattern + 0.1;
+            // Simplified standing wave pattern lobes:
+            // The number of lobes ~ 2 * Length_in_lambda
+            // sin(k * L * cos(angle)) works well visually.
+            // k*L = 2*PI * L_lambda.
+            // divide by something?
+            // Actually |sin( PI * L * cos(angle) ) / sin(angle)|
+            const L = lengthRef.current; // Use Ref to avoid stale closure
+
+            // Use Cosine argument to generate lobes along X-axis
+            // The argument 3.0 is a tuning factor to make it look distinct
+            // For L=4, we want ~8 lobes.
+            // sin(4 * PI * cos(angle)) -> 4 cycles -> 8 zeros -> 8 lobes.
+            // So argument should be PI * L.
+            const lobeArg = Math.PI * L * Math.cos(angle);
+            const num = Math.abs(Math.sin(lobeArg));
+
+            // Denom to boost main lobes near axis?
+            // Real formula has /sin(theta).
+            const den = Math.abs(Math.sin(angle));
+
+            // Clamp denom to avoid infinity
+            const val = den > 0.05 ? num / den : num * 20.0;
+
+            // Normalize somewhat so it's not too huge
+            dirGain = val * 0.3 + 0.1;
           }
 
           // Apply Polarization Pattern (E-field orientation)

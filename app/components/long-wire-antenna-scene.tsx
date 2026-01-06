@@ -11,19 +11,27 @@ import {
   LineCurve3,
   MeshBasicMaterial,
   Object3D,
-  Quaternion, // Added for quaternion logic
+  Quaternion,
   SphereGeometry,
   Vector3,
 } from "three";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { Slider } from "~/components/ui/slider";
 import { Switch } from "~/components/ui/switch";
+import { calculateField } from "~/utils/antenna-physics";
 import { ElectricFieldInstanced } from "./electric-field-instanced";
 
 const WIRE_START = new Vector3(-5, -1, 0);
 const WIRE_END = new Vector3(5, 3, 0);
 
-function LongWireAntenna({ speed = 1.0 }: { speed?: number }) {
+function LongWireAntenna({
+  speed = 1.0,
+  length = 2.5,
+}: {
+  speed?: number;
+  length?: number;
+}) {
   const insulatorGeo = useMemo(
     () => new CylinderGeometry(0.05, 0.05, 0.2, 16),
     [],
@@ -42,7 +50,7 @@ function LongWireAntenna({ speed = 1.0 }: { speed?: number }) {
   }, [wireCurve]);
 
   // E-Field and H-Field visualization
-  const segmentCount = 40;
+  const segmentCount = 60; // Increased resolution for higher harmonics
 
   const eRef = useRef<InstancedMesh>(null);
   const hRef = useRef<InstancedMesh>(null);
@@ -51,7 +59,7 @@ function LongWireAntenna({ speed = 1.0 }: { speed?: number }) {
   // Instanced Meshes for Standing Wave Visualization on the wire
   const eFieldInstances = useMemo(() => {
     const mesh = new InstancedMesh(
-      new CylinderGeometry(0.02, 0.02, 1, 8),
+      new CylinderGeometry(0.03, 0.03, 1, 8),
       new MeshBasicMaterial({
         color: "#ea580c",
         transparent: true,
@@ -63,8 +71,7 @@ function LongWireAntenna({ speed = 1.0 }: { speed?: number }) {
   }, []);
 
   const hFieldInstances = useMemo(() => {
-    // Current rings
-    const geometry = new CylinderGeometry(0.15, 0.15, 0.05, 16); // Ring-like cylinder
+    const geometry = new CylinderGeometry(0.15, 0.15, 0.05, 16);
     const mesh = new InstancedMesh(
       geometry,
       new MeshBasicMaterial({
@@ -81,22 +88,39 @@ function LongWireAntenna({ speed = 1.0 }: { speed?: number }) {
     timeRef.current += delta * 3 * speed;
     const time = timeRef.current;
     const tempObj = new Object3D();
-    const up = new Vector3(0, 1, 0); // Y-axis is typically 'up' for cylinders
+    const up = new Vector3(0, 1, 0);
+    const arbitraryUp = new Vector3(0, 0, 1);
+
+    // Wavenumber k = 2 * PI / lambda (normalized lambda=1)
+    // Wire length L in real space is fixed for visualization, but physically it represents 'length' wavelengths.
+    // Standing wave distribution: I(z) ~ sin(k * (L - z)) or similar standing wave form.
+    // For a wire of length L*lambda, the phase change is 2*PI * L.
 
     if (eRef.current) {
       for (let i = 0; i < segmentCount; i++) {
         const t = i / (segmentCount - 1);
-        // Standing wave pattern for ~2.5 wavelengths (5 half-waves)
-        // V(x) distribution
-        const k = 2.5 * 2 * Math.PI; // Total phase change
-        const spatialAmp = Math.sin(t * k); // 0 at start, varying
-        const timeAmp = Math.sin(time);
-        const amp = spatialAmp * timeAmp;
+        // t goes from 0 to 1 along the wire.
+        // Effective position z from 0 to 'length'.
+        // Standing wave V(z) ~ cos(beta * z) for open end?
+        // Let's use the simple standing wave form sin(2*PI * length * t) to see nodes.
+        const k = 2 * Math.PI * length;
+
+        // V and I are 90 deg out of phase in space and time.
+        // Voltage (E-field) is max at ends (open circuit).
+        // const spatialAmp = Math.cos(k * t); // Cosine ensures max at t=0 (if we consider feed/end logic)
+        // Actually, for open ends, current is 0, voltage is max.
+        // If we treat t=0 and t=1 as ends.
+
+        // Let's stick to a simple visual representation:
+        // Standing wave has 'length * 2' lobes (loops).
+        const spatialPhase = k * t;
+        const standingWave = Math.cos(spatialPhase) * Math.cos(time);
+
+        const amp = standingWave;
 
         const pos = wireCurve.getPoint(t);
         const tangent = wireCurve.getTangent(t).normalize();
 
-        const arbitraryUp = new Vector3(0, 0, 1);
         const normal = new Vector3()
           .crossVectors(tangent, arbitraryUp)
           .normalize();
@@ -106,7 +130,6 @@ function LongWireAntenna({ speed = 1.0 }: { speed?: number }) {
         }
 
         tempObj.position.copy(pos);
-        // Align cylinder (which is along Y-axis by default) to the normal vector
         const quaternion = new Quaternion().setFromUnitVectors(up, normal);
         tempObj.setRotationFromQuaternion(quaternion);
         tempObj.scale.set(1, Math.abs(amp) * 2, 1);
@@ -119,10 +142,11 @@ function LongWireAntenna({ speed = 1.0 }: { speed?: number }) {
     if (hRef.current) {
       for (let i = 0; i < segmentCount; i++) {
         const t = i / (segmentCount - 1);
-        const k = 2.5 * 2 * Math.PI;
-        const spatialAmp = Math.cos(t * k);
-        const timeAmp = Math.cos(time);
-        const amp = spatialAmp * timeAmp;
+        const k = 2 * Math.PI * length;
+        // Current (H-field) is 0 at ends. Sin wave.
+        const spatialPhase = k * t;
+        const standingWave = Math.sin(spatialPhase) * Math.sin(time); // 90 deg time phase diff from E
+        const amp = standingWave;
 
         const pos = wireCurve.getPoint(t);
         const tangent = wireCurve.getTangent(t).normalize();
@@ -134,7 +158,7 @@ function LongWireAntenna({ speed = 1.0 }: { speed?: number }) {
           Math.abs(amp) * 1.5 + 0.1,
           1,
           Math.abs(amp) * 1.5 + 0.1,
-        ); // Scale radius
+        );
         tempObj.updateMatrix();
         hRef.current.setMatrixAt(i, tempObj.matrix);
       }
@@ -177,45 +201,56 @@ function LongWireAntenna({ speed = 1.0 }: { speed?: number }) {
   );
 }
 
-function RadiationPattern() {
+function RadiationPattern({ length }: { length: number }) {
   const geometry = useMemo(() => {
-    const geo = new SphereGeometry(1, 90, 60);
+    const geo = new SphereGeometry(1, 120, 60); // Higher resolution for sharp nulls
     const posAttribute = geo.attributes.position;
     const vertex = new Vector3();
-    const scale = 4;
+    const scale = 5; // Scale up to be visible
 
     for (let i = 0; i < posAttribute.count; i++) {
       vertex.fromBufferAttribute(posAttribute, i);
-      const angle = vertex.angleTo(new Vector3(1, 0, 0)); // Angle to X axis
 
-      const k = 2.5 * Math.PI;
-      // For odd number of half-wavelengths (n=5, L=2.5lambda), use COSINE in numerator.
-      // E ~ cos(n * pi/2 * cos(theta)) / sin(theta)
+      // Angle to X axis (wire axis in simplified local calc)
+      // Note: calculateField expects angle from axis (0 to PI).
+      // Our sphere vertex angleTo(1,0,0) does exactly that (0 to PI).
+      const theta = vertex.angleTo(new Vector3(1, 0, 0));
 
-      const num = Math.cos(k * Math.cos(angle));
-      const den = Math.sin(angle);
+      // Use the physics engine!
+      const gain = calculateField(theta, length, "standing");
 
-      // Avoid division by zero
-      const gain = Math.abs(den > 0.01 ? num / den : 0);
-
-      // Add distinct lobes
+      // Apply gain to vertex position
+      // Add a small epsilon to avoid z-fighting or zero-size
       vertex.normalize().multiplyScalar(Math.max(0.01, gain) * scale);
 
       posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
     }
     geo.computeVertexNormals();
     return geo;
-  }, []);
+  }, [length]);
 
+  // Align pattern with the wire
+  // Wire goes from (-5, -1, 0) to (5, 3, 0).
+  // Direction vector:
   const direction = new Vector3().subVectors(WIRE_END, WIRE_START).normalize();
-  const rotationAngle = Math.atan2(direction.y, direction.x);
+  // We need to rotate the default (X-aligned) pattern to match this direction.
+  // Default calculateField assumes wire along Z axis?
+  // Wait, in calculateField:
+  // "phaseArg = K * z * cosTheta" -> theta is angle from Z axis if z is along Z.
+  // BUT: "vertex.angleTo(new Vector3(1, 0, 0))" measures from X axis.
+  // So my geometry generation assumes the antenna is along X axis.
+  // Therefore, I just need to rotate from X axis to the wire direction.
+
+  const fromVector = new Vector3(1, 0, 0);
+  const quaternion = new Quaternion().setFromUnitVectors(fromVector, direction);
+
   const midPoint = new Vector3()
     .addVectors(WIRE_START, WIRE_END)
     .multiplyScalar(0.5);
 
   return (
     <group position={midPoint}>
-      <mesh geometry={geometry} rotation={[0, 0, rotationAngle]}>
+      <mesh geometry={geometry} quaternion={quaternion}>
         <meshBasicMaterial
           color="#22c55e"
           wireframe={true}
@@ -240,6 +275,8 @@ export default function LongWireAntennaScene({
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
     "medium",
   );
+  // Default length 4 lambda
+  const [length, setLength] = useState([4]);
 
   const speedMultiplier = {
     slow: 0.3,
@@ -249,14 +286,14 @@ export default function LongWireAntennaScene({
 
   const effectiveSpeed = isThumbnail && !isHovered ? 0 : speedMultiplier;
 
-  // Calculate generic position/rotation for field alignment
+  // Legend and Control logic
   const direction = new Vector3().subVectors(WIRE_END, WIRE_START).normalize();
   const rotationAngle = Math.atan2(direction.y, direction.x);
   const midPoint = new Vector3()
     .addVectors(WIRE_START, WIRE_END)
     .multiplyScalar(0.5);
 
-  // Legend and Control logic (similar to others)
+  // Legend and Control logic
   const LegendContent = () => (
     <>
       <h2 className="text-lg md:text-xl font-bold mb-2">
@@ -286,16 +323,6 @@ export default function LongWireAntennaScene({
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 border-2 border-green-500 rounded-sm" />
           <span>{t("longWireAntenna.pattern")}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div
-            className="w-16 h-3 rounded-sm"
-            style={{
-              background:
-                "linear-gradient(to right, #ef4444, #eab308, #22c55e, #3b82f6)",
-            }}
-          />
-          <span>{t("longWireAntenna.waves")}</span>
         </div>
       </div>
     </>
@@ -337,6 +364,21 @@ export default function LongWireAntennaScene({
             </Label>
           </div>
         </div>
+      </div>
+
+      <div className="pt-3 border-t border-white/10">
+        <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
+          {t("common.controls.length")} : {length[0]}λ
+        </div>
+        <Slider
+          defaultValue={[4]}
+          min={1}
+          max={10}
+          step={0.5}
+          value={length}
+          onValueChange={setLength}
+          className="w-full"
+        />
       </div>
 
       <div className="pt-3 border-t border-white/10">
@@ -427,15 +469,16 @@ export default function LongWireAntennaScene({
             position={[0, -2, 0]}
           />
 
-          <LongWireAntenna speed={effectiveSpeed} />
-          {showPattern && <RadiationPattern />}
+          <LongWireAntenna speed={effectiveSpeed} length={length[0]} />
+          {showPattern && <RadiationPattern length={length[0]} />}
           {showWaves && (
             <group position={midPoint} rotation={[0, 0, rotationAngle]}>
               <ElectricFieldInstanced
                 antennaType="long-wire"
-                polarizationType="horizontal" // Generalization, as it's mixed
+                polarizationType="horizontal"
                 speed={effectiveSpeed}
                 amplitudeScale={1.5}
+                antennaLength={length[0]}
               />
             </group>
           )}
@@ -447,7 +490,7 @@ export default function LongWireAntennaScene({
               <LegendContent />
             </div>
 
-            <div className="hidden md:block absolute bottom-4 right-4 p-4 bg-black/70 text-white rounded-lg pointer-events-auto">
+            <div className="hidden md:block absolute bottom-4 right-4 p-4 bg-black/70 text-white rounded-lg pointer-events-auto w-64">
               <ControlsContent />
             </div>
 

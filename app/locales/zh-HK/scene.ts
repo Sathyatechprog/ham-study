@@ -9,6 +9,7 @@ export default {
       slow: "慢",
       medium: "中",
       fast: "快",
+      length: "天線長度 (Length λ)",
     },
   },
   circularPolarization: {

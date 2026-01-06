@@ -9,6 +9,7 @@ export default {
       slow: "Slow",
       medium: "Medium",
       fast: "Fast",
+      length: "Length (λ)",
     },
   },
   circularPolarization: {

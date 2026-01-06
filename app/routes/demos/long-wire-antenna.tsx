@@ -1,8 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
-import { ScientificCitation } from "~/components/scientific-citation";
 import { BlockMath, InlineMath } from "~/components/math";
+import { ScientificCitation } from "~/components/scientific-citation";
 import { getInstance } from "~/middleware/i18next";
 import type { Route } from "./+types/long-wire-antenna";
 
