@@ -277,7 +277,7 @@ export default {
     title: "Yagi-Uda Antenna",
     about:
       "The Yagi antenna was invented by Hidetsugu Yagi and Shintaro Uda of Japan. It's a <strong>high-gain, highly directional</strong> antenna widely used for shortwave communication, TV reception, and radar.",
-    theoryAnalysis: "Theory Analysis",
+    theoryAnalysis: "Theoretical Analysis",
     principle:
       "<strong>Operating Principle:</strong> Through mutual coupling between parasitic elements (reflector and directors) and the driven element, current phases are modified to constructively combine signals in one direction while canceling in the opposite direction.",
     gain: "<strong>Gain:</strong> More elements and longer directors mean higher gain and narrower beam.",
@@ -293,54 +293,13 @@ export default {
     physicsQuote:
       '"The phase of the current in the parasitic element depends on its length... By proper spacing and length, the radiation from the parasitic element reinforces the radiation from the driven element in the forward direction."',
     theoryTitle: "1. Overview",
-    theorySection1: {
-      content:
-        "The Yagi-Uda antenna (Yagi for short) is a high-gain, highly directional <strong>end-fire array antenna</strong>. It consists of one <strong>Driven Element</strong> and several <strong>Parasitic Elements</strong>. Its core principle is not to feed all elements via a transmission line, but to induce currents in parasitic elements through <strong>electromagnetic coupling</strong> (mutual impedance). By adjusting the <strong>length</strong> and <strong>spacing</strong> of the parasitic elements, the <strong>amplitude</strong> and <strong>phase</strong> of the induced currents are controlled, achieving directional superposition of the beam.",
-    },
-    theorySection2: {
-      title: "2. Structure & Electrical Characteristics",
-      intro:
-        "A typical Yagi antenna consists of three types of elements arranged on a single Boom:",
-      drivenElement: {
-        title: "2.1 Driven Element",
-        items: [
-          "<strong>Physical Description</strong>: Usually a half-wave Dipole or Folded Dipole.",
-          "<strong>Length</strong>: <M>L \\approx 0.48\\lambda</M> (slightly shorter than a half-wavelength to present purely resistive resonance).",
-          "<strong>Function</strong>: The only element connected to the feed line (signal source), responsible for exciting the entire antenna system.",
-        ],
-      },
-      reflector: {
-        title: "2.2 Reflector",
-        items: [
-          "<strong>Position</strong>: Located behind the Driven Element (opposite to the emission direction).",
-          "<strong>Length</strong>: <M>L_R \\approx (0.5 \\sim 0.55)\\lambda</M> (about 5% longer than the Driven Element).",
-          "<strong>Impedance</strong>: Longer than <M>\\lambda/2</M>, presenting <strong>inductive</strong> reactance.",
-          "<strong>Phase</strong>: Inductive reactance causes induced current <M>I_R</M> to <strong>lag</strong> behind the induced EMF.",
-          "<strong>Function</strong>: Acts like a 'mirror', reflecting electromagnetic waves radiating backwards to the front, suppressing the back lobe and improving the Front-to-Back Ratio (F/B Ratio).",
-        ],
-      },
-      director: {
-        title: "2.3 Director",
-        items: [
-          "<strong>Position</strong>: Located in front of the Driven Element (emission direction).",
-          "<strong>Length</strong>: <M>L_D \\approx (0.4 \\sim 0.45)\\lambda</M> (about 5% shorter than the Driven Element).",
-          "<strong>Impedance</strong>: Shorter than <M>\\lambda/2</M>, presenting <strong>capacitive</strong> reactance.",
-          "<strong>Phase</strong>: Capacitive reactance causes induced current <M>I_D</M> to <strong>lead</strong> the induced EMF.",
-          "<strong>Function</strong>: Acts like a 'lens', guiding electromagnetic waves forward.",
-        ],
-      },
-    },
-    theorySection3: {
-      title: "3. Working Principle (Phase Superposition)",
-      content:
-        "The working principle of a Yagi antenna can be simplified to <strong>binary array analysis</strong>.",
-      items: [
-        "<strong>Reflector Principle</strong>: The reflector is longer (inductive), causing current phase lag. This lag causes its radiated wave, when traveling back to the driven element, to be in opposite phase (destructive interference) with the backward wave; while in the forward direction, they are in phase (constructive interference), enhancing the signal.",
-        "<strong>Director Principle</strong>: The director is shorter (capacitive), causing current phase lead. This phase lead compensates for the spatial propagation delay of the wave, allowing the wave to superimpose constructively step-by-step along the director array like a traveling wave.",
-      ],
-    },
+    theoryContent:
+      "The Yagi antenna is an <strong>end-fire array</strong>. It works by inducing currents in parasitic elements (Reflectors/Directors) via <strong>mutual coupling</strong>. The <strong>Reflector</strong> is slightly longer than 1/2 wavelength (inductive), causing current lag that cancels the back lobe. The <strong>Directors</strong> are shorter (capacitive), causing current lead that reinforces the forward beam. This precise phase control achieves high gain without a complex feed network.",
+    formulaDriven: "Driven Element Length",
+    formulaReflector: "Reflector Length (usually 5% longer)",
+    formulaDirector: "Director Length (usually 5% shorter)",
     theorySummaryTable: {
-      title: "4. Summary Table",
+      title: "Summary Table",
       headers: ["Element Type", "Length", "Reactance", "Phase", "Function"],
       rows: [
         {

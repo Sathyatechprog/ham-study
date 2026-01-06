@@ -272,7 +272,7 @@ export default {
     title: "八木-宇田天线 (Yagi-Uda Antenna)",
     about:
       "八木天线是由日本的八木秀次和宇田新太郎发明的。它是一种<strong>高增益、强方向性</strong>的天线，广泛用于短波通信、电视接收和雷达。",
-    theoryAnalysis: "原理分析",
+    theoryAnalysis: "理论分析",
     principle:
       "<strong>工作原理:</strong> 通过寄生振子（反射器和引向器）与有源振子之间的互感耦合，改变电流相位，从而在单一方向叠加增强信号，在反方向抵消信号。",
     gain: "<strong>增益 (Gain):</strong> 单元越多，引向器越长，增益越高，波束越窄。",
@@ -288,53 +288,13 @@ export default {
     physicsQuote:
       '"The phase of the current in the parasitic element depends on its length... By proper spacing and length, the radiation from the parasitic element reinforces the radiation from the driven element in the forward direction."',
     theoryTitle: "1. 概述",
-    theorySection1: {
-      content:
-        "八木-宇田天线（简称八木天线）是一种高增益、方向性强的<strong>端射阵列天线</strong>（End-fire Array）。它由一个<strong>有源振子</strong>（Driven Element）和若干个<strong>无源寄生振子</strong>（Parasitic Elements）组成。其核心原理并非通过馈线给所有振子供电，而是利用<strong>电磁耦合</strong>（互阻抗）在无源振子中感应出电流，通过调整无源振子的<strong>长度</strong>和<strong>间距</strong>，控制感应电流的<strong>幅度</strong>和<strong>相位</strong>，从而实现波束的定向叠加。",
-    },
-    theorySection2: {
-      title: "2. 结构组成与电特性",
-      intro: "典型的八木天线包含三种元件，排列在同一根主梁（Boom）上：",
-      drivenElement: {
-        title: "2.1 有源振子 (Driven Element)",
-        items: [
-          "<strong>物理描述</strong>：通常是一个半波偶极子（Dipole）或折合振子（Folded Dipole）。",
-          "<strong>长度</strong>：<M>L \\approx 0.48\\lambda</M>（略短于半波长以呈纯电阻性谐振）。",
-          "<strong>功能</strong>：唯一连接馈线（信号源）的元件，负责激励整个天线系统。",
-        ],
-      },
-      reflector: {
-        title: "2.2 反射器 (Reflector)",
-        items: [
-          "<strong>位置</strong>：位于有源振子的后方（背离发射方向）。",
-          "<strong>长度</strong>：<M>L_R \\approx (0.5 \\sim 0.55)\\lambda</M>（比有源振子长约 5%）。",
-          "<strong>阻抗特性</strong>：由于长度大于谐振长度（<M>\\lambda/2</M>），其呈现<strong>感性</strong>（Inductive）。",
-          "<strong>相位特性</strong>：感性阻抗导致感应电流 <M>I_R</M> 在相位上<strong>滞后</strong>于感应电动势。",
-          "<strong>作用</strong>：像一面“镜子”，将射向后方的电磁波反射回前方，抑制后瓣，提高前后比（F/B Ratio）。",
-        ],
-      },
-      director: {
-        title: "2.3 引向器 (Director)",
-        items: [
-          "<strong>位置</strong>：位于有源振子的前方（发射方向）。",
-          "<strong>数量</strong>：可以有 1 个或多个（引向器越多，增益越高，波束越窄）。",
-          "<strong>长度</strong>：<M>L_D \\approx (0.4 \\sim 0.45)\\lambda</M>（比有源振子短约 5%）。",
-          "<strong>阻抗特性</strong>：由于长度小于谐振长度（<M>\\lambda/2</M>），其呈现<strong>容性</strong>（Capacitive）。",
-          "<strong>相位特性</strong>：容性阻抗导致感应电流 <M>I_D</M> 在相位上<strong>超前</strong>于感应电动势。",
-          "<strong>作用</strong>：像“透镜”一样引导电磁波向前方传播。",
-        ],
-      },
-    },
-    theorySection3: {
-      title: "3. 工作原理分析 (相位叠加法)",
-      content: "八木天线的工作原理可以简化为<strong>二元阵列分析</strong>。",
-      items: [
-        "<strong>反射器原理</strong>：反射器较长（感性），电流相位滞后。这种滞后使得其辐射的波在传回有源振子时，正好与向后发射的波相位相反（相消干涉），消除了后瓣；而在前方则相位相同（相长干涉），增强了信号。",
-        "<strong>引向器原理</strong>：引向器较短（容性），电流相位超前。这种相位超前正好抵消了波的空间传播延迟，使得波像行波一样在引向器列上逐级叠加增强。",
-      ],
-    },
+    theoryContent:
+      "八木天线是一个<strong>端射阵列</strong>。其核心原理是利用<strong>互感耦合</strong>在无源振子（反射器和引向器）上感应出电流。<strong>反射器</strong>略长于 1/2 波长（呈感性），电流相位滞后，从而抵消后瓣。<strong>引向器</strong>略短于 1/2 波长（呈容性），电流相位超前，从而增强前向波束。这种精妙的相位差实现了无需复杂馈电网络的高增益定向辐射。",
+    formulaDriven: "有源振子长度",
+    formulaReflector: "反射器长度 (通常长 5%)",
+    formulaDirector: "引向器长度 (通常短 5%)",
     theorySummaryTable: {
-      title: "4. 总结表",
+      title: "总结表",
       headers: ["振子类型", "长度特征", "电抗性质", "电流相位", "作用"],
       rows: [
         {
