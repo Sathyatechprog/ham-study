@@ -230,6 +230,44 @@ export default {
       "Moxon 矩形天线利用了'临界耦合'原理。通过将元件末端向内弯曲并保持特定的间距，使得有源振子与反射器之间的互感耦合增强。这种特定的几何结构产生了近乎完美的心形 (Cardioid) 辐射方向图，在保持前向增益的同时，极大程度地消除了后向辐射 (极高的 F/B 比)。",
     physicsQuote:
       '"The Moxon Rectangle is a 2-element beam with the element tips folded towards each other... maximizing the front-to-back ratio."',
+    theoryAnalysis: "理论分析",
+    theoryContent:
+      "虽然精确的 Moxon 辐射场需要复杂的数值分析（如 NEC 建模），但其标志性的<strong>心形方向图 (Cardioid Pattern)</strong> 可以用以下简化函数近似描述：",
+    formulaRadiation: "辐射方向图公式 (Mathematical Model)",
+    formulaAngle:
+      "其中 <M>\\theta</M> 是方位角（<M>0^\\circ</M> 为天线前方）。",
+    formulaShapeFactor: "<M>A</M> 是形状因子（通常 <M>A \\approx 1.3</M>）。",
+    theorySummaryTable: {
+      title: "Moxon vs 八木 (2单元)",
+      headers: ["特性", "Moxon 矩形天线", "2单元八木天线"],
+      rows: [
+        {
+          feature: "尺寸",
+          moxon: "小 (紧凑矩形)",
+          yagi: "大 (长条形)",
+        },
+        {
+          feature: "前后比",
+          moxon: "<strong>极高 (>20dB)</strong>",
+          yagi: "一般 (10-15dB)",
+        },
+        {
+          feature: "增益",
+          moxon: "中等 (~5.5 dBi)",
+          yagi: "略高 (~6.0 dBi)",
+        },
+        {
+          feature: "匹配",
+          moxon: "<strong>直连 50Ω</strong>",
+          yagi: "通常需要匹配网络",
+        },
+        {
+          feature: "带宽",
+          moxon: "极宽",
+          yagi: "较窄",
+        },
+      ],
+    },
   },
 
   positiveVAntenna: {

@@ -234,6 +234,45 @@ export default {
       'The Moxon Rectangle uses "critical coupling" principles. By bending element tips inward with specific spacing, the mutual coupling between driven element and reflector is enhanced. This geometry produces a nearly perfect cardioid pattern, maintaining forward gain while greatly eliminating back radiation (high F/B ratio).',
     physicsQuote:
       '"The Moxon Rectangle is a 2-element beam with the element tips folded towards each other... maximizing the front-to-back ratio."',
+    theoryAnalysis: "Theoretical Analysis",
+    theoryContent:
+      "Although the precise radiation field of a Moxon antenna requires complex numerical analysis (like NEC modeling), its signature <strong>Cardioid Pattern</strong> can be approximated by the following simplified function:",
+    formulaRadiation: "Radiation Pattern Formula (Mathematical Model)",
+    formulaAngle:
+      "Where <M>\\theta</M> is the azimuth angle (<M>0^\\circ</M> is the front).",
+    formulaShapeFactor:
+      "<M>A</M> is the shape factor (typically <M>A \\approx 1.3</M>).",
+    theorySummaryTable: {
+      title: "Moxon vs 2-Element Yagi",
+      headers: ["Feature", "Moxon Rectangle", "2-Element Yagi"],
+      rows: [
+        {
+          feature: "Size",
+          moxon: "Small (Compact Rectangle)",
+          yagi: "Large (Linear)",
+        },
+        {
+          feature: "F/B Ratio",
+          moxon: "<strong>Very High (>20dB)</strong>",
+          yagi: "Average (10-15dB)",
+        },
+        {
+          feature: "Gain",
+          moxon: "Moderate (~5.5 dBi)",
+          yagi: "Slightly Higher (~6.0 dBi)",
+        },
+        {
+          feature: "Matching",
+          moxon: "<strong>Direct 50Ω</strong>",
+          yagi: "Matching Network Required",
+        },
+        {
+          feature: "Bandwidth",
+          moxon: "Very Wide",
+          yagi: "Narrower",
+        },
+      ],
+    },
   },
 
   positiveVAntenna: {

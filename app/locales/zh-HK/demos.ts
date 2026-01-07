@@ -230,6 +230,44 @@ export default {
       "Moxon 矩形天線利用了'臨界耦合'原理。通過將元件末端向內彎曲並保持特定的間距，使得有源振子與反射器之間的互感耦合增強。",
     physicsQuote:
       '"The Moxon Rectangle is a 2-element beam with the element tips folded towards each other... maximizing the front-to-back ratio."',
+    theoryAnalysis: "理論分析",
+    theoryContent:
+      "雖然精確的 Moxon 輻射場需要複雜的數值分析（如 NEC 建模），但其標誌性的<strong>心形方向圖 (Cardioid Pattern)</strong> 可以用以下簡化函數近似描述：",
+    formulaRadiation: "輻射方向圖公式 (Mathematical Model)",
+    formulaAngle:
+      "其中 <M>\\theta</M> 是方位角（<M>0^\\circ</M> 為天線前方）。",
+    formulaShapeFactor: "<M>A</M> 是形狀因子（通常 <M>A \\approx 1.3</M>）。",
+    theorySummaryTable: {
+      title: "Moxon vs 八木 (2單元)",
+      headers: ["特性", "Moxon 矩形天線", "2單元八木天線"],
+      rows: [
+        {
+          feature: "尺寸",
+          moxon: "小 (緊湊矩形)",
+          yagi: "大 (長條形)",
+        },
+        {
+          feature: "前後比",
+          moxon: "<strong>極高 (>20dB)</strong>",
+          yagi: "一般 (10-15dB)",
+        },
+        {
+          feature: "增益",
+          moxon: "中等 (~5.5 dBi)",
+          yagi: "略高 (~6.0 dBi)",
+        },
+        {
+          feature: "匹配",
+          moxon: "<strong>直連 50Ω</strong>",
+          yagi: "通常需要匹配網絡",
+        },
+        {
+          feature: "頻寬",
+          moxon: "極寬",
+          yagi: "較窄",
+        },
+      ],
+    },
   },
 
   positiveVAntenna: {
