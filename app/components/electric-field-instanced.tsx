@@ -11,6 +11,7 @@ interface ElectricFieldInstancedProps {
   axialRatio?: number;
   antennaLength?: number;
   radialAngle?: "60" | "135" | string;
+  activeHarmonic?: number;
 }
 
 export function ElectricFieldInstanced({
@@ -21,6 +22,7 @@ export function ElectricFieldInstanced({
   isRHCP = true,
   antennaLength = 2.5,
   radialAngle,
+  activeHarmonic,
 }: ElectricFieldInstancedProps) {
   // Dense Grid for "Field Fabric"
   const gridSize = 100; // 100x100 = 10,000 particles
@@ -40,6 +42,9 @@ export function ElectricFieldInstanced({
   const timeRef = useRef(0);
   const lengthRef = useRef(antennaLength);
   lengthRef.current = antennaLength;
+
+  const harmonicRef = useRef(activeHarmonic);
+  harmonicRef.current = activeHarmonic;
 
   useFrame((_state, delta) => {
     if (!meshRef.current) return;
@@ -133,43 +138,6 @@ export function ElectricFieldInstanced({
             const sinDir = Math.sin(angle);
             const front = Math.max(0, sinDir);
             dirGain = front ** 2.0 + 0.1;
-          } else if (antennaType === "long-wire") {
-            // Physics-inspired simplified lobe generator for shader-like speed
-            // |sin( PI * L * cos(theta - rotation) )| creates main lobes.
-            // antennaLength likely passed in wavelengths.
-            // In our coordinate system here, angle=0 is X axis.
-            // Wire logic is X-aligned in long-wire-antenna-scene.
-
-            // Simplified standing wave pattern lobes:
-            // The number of lobes ~ 2 * Length_in_lambda
-            // sin(k * L * cos(angle)) works well visually.
-            // k*L = 2*PI * L_lambda.
-            // divide by something?
-            // Actually |sin( PI * L * cos(angle) ) / sin(angle)|
-            const L = lengthRef.current; // Use Ref to avoid stale closure
-
-            // Use Cosine argument to generate lobes along X-axis
-            // Increase frequency factor significantly to show distinct lobes for L=10
-            // Physics: Argument is k * L * cos(theta) * 0.5 roughly?
-            // Visual: We want MORE lobes.
-            // Try 2.5 * PI * L
-            const lobeArg = 2.5 * Math.PI * L * Math.cos(angle);
-
-            // Sharpen the lobes: power of 2 or more?
-            const baseLobe = Math.abs(Math.sin(lobeArg));
-            const num = baseLobe ** 2; // Sharper lobes
-
-            // Denom to boost main lobes near axis?
-            // Real formula has /sin(theta).
-            const den = Math.abs(Math.sin(angle));
-
-            // Clamp denom to avoid infinity
-            // For L=10, we want noticeable lobes off-axis too.
-            const val = den > 0.1 ? num / den : num * 10.0;
-
-            // Normalize somewhat so it's not too huge
-            // Lower baseline to 0.05 to allow "nulls" to be truly dark/blue
-            dirGain = val * 0.5 + 0.05;
           }
 
           // Apply Polarization Pattern (E-field orientation)
@@ -228,6 +196,49 @@ export function ElectricFieldInstanced({
 
             hScale = 1.0;
           }
+        } else if (antennaType === "long-wire") {
+          // Physics-inspired simplified lobe generator for shader-like speed
+          const L = lengthRef.current; // Use Ref to avoid stale closure
+
+          // Use Cosine argument to generate lobes along X-axis
+          const lobeArg = 2.5 * Math.PI * L * Math.cos(angle);
+
+          // Sharpen the lobes: power of 2 or more?
+          const baseLobe = Math.abs(Math.sin(lobeArg));
+          const num = baseLobe ** 2; // Sharper lobes
+
+          // Denom to boost main lobes near axis?
+          const den = Math.abs(Math.sin(angle));
+
+          // Clamp denom to avoid infinity
+          const val = den > 0.1 ? num / den : num * 10.0;
+
+          // Normalize somewhat so it's not too huge
+          dirGain = val * 0.5 + 0.05;
+        } else if (antennaType === "end-fed") {
+          // Physics-inspired simplified lobe generator based on harmonic formula
+          const n =
+            antennaType === "end-fed" && harmonicRef.current
+              ? harmonicRef.current
+              : 1;
+
+          const cosTheta = Math.cos(angle);
+          const sinTheta = Math.abs(Math.sin(angle));
+          const safeSinTheta = Math.max(0.001, sinTheta);
+
+          let val = 0;
+          if (n % 2 === 1) {
+            // Odd harmonic (1, 3, 5...)
+            const num = Math.cos(((n * Math.PI) / 2) * cosTheta);
+            val = Math.abs(num / safeSinTheta);
+          } else {
+            // Even harmonic (2, 4...)
+            const num = Math.sin(((n * Math.PI) / 2) * cosTheta);
+            val = Math.abs(num / safeSinTheta);
+          }
+
+          val = val ** 1.5;
+          dirGain = val * 0.5 + 0.05;
         } else if (antennaType === "vertical" || antennaType === "gp") {
           hScale = 0;
           dirGain = 1.0; // Omni
