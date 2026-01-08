@@ -52,6 +52,9 @@ const LongWireAntennaScene = lazy(
 const DipoleAntennaScene = lazy(
   () => import("~/components/dipole-antenna-scene"),
 );
+const WindomAntennaScene = lazy(
+  () => import("~/components/windom-antenna-scene"),
+);
 
 export const meta = ({ loaderData }: Route.MetaArgs) => {
   const { title, description, keywords } = loaderData;
@@ -258,6 +261,12 @@ export default function Home() {
       description: t("demos.longWireAntenna.description"),
       href: "/demos/long-wire-antenna",
       component: LongWireAntennaScene,
+    },
+    {
+      title: t("demos.windomAntenna.title"),
+      description: t("demos.windomAntenna.description"),
+      href: "/demos/windom-antenna",
+      component: WindomAntennaScene,
     },
   ];
 

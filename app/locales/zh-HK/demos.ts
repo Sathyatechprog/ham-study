@@ -86,6 +86,7 @@ export default {
       "線性極化波可以分解為兩個相反旋轉的圓極化波，接收天線只能接收其中一個分量，因此損失一半能量 (3dB)。儘管有損耗，但考慮到極化失配的風險，這種組合在特定情況下（如流動通訊）是可以接受的。",
     physicsContent:
       "根據天線理論，垂直偶極子 (Vertical Dipole) 產生的電場只有垂直分量。其在水平面上的輻射強度是均勻的，形成全向方向圖。",
+
     physicsQuote:
       '"The radiation pattern of a vertical dipole is omnidirectional in the horizontal plane... The E-field lines are vertical, parallel to the dipole axis."',
   },
@@ -539,5 +540,112 @@ export default {
       "其中 <M>\\theta</M> 是相對於導線軸的夾角。在我們的仿真中，導線長度模型為 <M>L = 2.5\\lambda</M>，對應於：",
     theoryResult:
       "由於 <M>n=5</M> 是奇數，當 <M>\\theta = 90^\\circ</M> 時，項 <M>\\cos(\\frac{5\\pi}{2} \\cos \\theta)</M> 變為 <M>\\cos(0) = 1</M>。這解釋了為什麼會存在垂直於導線的寬邊波瓣，這是奇次諧波駐波天線的一個顯著特徵。",
+  },
+
+  windomAntenna: {
+    metaTitle: "溫頓天線 (Windom Antenna) | 業餘無線電可視化",
+    metaDescription:
+      "3D演示溫頓天線(OCFD)的偏饋結構、匹配原理及多頻段工作特性。",
+    metaKeywords:
+      "溫頓天線, Windom antenna, OCFD, 偏饋偶極子, Off-Center Fed Dipole, 4:1 balun, 多頻段天線",
+    title: "溫頓天線 (Windom / OCFD)",
+    overviewTitle: "關於此演示 (About this Demo)",
+    overview:
+      "本頁面演示了<strong>溫頓天線 (Windom)</strong>，也稱為<strong>偏饋偶極子 (OCFD)</strong>。通過將饋電點從中心移開，我們在不損失太多效率的情況下獲得了多頻段工作的能力。場景中的不對稱結構正是其核心特徵。",
+    structure:
+      "<strong>結構模擬</strong>：饋電點（白色盒子）位於天線總長度的約 <strong>33%</strong> 處。這種「偏心」設計徹底改變了天線的阻抗分佈。",
+    principleTitle: "為什麼是 33% 處？ (The Magic Point)",
+    principleIntro:
+      "如果我們觀察不同頻率下的電流駐波分佈（黃色曲線），會發現 1/3 處是一個神奇的位置：",
+    principlePoints: {
+      fundamental: "<strong>基頻 (n=1)</strong>：電流適中，阻抗約 200-300Ω。",
+      harmonics2:
+        "<strong>二次諧波 (n=2)</strong>：中心是電流波節（阻抗無窮大），但在 1/3 處電流依然適中（阻抗約 200-300Ω）。",
+      harmonics4:
+        "<strong>四次諧波 (n=4)</strong>：1/3 處依然保持適中的電流和阻抗。",
+    },
+    principleConclusion:
+      "<strong>結論</strong>：僅需一個饋電點，就能在 40m, 20m, 10m 等偶數倍頻頻段獲得相似的阻抗。",
+    matchingTitle: "匹配系統：4:1 巴倫",
+    matchingIntro:
+      "由於饋電點阻抗（~200-300Ω）遠高於 50Ω 同軸電纜，我們需要進行阻抗變換：",
+    matchingConclusion:
+      "因此，溫頓天線必須搭配一個 <strong>4:1 電流型巴倫</strong>。這與 EFHW 使用的 49:1 變壓器完全不同。",
+    patternTitle: "輻射方向圖",
+    patternIntro:
+      "輻射方向圖（綠色網格）主要由天線的<strong>物理總長度</strong>決定。在基頻下，它與普通偶極子非常相似（呈8字形）。在高次諧波下，它會分裂成多個花瓣。",
+    patternPoints: {
+      fundamental: "<strong>基頻</strong>：變形的「8」字，與偶極子類似。",
+      harmonic: "<strong>諧波</strong>：呈多瓣狀，指向性增強。",
+    },
+    comparisonTitle: "溫頓 vs EFHW vs 偶極子",
+    tableHead: {
+      feature: "特性",
+      dipole: "偶極子 (Dipole)",
+      windom: "溫頓 (OCFD)",
+      efhw: "端饋 (EFHW)",
+    },
+    tableRow: {
+      feedPos: "饋電位置",
+      multiBand: "多頻段能力",
+      match: "匹配設備",
+      ground: "接地需求",
+      cons: "缺點",
+    },
+    tableCell: {
+      dipoleFeed: "中心 (50%)",
+      windomFeed: "偏心 (33%)",
+      efhwFeed: "端點 (0%)",
+      dipoleBand: "差 (僅基頻+3倍頻)",
+      windomBand: "良 (基頻+偶次諧波)",
+      efhwBand: "優 (基頻+所有諧波)",
+      dipoleMatch: "1:1 巴倫 (可選)",
+      windomMatch: "4:1 巴倫 (必須)",
+      efhwMatch: "49:1 變壓器 (必須)",
+      dipoleGround: "不需要",
+      windomGround: "推薦 (防共模)",
+      efhwGround: "必須 (依賴電纜地網)",
+      dipoleCons: "單頻段",
+      windomCons: "諧波有缺口",
+      efhwCons: "變壓器損耗大",
+    },
+    comparisonSummary:
+      "<strong>總結</strong>：溫頓天線是效率與便利性的折中。它的效率通常高於 EFHW，但對防共模干擾的要求更高。",
+    misconceptionTitle: "常見誤區",
+    misconceptionIntro:
+      "很多初學者誤以為移動饋電點會讓方向圖「歪向一邊」，這是<strong>錯誤</strong>的。",
+    misconceptionPhysicsTitle: "物理定式 (Physics Rules)",
+    misconceptionPhysics:
+      "駐波形狀由<strong>導線總長度</strong>和<strong>頻率</strong>決定。無論從哪裏饋電，電流在兩端都必須為零。因此，駐波形狀不變，輻射方向圖也不變。",
+    misconceptionFeedTitle: "饋電點的作用",
+    misconceptionFeed: "移動饋電點只是在<strong>選擇阻抗</strong>：",
+    misconceptionFeedLow: "波腹饋電 = 低阻抗 (偶極子)",
+    misconceptionFeedHigh: "波節饋電 = 高阻抗 (端饋)",
+    misconceptionFeedMid: "中間饋電 = 中等阻抗 (溫頓)",
+    misconceptionConclusion: "饋電點決定 SWR，不決定方向圖。",
+    misconceptionExTitle: "現實中的例外",
+    misconceptionEx:
+      "如果巴倫性能不佳導致共模電流，饋線會參與輻射，這<strong>確實</strong>會導致方向圖畸變。",
+    polarizationTitle: "極化特性 (Polarization)",
+    polarizationIntro:
+      "溫頓天線是<strong>線極化 (Linear Polarization)</strong> 天線，通常表現為水平線極化。它<strong>不是</strong>橢圓極化或圓極化。",
+    polarizationReason1Title: "1. 物理結構決定",
+    polarizationReason1:
+      "橢圓極化需要兩個垂直且有相位差的電場分量（如螺旋天線）。溫頓本質上是一根單導線，電場矢量始終平行於導線振動。",
+    polarizationReason2Title: "2. 架設方式影響",
+    polarizationReason2List: {
+      horizontal: "<strong>水平架設</strong>：產生純粹的水平極化。",
+      invertedV:
+        "<strong>倒V架設</strong>：依然是線極化。但傾斜的振子引入了垂直分量，填補了原本的軸向盲區（填充因子 δ ≈ 0.2），使方向圖更接近全向（胖花生形）。",
+      sloper:
+        "<strong>傾斜架設 (Sloper)</strong>：產生斜線極化，電場矢量沿斜線振動，而非旋轉。",
+    },
+    polarizationExceptionTitle: "3. 唯一的例外 (干擾)",
+    polarizationException:
+      "只有在<strong>共模干擾</strong>嚴重時（巴倫失效，饋線輻射），垂直的饋線波與水平的天線波混合，才可能導致極化狀態混亂。這屬於<strong>信號畸變</strong>，而非設計特性。",
+    physicsContent:
+      "溫頓天線利用了導線上特定位置（約離中心17%處，即全長33%處）在多個諧波頻率下阻抗近似相等的特性。這使得單一饋電點配合4:1巴倫即可實現多頻段工作。",
+    physicsQuote:
+      '"By moving the feed point to an off-center position... the antenna impedance at the feed point can be made manageable on multiple harmonic bands."',
   },
 } satisfies typeof import("~/locales/zh/demos").default;

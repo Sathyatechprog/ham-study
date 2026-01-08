@@ -10,6 +10,12 @@ export default {
       medium: "中",
       fast: "快",
       length: "天線長度 (Length λ)",
+      harmonicMode: "諧波模式 (Harmonic Mode)",
+      harmonic1: "基頻 (n=1)",
+      harmonic2: "2次諧波 (n=2)",
+      harmonic3: "3次諧波 (n=3)",
+      harmonic4: "4次諧波 (n=4)",
+      invertedV: "倒V模式 (Inverted V)",
     },
   },
   circularPolarization: {

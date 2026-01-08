@@ -101,6 +101,12 @@ export default {
         "3D demonstration of Long Wire Antenna multi-lobed radiation characteristics.",
       keywords: "Long Wire Antenna, random wire, multi-lobed pattern",
     },
+    windomAntenna: {
+      title: "Windom Antenna (OCFD)",
+      description:
+        "3D demonstration of Windom Antenna (OCFD) structure and multi-band operation.",
+      keywords: "Windom antenna, OCFD, Off-Center Fed Dipole",
+    },
   },
 
   tools: {

@@ -12,6 +12,136 @@ interface ElectricFieldInstancedProps {
   antennaLength?: number;
   radialAngle?: "60" | "135" | string;
   activeHarmonic?: number;
+  isInvertedV?: boolean;
+  rotation?: [number, number, number];
+}
+
+// Numerical Integration for Windom Pattern (Handles Inverted V geometry)
+function calculateWindomFactor(
+  angle: number, // angle in X-Z plane (from X axis)
+  n: number,
+  isInvertedV: boolean,
+): number {
+  // Normalize wire length L=1.
+  // kL = n * pi
+  const k = n * Math.PI;
+
+  const segments = 40;
+  let Ex_real = 0,
+    Ex_imag = 0;
+  let Ey_real = 0,
+    Ey_imag = 0;
+  let Ez_real = 0,
+    Ez_imag = 0;
+
+  // Observer direction (Far Field in X-Z Plane)
+  // angle is atan2(z, x).
+  // x = cos(angle), z = sin(angle).
+  // dir = (cos, 0, sin).
+  const dx = Math.cos(angle);
+  const dy = 0;
+  const dz = Math.sin(angle);
+
+  // Wire Geometry
+  // Windom Feed is at 33%. Place Feed (Apex) at (0,0,0).
+  // Left Arm (Length 1/3): Direction -Z (roughly).
+  // Right Arm (Length 2/3): Direction +Z (roughly).
+
+  // Droop Angle (for Inverted V)
+  // 120 deg included -> Arms droop 30 deg from horizontal
+  const droop = isInvertedV ? Math.PI / 6 : 0;
+  const cosD = Math.cos(droop);
+  const sinD = Math.sin(droop); // Y component (downwards usually, let's say negative Y)
+
+  for (let i = 0; i < segments; i++) {
+    const t = (i + 0.5) / segments; // 0..1 along wire
+    // Current Standing Wave (Sinusoidal, 0 at ends)
+    const I = Math.sin(k * t);
+
+    // Position & Tangent
+    // Feed is at t_feed = 1/3 = 0.3333.
+    const distFromFeed = t - 1 / 3; // Negative on Left Arm, Positive on Right
+
+    let px = 0,
+      py = 0,
+      pz = 0;
+    let tx = 0,
+      ty = 0,
+      tz = 0;
+
+    if (distFromFeed < 0) {
+      // Left Arm (Visual: Apex -> Left)
+      const d = -distFromFeed; // Dist from Apex
+      // Direction: -Z, and Droop (-Y).
+      // vector = (0, -sinD, -cosD)
+      px = 0;
+      py = d * -sinD;
+      pz = d * -cosD;
+      // Tangent is along +t direction (Left -> Right).
+      // Left arm grows from Left(End) to Apex(Feed).
+      // Vector End->Apex is (+Z).
+      tx = 0;
+      ty = sinD;
+      tz = cosD;
+    } else {
+      // Right Arm
+      const d = distFromFeed;
+      // Direction: +Z, and Droop (-Y).
+      px = 0;
+      py = d * -sinD;
+      pz = d * cosD;
+      // Tangent
+      tx = 0;
+      ty = -sinD;
+      tz = cosD;
+    }
+
+    // Phase k * (r . dir)
+    // k normalized to Length=1 is n*PI.
+    // Coordinate r is normalized to Length=1.
+    const phase = k * (px * dx + py * dy + pz * dz);
+    const cp = Math.cos(phase);
+    const sp = Math.sin(phase);
+
+    // Vector Current J = I * Tangent
+    const Jx = I * tx;
+    const Jy = I * ty;
+    const Jz = I * tz;
+
+    // Vector Potential Contribution dA = J * exp(j phase)
+    Ex_real += Jx * cp;
+    Ex_imag += Jx * sp;
+    Ey_real += Jy * cp;
+    Ey_imag += Jy * sp;
+    Ez_real += Jz * cp;
+    Ez_imag += Jz * sp;
+  }
+
+  // Far Field E = A - (A.r)r  (Projection onto plane perpendicular to r) (Transverse)
+  // A dot r
+  const AdotR_real = Ex_real * dx + Ey_real * dy + Ez_real * dz;
+  const AdotR_imag = Ex_imag * dx + Ey_imag * dy + Ez_imag * dz;
+
+  const Eperpx_real = Ex_real - AdotR_real * dx;
+  const Eperpy_real = Ey_real - AdotR_real * dy;
+  const Eperpz_real = Ez_real - AdotR_real * dz;
+
+  const Eperpx_imag = Ex_imag - AdotR_imag * dx;
+  const Eperpy_imag = Ey_imag - AdotR_imag * dy;
+  const Eperpz_imag = Ez_imag - AdotR_imag * dz;
+
+  const magSq =
+    Eperpx_real ** 2 +
+    Eperpy_real ** 2 +
+    Eperpz_real ** 2 +
+    Eperpx_imag ** 2 +
+    Eperpy_imag ** 2 +
+    Eperpz_imag ** 2;
+
+  // Normalize: A half-wave dipole max gain is ~ something.
+  // With 40 segments, expected sum is ~25.
+  // Tuning factor 0.5
+  return Math.sqrt(magSq) / (segments * 0.5); // Tuning factor
 }
 
 export function ElectricFieldInstanced({
@@ -23,6 +153,8 @@ export function ElectricFieldInstanced({
   antennaLength = 2.5,
   radialAngle,
   activeHarmonic,
+  isInvertedV = false,
+  rotation = [0, 0, 0],
 }: ElectricFieldInstancedProps) {
   // Dense Grid for "Field Fabric"
   const gridSize = 100; // 100x100 = 10,000 particles
@@ -45,6 +177,9 @@ export function ElectricFieldInstanced({
 
   const harmonicRef = useRef(activeHarmonic);
   harmonicRef.current = activeHarmonic;
+
+  const invertedVRef = useRef(isInvertedV);
+  invertedVRef.current = isInvertedV;
 
   useFrame((_state, delta) => {
     if (!meshRef.current) return;
@@ -215,12 +350,30 @@ export function ElectricFieldInstanced({
 
           // Normalize somewhat so it's not too huge
           dirGain = val * 0.5 + 0.05;
+        } else if (antennaType === "windom") {
+          // Windom (OCFD) Logic using Numerical Integration
+          // This correctly handles the V-shape (Inverted V) and Harmonic patterns
+          const n = harmonicRef.current ? harmonicRef.current : 1;
+          const isInv = invertedVRef.current;
+
+          // Calculate Pattern Factor numerically
+          let val = calculateWindomFactor(angle, n, isInv);
+
+          val = val ** 1.5;
+          dirGain = val * 0.5 + 0.05;
+
+          // Enforce Linear Polarization
+          if (polarizationType === "vertical") {
+            yScale = 1.0;
+            hScale = 0.0;
+          } else {
+            // Horizontal (Linear)
+            yScale = 0.0;
+            hScale = 1.0;
+          }
         } else if (antennaType === "end-fed") {
-          // Physics-inspired simplified lobe generator based on harmonic formula
-          const n =
-            antennaType === "end-fed" && harmonicRef.current
-              ? harmonicRef.current
-              : 1;
+          // End-Fed Half Wave (EFHW) operates at harmonics (n=1, 2, 3...)
+          const n = harmonicRef.current ? harmonicRef.current : 1;
 
           const cosTheta = Math.cos(angle);
           const sinTheta = Math.abs(Math.sin(angle));
@@ -228,17 +381,27 @@ export function ElectricFieldInstanced({
 
           let val = 0;
           if (n % 2 === 1) {
-            // Odd harmonic (1, 3, 5...)
+            // Odd harmonic
             const num = Math.cos(((n * Math.PI) / 2) * cosTheta);
             val = Math.abs(num / safeSinTheta);
           } else {
-            // Even harmonic (2, 4...)
+            // Even harmonic
             const num = Math.sin(((n * Math.PI) / 2) * cosTheta);
             val = Math.abs(num / safeSinTheta);
           }
 
           val = val ** 1.5;
           dirGain = val * 0.5 + 0.05;
+
+          // Enforce Linear Polarization
+          if (polarizationType === "vertical") {
+            yScale = 1.0;
+            hScale = 0.0;
+          } else {
+            // Horizontal (Linear)
+            yScale = 0.0;
+            hScale = 1.0;
+          }
         } else if (
           antennaType === "vertical" ||
           antennaType === "gp" ||
@@ -453,7 +616,11 @@ export function ElectricFieldInstanced({
   });
 
   return (
-    <instancedMesh ref={meshRef} args={[geometry, undefined, count]}>
+    <instancedMesh
+      ref={meshRef}
+      args={[geometry, undefined, count]}
+      rotation={rotation}
+    >
       <meshBasicMaterial toneMapped={false} />
       <instancedBufferAttribute attach="instanceColor" args={[colorArray, 3]} />
     </instancedMesh>

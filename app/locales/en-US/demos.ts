@@ -547,4 +547,116 @@ export default {
     theoryResult:
       "Since <M>n=5</M> is an odd number, the term <M>\\cos(\\frac{5\\pi}{2} \\cos \\theta)</M> becomes <M>\\cos(0) = 1</M> when <M>\\theta = 90^\\circ</M>. This explains the presence of a broadside lobe perpendicular to the wire, which is a characteristic feature of odd-harmonic standing wave antennas.",
   },
+
+  windomAntenna: {
+    metaTitle: "Windom Antenna (OCFD) | Ham Radio Visualization",
+    metaDescription:
+      "3D visualization of Windom Antenna (OCFD) off-center feed structure, matching principles, and multi-band operation.",
+    metaKeywords:
+      "Windom antenna, OCFD, Off-Center Fed Dipole, 4:1 balun, multi-band antenna",
+    title: "Windom Antenna (Windom / OCFD)",
+    overviewTitle: "About this Demo",
+    overview:
+      "This page demonstrates the <strong>Windom Antenna</strong>, also known as the <strong>Off-Center Fed Dipole (OCFD)</strong>. By moving the feed point away from the center, we gain multi-band capability without significant efficiency loss. The asymmetrical structure is its key feature.",
+    structure:
+      "<strong>Structure Simulation</strong>: The feed point (white box) is located at approximately <strong>33%</strong> of the total length. This off-center design fundamentally changes the impedance distribution.",
+    principleTitle: "Why 33%? (The Magic Point)",
+    principleIntro:
+      "If we observe the current standing wave distribution (yellow curve) at different frequencies, we find that the 1/3 point is a magic location:",
+    principlePoints: {
+      fundamental:
+        "<strong>Fundamental (n=1)</strong>: Moderate current, impedance approx 200-300Ω.",
+      harmonics2:
+        "<strong>2nd Harmonic (n=2)</strong>: The center is a current node (infinite impedance), but at 1/3, the current is still moderate (impedance ~200-300Ω).",
+      harmonics4:
+        "<strong>4th Harmonic (n=4)</strong>: The 1/3 point maintains moderate current and impedance.",
+    },
+    principleConclusion:
+      "<strong>Conclusion</strong>: With a single feed point, we can achieve similar impedance on even harmonic bands like 40m, 20m, and 10m.",
+    matchingTitle: "Matching System: 4:1 Balun",
+    matchingIntro:
+      "Since the feed point impedance (~200-300Ω) is much higher than 50Ω coaxial cable, we need impedance transformation:",
+    matchingConclusion:
+      "Therefore, the Windom antenna must be used with a <strong>4:1 Current Balun</strong>. This is different from the 49:1 transformer used in EFHW.",
+    patternTitle: "Radiation Pattern",
+    patternIntro:
+      "The radiation pattern (green mesh) is primarily determined by the <strong>physical total length</strong> of the antenna. At the fundamental frequency, it is similar to a dipole (figure-8). At higher harmonics, it splits into multiple lobes.",
+    patternPoints: {
+      fundamental:
+        "<strong>Fundamental</strong>: Distorted figure-8, similar to a dipole.",
+      harmonic:
+        "<strong>Harmonics</strong>: Multi-lobed, increased directivity.",
+    },
+    comparisonTitle: "Windom vs EFHW vs Dipole",
+    tableHead: {
+      feature: "Feature",
+      dipole: "Dipole",
+      windom: "Windom (OCFD)",
+      efhw: "End-Fed (EFHW)",
+    },
+    tableRow: {
+      feedPos: "Feed Point",
+      multiBand: "Multi-band",
+      match: "Matching",
+      ground: "Grounding",
+      cons: "Drawbacks",
+    },
+    tableCell: {
+      dipoleFeed: "Center (50%)",
+      windomFeed: "Off-Center (33%)",
+      efhwFeed: "End (0%)",
+      dipoleBand: "Poor (Fundamental + Odd Harmonics)",
+      windomBand: "Good (Fundamental + Even Harmonics)",
+      efhwBand: "Excellent (Fundamental + All Harmonics)",
+      dipoleMatch: "1:1 Balun (Optional)",
+      windomMatch: "4:1 Balun (Required)",
+      efhwMatch: "49:1 Transformer (Required)",
+      dipoleGround: "Not required",
+      windomGround: "Recommended (Anti-common mode)",
+      efhwGround: "Required (Counterpoise)",
+      dipoleCons: "Single band",
+      windomCons: "Gaps in harmonics",
+      efhwCons: "High loss in transformer",
+    },
+    comparisonSummary:
+      "<strong>Summary</strong>: The Windom antenna is a compromise between efficiency and convenience. It is generally more efficient than EFHW but requires better common-mode noise suppression.",
+    misconceptionTitle: "Common Misconceptions",
+    misconceptionIntro:
+      "Many beginners mistakenly believe that moving the feed point causes the pattern to 'skew to one side'. This is <strong>incorrect</strong>.",
+    misconceptionPhysicsTitle: "Physics Rules",
+    misconceptionPhysics:
+      "The standing wave shape is determined by the <strong>total wire length</strong> and <strong>frequency</strong>. Current must be zero at the ends regardless of feed point. Thus, the standing wave shape and radiation pattern remain unchanged.",
+    misconceptionFeedTitle: "Role of Feed Point",
+    misconceptionFeed:
+      "Moving the feed point only selects the <strong>impedance</strong>:",
+    misconceptionFeedLow: "Feed at Antinode = Low Impedance (Dipole)",
+    misconceptionFeedHigh: "Feed at Node = High Impedance (End-Fed)",
+    misconceptionFeedMid: "Feed at Mid-slope = Medium Impedance (Windom)",
+    misconceptionConclusion: "Feed point determines SWR, not directionality.",
+    misconceptionExTitle: "Practical Exception",
+    misconceptionEx:
+      "If the balun is poor and allows common mode current, the feedline becomes part of the radiator, which <strong>does</strong> distort the pattern.",
+    polarizationTitle: "Polarization Characteristics",
+    polarizationIntro:
+      "Windom Antenna is **Linear Polarization** (usually Horizontal). It is **NOT** Elliptical or Circular polarization.",
+    polarizationReason1Title: "1. Physics",
+    polarizationReason1:
+      "Elliptical polarization requires two orthogonal E-field components with a phase shift (e.g., Helical antenna). A Windom is essentially a single wire. The electric field vector always vibrates parallel to the wire.",
+    polarizationReason2Title: "2. Mounting Effects",
+    polarizationReason2List: {
+      horizontal:
+        "<strong>Horizontal Mount</strong>: Produces pure Horizontal Linear polarization.",
+      invertedV:
+        "<strong>Inverted-V Mount</strong>: Still Linear. However, the slanted elements introduce a vertical component that fills in the axial nulls (Filling Factor δ ≈ 0.2), making the pattern more omnidirectional (peanut-shaped).",
+      sloper:
+        "<strong>Sloper Mount</strong>: Produces Tilted Linear polarization (vibrates along a diagonal line, not rotating).",
+    },
+    polarizationExceptionTitle: "3. The Only Exception (Interference)",
+    polarizationException:
+      "Only severe **Common Mode Current** (poor balun causing feeder radiation) can mix vertical feeder waves with horizontal wire waves, leading to messy polarization. But this is considered **Signal Distortion/RFI**, not a design feature.",
+    physicsContent:
+      "The Windom antenna exploits the property that impedance is similar at approximately 33% of the length for multiple harmonic frequencies. This allows multi-band operation with a single feed point and a 4:1 balun.",
+    physicsQuote:
+      '"By moving the feed point to an off-center position... the antenna impedance at the feed point can be made manageable on multiple harmonic bands."',
+  },
 } satisfies typeof import("~/locales/zh/demos").default;

@@ -540,4 +540,111 @@ export default {
     theoryResult:
       "由于 <M>n=5</M> 是奇数，当 <M>\\theta = 90^\\circ</M> 时，项 <M>\\cos(\\frac{5\\pi}{2} \\cos \\theta)</M> 变为 <M>\\cos(0) = 1</M>。这解释了为什么会存在垂直于导线的宽边波瓣，这是奇次谐波驻波天线的一个显著特征。",
   },
+
+  windomAntenna: {
+    metaTitle: "温顿天线 (Windom Antenna) | 业余无线电可视化",
+    metaDescription:
+      "3D演示温顿天线(OCFD)的偏馈结构、匹配原理及多波段工作特性。",
+    metaKeywords:
+      "温顿天线, Windom antenna, OCFD, 偏馈偶极子, Off-Center Fed Dipole, 4:1 balun, 多波段天线",
+    title: "温顿天线 (Windom / OCFD)",
+    overviewTitle: "关于此演示 (About this Demo)",
+    overview:
+      "本页面演示了<strong>温顿天线 (Windom)</strong>，也称为<strong>偏馈偶极子 (OCFD)</strong>。通过将馈电点从中心移开，我们在不损失太多效率的情况下获得了多波段工作的能力。场景中的不对称结构正是其核心特征。",
+    structure:
+      "<strong>结构仿真</strong>：馈电点（白色盒子）位于天线总长度的约 <strong>33%</strong> 处。这种“偏心”设计彻底改变了天线的阻抗分布。",
+    principleTitle: "为什么是 33% 处？ (The Magic Point)",
+    principleIntro:
+      "如果我们观察不同频率下的电流驻波分布（黄色曲线），会发现 1/3 处是一个神奇的位置：",
+    principlePoints: {
+      fundamental: "<strong>基频 (n=1)</strong>：电流适中，阻抗约 200-300Ω。",
+      harmonics2:
+        "<strong>二次谐波 (n=2)</strong>：中心是电流波节（阻抗无穷大），但在 1/3 处电流依然适中（阻抗约 200-300Ω）。",
+      harmonics4:
+        "<strong>四次谐波 (n=4)</strong>：1/3 处依然保持适中的电流和阻抗。",
+    },
+    principleConclusion:
+      "<strong>结论</strong>：仅需一个馈电点，就能在 40m, 20m, 10m 等偶数倍频波段获得相似的阻抗。",
+    matchingTitle: "匹配系统：4:1 巴伦",
+    matchingIntro:
+      "由于馈电点阻抗（~200-300Ω）远高于 50Ω 同轴电缆，我们需要进行阻抗变换：",
+    matchingConclusion:
+      "因此，温顿天线必须搭配一个 <strong>4:1 电流型巴伦</strong>。这与 EFHW 使用的 49:1 变压器完全不同。",
+    patternTitle: "辐射方向图",
+    patternIntro:
+      "辐射方向图（绿色网格）主要由天线的<strong>物理总长度</strong>决定。在基频下，它与普通偶极子非常相似（呈8字形）。在高次谐波下，它会分裂成多个花瓣。",
+    patternPoints: {
+      fundamental: "<strong>基频</strong>：变形的“8”字，与偶极子类似。",
+      harmonic: "<strong>谐波</strong>：呈多瓣状，指向性增强。",
+    },
+    comparisonTitle: "温顿 vs EFHW vs 偶极子",
+    tableHead: {
+      feature: "特性",
+      dipole: "偶极子 (Dipole)",
+      windom: "温顿 (OCFD)",
+      efhw: "端馈 (EFHW)",
+    },
+    tableRow: {
+      feedPos: "馈电位置",
+      multiBand: "多波段能力",
+      match: "匹配设备",
+      ground: "接地需求",
+      cons: "缺点",
+    },
+    tableCell: {
+      dipoleFeed: "中心 (50%)",
+      windomFeed: "偏心 (33%)",
+      efhwFeed: "端点 (0%)",
+      dipoleBand: "差 (仅基频+3倍频)",
+      windomBand: "良 (基频+偶次谐波)",
+      efhwBand: "优 (基频+所有谐波)",
+      dipoleMatch: "1:1 巴伦 (可选)",
+      windomMatch: "4:1 巴伦 (必须)",
+      efhwMatch: "49:1 变压器 (必须)",
+      dipoleGround: "不需要",
+      windomGround: "推荐 (防共模)",
+      efhwGround: "必须 (依赖电缆地网)",
+      dipoleCons: "单波段",
+      windomCons: "谐波有缺口",
+      efhwCons: "变压器损耗大",
+    },
+    comparisonSummary:
+      "<strong>总结</strong>：温顿天线是效率与便利性的折中。它的效率通常高于 EFHW，但对防共模干扰的要求更高。",
+    misconceptionTitle: "常见误区",
+    misconceptionIntro:
+      "很多初学者误以为移动馈电点会让方向图“歪向一边”，这是<strong>错误</strong>的。",
+    misconceptionPhysicsTitle: "物理定式 (Physics Rules)",
+    misconceptionPhysics:
+      "驻波形状由<strong>导线总长度</strong>和<strong>频率</strong>决定。无论从哪里馈电，电流在两端都必须为零。因此，驻波形状不变，辐射方向图也不变。",
+    misconceptionFeedTitle: "馈电点的作用",
+    misconceptionFeed: "移动馈电点只是在<strong>选择阻抗</strong>：",
+    misconceptionFeedLow: "波腹馈电 = 低阻抗 (偶极子)",
+    misconceptionFeedHigh: "波节馈电 = 高阻抗 (端馈)",
+    misconceptionFeedMid: "中间馈电 = 中等阻抗 (温顿)",
+    misconceptionConclusion: "馈电点决定 SWR，不决定方向图。",
+    misconceptionExTitle: "现实中的例外",
+    misconceptionEx:
+      "如果巴伦性能不佳导致共模电流，馈线会参与辐射，这<strong>确实</strong>会导致方向图畸变。",
+    polarizationTitle: "极化特性 (Polarization)",
+    polarizationIntro:
+      "温顿天线是<strong>线极化 (Linear Polarization)</strong> 天线，通常表现为水平线极化。它<strong>不是</strong>椭圆极化或圆极化。",
+    polarizationReason1Title: "1. 物理结构决定",
+    polarizationReason1:
+      "椭圆极化需要两个垂直且有相位差的电场分量（如螺旋天线）。温顿本质上是一根单导线，电场矢量始终平行于导线振动。",
+    polarizationReason2Title: "2. 架设方式影响",
+    polarizationReason2List: {
+      horizontal: "<strong>水平架设</strong>：产生纯粹的水平极化。",
+      invertedV:
+        "<strong>倒V架设</strong>：依然是线极化。但倾斜的振子引入了垂直分量，填补了原本的轴向盲区（填充因子 δ ≈ 0.2），使方向图更接近全向（胖花生形）。",
+      sloper:
+        "<strong>倾斜架设 (Sloper)</strong>：产生斜线极化，电场矢量沿斜线振动，而非旋转。",
+    },
+    polarizationExceptionTitle: "3. 唯一的例外 (干扰)",
+    polarizationException:
+      "只有在<strong>共模干扰</strong>严重时（巴伦失效，馈线辐射），垂直的馈线波与水平的天线波混合，才可能导致极化状态混乱。但这属于<strong>信号畸变</strong>，而非设计特性。",
+    physicsContent:
+      "温顿天线利用了导线上特定位置（约离中心17%处，即全长33%处）在多个谐波频率下阻抗近似相等的特性。这使得单一馈电点配合4:1巴伦即可实现多波段工作。",
+    physicsQuote:
+      '"By moving the feed point to an off-center position... the antenna impedance at the feed point can be made manageable on multiple harmonic bands."',
+  },
 } satisfies Record<string, unknown>;

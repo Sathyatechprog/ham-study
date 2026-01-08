@@ -91,6 +91,11 @@ export default {
       keywords:
         "長線天線, Long Wire Antenna, 隨機線天線, random wire, 多瓣方向圖",
     },
+    windomAntenna: {
+      title: "溫頓天線 (Windom Antenna)",
+      description: "3D演示溫頓天線(OCFD)的偏饋結構與多寬頻特性。",
+      keywords: "溫頓天線, Windom antenna, OCFD, 偏饋偶極子",
+    },
   },
 
   tools: {

@@ -10,6 +10,12 @@ export default {
       medium: "Medium",
       fast: "Fast",
       length: "Length (λ)",
+      harmonicMode: "Harmonic Mode",
+      harmonic1: "Fundamental (n=1)",
+      harmonic2: "2nd Harmonic (n=2)",
+      harmonic3: "3rd Harmonic (n=3)",
+      harmonic4: "4th Harmonic (n=4)",
+      invertedV: "Inverted V Mode",
     },
   },
   circularPolarization: {
