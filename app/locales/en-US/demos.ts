@@ -659,4 +659,63 @@ export default {
     physicsQuote:
       '"By moving the feed point to an off-center position... the antenna impedance at the feed point can be made manageable on multiple harmonic bands."',
   },
+  hb9cvAntenna: {
+    title: "HB9CV Antenna",
+    metaTitle: "HB9CV Antenna 3D Visualization - Phased Array Principle",
+    metaDescription:
+      "Interactive 3D visualization of HB9CV antenna. Explore its unique phasing principle, cardioid radiation pattern, and high front-to-back ratio.",
+    metaKeywords:
+      "HB9CV antenna, phased array, directional antenna, ham radio, 3D simulation",
+    about:
+      "The HB9CV antenna is a classic 2-element phased array designed by Swiss radio amateur Rudolf Baumgartner (HB9CV) in the 1950s. Unlike a Yagi-Uda antenna where only one element is driven, both elements of the HB9CV are active. They are fed with equal amplitude but a specific phase difference, resulting in superior gain and a remarkable front-to-back ratio for such a short boom length.",
+    structureTitle: "Structure",
+    structureContent:
+      "The antenna consists of two driven elements separated by approximately 1/8 wavelength. A phasing line (often Z-shaped) connects the two elements, introducing a specific phase shift. This configuration ensures that the radiation from the rear element cancels out towards the back and reinforces towards the front.",
+    phaseTitle: "Phasing Principle",
+    phaseContent: "The key to HB9CV's performance is the phase relationship:",
+    phaseFront:
+      "Space phase shift (due to distance) + Transmission line phase shift",
+    phaseRear: "Total phase difference results in cancellation at the rear.",
+    formulaTitle: "Radiation Pattern Formula",
+    formulaIntro:
+      "The array factor for the HB9CV can be approximated by summation of two sources with phase difference:",
+    afDef:
+      "Where k is wave number, d is spacing, θ is angle, and δ is phase difference.",
+    paramK: "k = 2π/λ",
+    paramD: "d ≈ λ/8 (45°)",
+    paramDelta: "δ ≈ 225° (5π/4)",
+    patternTitle: "Radiation Pattern",
+    patternContent:
+      "The combination of 45° spatial separation and 225° electrical phase shift produces a cardioid (heart-shaped) pattern with a deep null at the back.",
+    comparisonTitle: "Comparison: HB9CV vs Yagi (2-element)",
+    comparisonTable: {
+      headers: { feature: "Feature", hb9cv: "HB9CV", yagi: "Yagi (2-el)" },
+      rows: {
+        gain: {
+          feature: "Gain",
+          hb9cv: "Higher (~4-5 dBd)",
+          yagi: "Lower (~3-4 dBd)",
+        },
+        fbRatio: {
+          feature: "F/B Ratio",
+          hb9cv: "Excellent (20-30 dB)",
+          yagi: "Moderate (10-15 dB)",
+        },
+        bandwidth: {
+          feature: "Bandwidth",
+          hb9cv: "Broader",
+          yagi: "Narrower",
+        },
+        feed: {
+          feature: "Feed System",
+          hb9cv: "Phasing Line Required",
+          yagi: "Simple Dipole Feed",
+        },
+      },
+    },
+    physicsContent:
+      "The HB9CV demonstrates the principle of a phased array where controlling the phase of each element allows for beamforming without the need for passive parasitic elements.",
+    physicsQuote:
+      "Phased arrays are the basis for modern radar and beamforming systems.",
+  },
 } satisfies typeof import("~/locales/zh/demos").default;

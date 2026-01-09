@@ -55,6 +55,9 @@ const DipoleAntennaScene = lazy(
 const WindomAntennaScene = lazy(
   () => import("~/components/windom-antenna-scene"),
 );
+const HB9CVAntennaScene = lazy(
+  () => import("~/components/hb9cv-antenna-scene"),
+);
 
 export const meta = ({ loaderData }: Route.MetaArgs) => {
   const { title, description, keywords } = loaderData;
@@ -267,6 +270,12 @@ export default function Home() {
       description: t("demos.windomAntenna.description"),
       href: "/demos/windom-antenna",
       component: WindomAntennaScene,
+    },
+    {
+      title: t("demos.hb9cv.title"),
+      description: t("demos.hb9cv.description"),
+      href: "/demos/hb9cv-antenna",
+      component: HB9CVAntennaScene,
     },
   ];
 

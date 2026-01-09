@@ -96,6 +96,12 @@ export default {
       description: "3D演示溫頓天線(OCFD)的偏饋結構與多寬頻特性。",
       keywords: "溫頓天線, Windom antenna, OCFD, 偏饋偶極子",
     },
+    hb9cv: {
+      title: "HB9CV 天線",
+      description:
+        "HB9CV 設計的一種 2 單元相控陣列天線，具有高增益和高前後比。",
+      keywords: "HB9CV 天線, 相控陣列, 定向天線, 業餘無線電",
+    },
   },
 
   tools: {

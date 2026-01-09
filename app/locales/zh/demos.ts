@@ -647,4 +647,54 @@ export default {
     physicsQuote:
       '"By moving the feed point to an off-center position... the antenna impedance at the feed point can be made manageable on multiple harmonic bands."',
   },
+  hb9cvAntenna: {
+    title: "HB9CV 天线",
+    metaTitle: "HB9CV 天线 3D 可视化 - 相控阵列原理",
+    metaDescription:
+      "HB9CV 天线交互式 3D 可视化。探索其独特的相位原理、心形辐射方向图以及高前后比特性。",
+    metaKeywords: "HB9CV 天线, 相控阵列, 定向天线, 业余无线电, 3D 仿真",
+    about:
+      "HB9CV 天线是由瑞士无线电爱好者 Rudolf Baumgartner (HB9CV) 在 1950 年代设计的经典 2 单元相控阵列天线。不同于只有一个有源振子的八木天线，HB9CV 的两个单元都是有源驱动的。它们以相等的幅度但特定的相位差进行馈电，从而在非常短的动臂长度下实现了卓越的增益和惊人的前后比。",
+    structureTitle: "结构",
+    structureContent:
+      "该天线由两个有源振子组成，间距约为 1/8 波长。一条相位线（通常为 Z 形）连接两个元件，引入特定的相移。这种配置确保了辐射在后方相互抵消，而在前方相互增强。",
+    phaseTitle: "相位原理",
+    phaseContent: "HB9CV 性能的关键在于相位关系：",
+    phaseFront: "空间相移（由于距离） + 传输线相移",
+    phaseRear: "总相位差导致后方辐射抵消。",
+    formulaTitle: "辐射方向图公式",
+    formulaIntro: "HB9CV 的阵列因子可以通过两个具有相位差的源的叠加来近似：",
+    afDef: "其中 k 是波数，d 是间距，θ 是角度，δ 是相位差。",
+    paramK: "k = 2π/λ",
+    paramD: "d ≈ λ/8 (45°)",
+    paramDelta: "δ ≈ 225° (5π/4)",
+    patternTitle: "辐射方向图",
+    patternContent:
+      "45° 的空间分离和 225° 的电相位偏移相结合，产生了心形方向图，在背面有一个深深的零点。",
+    comparisonTitle: "对比：HB9CV vs 八木 (2单元)",
+    comparisonTable: {
+      headers: { feature: "特性", hb9cv: "HB9CV", yagi: "八木 (2单元)" },
+      rows: {
+        gain: {
+          feature: "增益",
+          hb9cv: "更高的 (~4-5 dBd)",
+          yagi: "较低 (~3-4 dBd)",
+        },
+        fbRatio: {
+          feature: "前后比",
+          hb9cv: "优秀 (20-30 dB)",
+          yagi: "一般 (10-15 dB)",
+        },
+        bandwidth: { feature: "带宽", hb9cv: "较宽", yagi: "较窄" },
+        feed: {
+          feature: "馈电系统",
+          hb9cv: "需要相位线",
+          yagi: "简单偶极子馈电",
+        },
+      },
+    },
+    physicsContent:
+      "HB9CV 展示了相控阵列的原理：通过控制每个单元的相位来实现波束赋形，而无需无源寄生元件。",
+    physicsQuote: "相控阵列是现代雷达和波束赋形系统的基础。",
+  },
 } satisfies Record<string, unknown>;

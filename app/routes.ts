@@ -57,6 +57,9 @@ const getDemoRoutes = (idPrefix: string) => [
   route("demos/windom-antenna", "routes/demos/windom-antenna.tsx", {
     id: `${idPrefix}-windom`,
   }),
+  route("demos/hb9cv-antenna", "routes/demos/hb9cv-antenna.tsx", {
+    id: `${idPrefix}-hb9cv`,
+  }),
   route("tools/yagi-calculator", "routes/tools/yagi-calculator.tsx", {
     id: `${idPrefix}-yagi-tools`,
   }),

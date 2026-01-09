@@ -129,4 +129,13 @@ export default {
     pattern: "Radiation Pattern",
     waves: "Wave Intensity",
   },
+  hb9cvAntenna: {
+    title: "HB9CV Antenna",
+    desc: "2-Element Phased Array, Cardioid Pattern.",
+    frontElement: "Front (Driven, -225°)",
+    rearElement: "Rear (Driven, 0°)",
+    phaseLine: "Phasing Line (Z-shape)",
+    pattern: "Cardioid Pattern",
+    strength: "Field Strength",
+  },
 } satisfies typeof import("~/locales/zh/scene").default;

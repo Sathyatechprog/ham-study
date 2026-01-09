@@ -129,4 +129,13 @@ export default {
     pattern: "輻射方向圖 (Pattern)",
     waves: "電波強度 (Waves)",
   },
+  hb9cvAntenna: {
+    title: "HB9CV 天線",
+    desc: "2單元相控陣列，心形輻射圖。<br/>2-Element Phased Array, Cardioid Pattern.",
+    frontElement: "前振子 (驅動, -225°)",
+    rearElement: "後振子 (驅動, 0°)",
+    phaseLine: "相位線 (Z形)",
+    pattern: "心形輻射圖",
+    strength: "電場強度",
+  },
 } satisfies typeof import("~/locales/zh/scene").default;

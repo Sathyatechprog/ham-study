@@ -245,7 +245,8 @@ export function ElectricFieldInstanced({
         } else if (
           antennaType === "yagi" ||
           antennaType === "quad" ||
-          antennaType === "moxon"
+          antennaType === "moxon" ||
+          antennaType === "hb9cv"
         ) {
           // Directional Beam Logic first, then apply Polarization hScale/yScale
 
@@ -273,6 +274,17 @@ export function ElectricFieldInstanced({
             const sinDir = Math.sin(angle);
             const front = Math.max(0, sinDir);
             dirGain = front ** 2.0 + 0.1;
+          } else if (antennaType === "hb9cv") {
+            // HB9CV Pattern: Cardioid-like
+            // Phase difference logic approximation
+            const kd = Math.PI / 4; // 45 deg
+            const delta = (5 * Math.PI) / 4; // 225 deg
+            const psi = kd * cosDir + delta;
+
+            // Magnitude of sum of two unit vectors with angle psi
+            const mag = Math.sqrt(2 + 2 * Math.cos(psi));
+            dirGain = mag / 1.414; // Normalize peak
+            dirGain = dirGain ** 2; // Power pattern for sharpness
           }
 
           // Apply Polarization Pattern (E-field orientation)
@@ -554,6 +566,7 @@ export function ElectricFieldInstanced({
           antennaType === "yagi" ||
           antennaType === "quad" ||
           antennaType === "moxon" ||
+          antennaType === "hb9cv" ||
           antennaType === "long-wire" ||
           polarizationType === "horizontal"; // Dipoles/V-antennas have nulls
 

@@ -107,6 +107,12 @@ export default {
         "3D demonstration of Windom Antenna (OCFD) structure and multi-band operation.",
       keywords: "Windom antenna, OCFD, Off-Center Fed Dipole",
     },
+    hb9cv: {
+      title: "HB9CV Antenna",
+      description:
+        "A 2-element phased array with high gain and F/B ratio, designed by HB9CV.",
+      keywords: "HB9CV antenna, phased array, directional antenna, ham radio",
+    },
   },
 
   tools: {

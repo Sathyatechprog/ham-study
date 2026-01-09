@@ -129,4 +129,13 @@ export default {
     pattern: "辐射方向图 (Pattern)",
     waves: "电波强度 (Waves)",
   },
+  hb9cvAntenna: {
+    title: "HB9CV 天线",
+    desc: "2单元相控阵列，心形辐射图。<br/>2-Element Phased Array, Cardioid Pattern.",
+    frontElement: "前振子 (驱动, -225°)",
+    rearElement: "后振子 (驱动, 0°)",
+    phaseLine: "相位线 (Z形)",
+    pattern: "心形辐射图",
+    strength: "电场强度",
+  },
 } satisfies Record<string, unknown>;
