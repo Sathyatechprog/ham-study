@@ -144,7 +144,7 @@ export default {
     loop: "主环 (Main Loop)",
     capacitor: "调谐电容 (Capacitor)",
     pattern: "辐射方向图 (轴向零点)",
-    rotation: "旋转天线 (Rotate)",
+
     strength: "电场强度",
   },
 } satisfies Record<string, unknown>;

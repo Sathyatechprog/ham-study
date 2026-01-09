@@ -144,7 +144,7 @@ export default {
     loop: "Main Loop",
     capacitor: "Tuning Capacitor",
     pattern: "Radiation Pattern (Null on Axis)",
-    rotation: "Rotate Antenna",
+
     strength: "E-Field Strength",
   },
 } satisfies typeof import("~/locales/zh/scene").default;
