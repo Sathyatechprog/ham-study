@@ -232,7 +232,7 @@ export default function MoxonAntennaScene({
               id="wave-mode"
               checked={showWaves}
               onCheckedChange={setShowWaves}
-              className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+              className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
             />
             <Label
               htmlFor="wave-mode"
@@ -246,7 +246,7 @@ export default function MoxonAntennaScene({
               id="pattern-mode"
               checked={showPattern}
               onCheckedChange={setShowPattern}
-              className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+              className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
             />
             <Label
               htmlFor="pattern-mode"
@@ -349,13 +349,16 @@ export default function MoxonAntennaScene({
           <MoxonAntenna />
           {showPattern && <RadiationPattern />}
           {/* Surface/Field Mode */}
+          {/* Surface/Field Mode - Lifted to match antenna height */}
           {showWaves && (
-            <ElectricFieldInstanced
-              antennaType="moxon"
-              polarizationType="horizontal"
-              speed={effectiveSpeed}
-              amplitudeScale={1.5}
-            />
+            <group position={[0, 2, 0]}>
+              <ElectricFieldInstanced
+                antennaType="moxon"
+                polarizationType="horizontal"
+                speed={effectiveSpeed}
+                amplitudeScale={1.5}
+              />
+            </group>
           )}
         </Canvas>
 

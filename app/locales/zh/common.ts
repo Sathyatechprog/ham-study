@@ -46,6 +46,11 @@ export default {
       description: "极化的一般形式，介于线极化和圆极化之间。",
       keywords: "椭圆极化, 极化形式, elliptical polarization",
     },
+    dipoleAntenna: {
+      title: "偶极子天线 (Dipole Antenna)",
+      description: "最基础的天线类型。直观展示驻波原理与辐射方向图。",
+      keywords: "偶极子天线, 半波偶极子, 驻波",
+    },
     yagi: {
       title: "八木-宇田天线 (Yagi-Uda Antenna)",
       description: "著名的定向天线，由引向器、有源振子和反射器组成。",
@@ -81,6 +86,29 @@ export default {
       title: "端馈半波天线 (End-Fed Half Wave)",
       description: "多波段便携天线，使用49:1阻抗变换器，一端馈电。",
       keywords: "端馈天线, 半波天线, EFHW, end-fed half wave",
+    },
+    longWireAntenna: {
+      title: "长线天线 (Long Wire Antenna)",
+      description: "3D演示长线天线的多瓣辐射特性，展示长度与方向性的关系。",
+      keywords:
+        "长线天线, Long Wire Antenna, 随机线天线, random wire, 多瓣方向图",
+    },
+    windomAntenna: {
+      title: "温顿天线 (Windom Antenna)",
+      description: "3D演示温顿天线(OCFD)的偏馈结构与多波段特性。",
+      keywords: "温顿天线, Windom antenna, OCFD, 偏馈偶极子",
+    },
+    hb9cv: {
+      title: "HB9CV 天线",
+      description:
+        "HB9CV 设计的一种 2 单元相控阵列天线，具有高增益和高前后比。",
+      keywords: "HB9CV 天线, 相控阵列, 定向天线, 业余无线电",
+    },
+    magneticLoopAntenna: {
+      title: "磁环天线 (Magnetic Loop)",
+      description:
+        "小环天线（磁偶极子）3D演示。直观展示其深零点抗干扰和高Q特性。",
+      keywords: "磁环天线, 小环天线, 磁偶极子, 天线可视化",
     },
   },
 

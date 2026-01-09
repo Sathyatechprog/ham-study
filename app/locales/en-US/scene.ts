@@ -9,6 +9,13 @@ export default {
       slow: "Slow",
       medium: "Medium",
       fast: "Fast",
+      length: "Length (λ)",
+      harmonicMode: "Harmonic Mode",
+      harmonic1: "Fundamental (n=1)",
+      harmonic2: "2nd Harmonic (n=2)",
+      harmonic3: "3rd Harmonic (n=3)",
+      harmonic4: "4th Harmonic (n=4)",
+      invertedV: "Inverted V Mode",
     },
   },
   circularPolarization: {
@@ -40,6 +47,10 @@ export default {
     radials: "Radials",
     pattern: "Radiation Pattern",
     eField: "E-field",
+    radialAngle: "Radial Angle",
+    angle90: "90° (Horizontal)",
+    angle60: "60° (Uptilted)",
+    angle135: "135° (Drooping)",
   },
   horizontalPolarization: {
     title: "Horizontal Polarization",
@@ -109,4 +120,31 @@ export default {
     pattern: "Radiation Pattern",
     waves: "Wave Intensity",
   },
-} satisfies Record<string, unknown>;
+  longWireAntenna: {
+    title: "Long Wire Antenna",
+    desc: "An antenna longer than a wavelength. Has a multi-lobed radiation pattern.",
+    radiator: "Radiator",
+    eField: "E-Field",
+    hField: "H-Field",
+    pattern: "Radiation Pattern",
+    waves: "Wave Intensity",
+  },
+  hb9cvAntenna: {
+    title: "HB9CV Antenna",
+    desc: "2-Element Phased Array, Cardioid Pattern.",
+    frontElement: "Front (Driven, -225°)",
+    rearElement: "Rear (Driven, 0°)",
+    phaseLine: "Phasing Line (Z-shape)",
+    pattern: "Cardioid Pattern",
+    strength: "Field Strength",
+  },
+  magneticLoopAntenna: {
+    title: "Magnetic Loop Antenna",
+    desc: "A small loop antenna with sharp nulls on axis. High Q, narrow bandwidth, excellent for noise rejection.<br/>Ideally suited for limited spaces and receiving weak signals.",
+    loop: "Main Loop",
+    capacitor: "Tuning Capacitor",
+    pattern: "Radiation Pattern (Null on Axis)",
+
+    strength: "E-Field Strength",
+  },
+} satisfies typeof import("~/locales/zh/scene").default;

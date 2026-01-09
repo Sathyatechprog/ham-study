@@ -45,6 +45,12 @@ export default {
         "The general form of polarization, between linear and circular.",
       keywords: "elliptical polarization, polarization types",
     },
+    dipoleAntenna: {
+      title: "Dipole Antenna",
+      description:
+        "The most fundamental antenna type. Visualize standing waves and radiation patterns.",
+      keywords: "dipole antenna, half-wave, standing wave",
+    },
     yagi: {
       title: "Yagi-Uda Antenna",
       description:
@@ -88,6 +94,31 @@ export default {
         "A multi-band portable antenna using a 49:1 impedance transformer, fed at one end.",
       keywords:
         "end-fed half wave, EFHW, portable antenna, impedance transformer",
+    },
+    longWireAntenna: {
+      title: "Long Wire Antenna",
+      description:
+        "3D demonstration of Long Wire Antenna multi-lobed radiation characteristics.",
+      keywords: "Long Wire Antenna, random wire, multi-lobed pattern",
+    },
+    windomAntenna: {
+      title: "Windom Antenna (OCFD)",
+      description:
+        "3D demonstration of Windom Antenna (OCFD) structure and multi-band operation.",
+      keywords: "Windom antenna, OCFD, Off-Center Fed Dipole",
+    },
+    hb9cv: {
+      title: "HB9CV Antenna",
+      description:
+        "A 2-element phased array with high gain and F/B ratio, designed by HB9CV.",
+      keywords: "HB9CV antenna, phased array, directional antenna, ham radio",
+    },
+    magneticLoopAntenna: {
+      title: "Magnetic Loop Antenna",
+      description:
+        "Small Loop Antenna (Magnetic Dipole) 3D demo. Visualize its deep nulls and high Q.",
+      keywords:
+        "magnet loop, small loop, magnetic dipole, antenna visualization",
     },
   },
 

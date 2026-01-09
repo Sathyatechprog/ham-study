@@ -8,15 +8,15 @@ const EllipticalPolarizationScene = lazy(
   () => import("~/components/elliptical-polarization-scene"),
 );
 
-import { MathInfinity } from "~/components/math-inline";
+import { InlineMath } from "~/components/math";
 import { ScientificCitation } from "~/components/scientific-citation";
 
 export const loader = ({ context }: Route.LoaderArgs) => {
   const { t } = getInstance(context);
   return {
-    title: t("demos.elliptical.title"),
-    description: t("demos.elliptical.description"),
-    keywords: t("demos.elliptical.keywords"),
+    title: t("demos:ellipticalPolarization.metaTitle"),
+    description: t("demos:ellipticalPolarization.metaDescription"),
+    keywords: t("demos:ellipticalPolarization.metaKeywords"),
   };
 };
 
@@ -69,7 +69,7 @@ export default function EllipticalPolarizationPage() {
             <Trans
               ns="demos"
               i18nKey={`${ep}.about`}
-              components={{ b: <b /> }}
+              components={{ b: <b />, M: <InlineMath /> }}
             />
           </p>
           <p>{t(`${ep}.sliderNote`)}</p>
@@ -78,21 +78,21 @@ export default function EllipticalPolarizationPage() {
               <Trans
                 ns="demos"
                 i18nKey={`${ep}.linear`}
-                components={{ strong: <strong /> }}
+                components={{ strong: <strong />, M: <InlineMath /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
                 i18nKey={`${ep}.circular`}
-                components={{ strong: <strong /> }}
+                components={{ strong: <strong />, M: <InlineMath /> }}
               />
             </li>
             <li>
               <Trans
                 ns="demos"
                 i18nKey={`${ep}.elliptical`}
-                components={{ strong: <strong /> }}
+                components={{ strong: <strong />, M: <InlineMath /> }}
               />
             </li>
           </ul>
@@ -102,7 +102,7 @@ export default function EllipticalPolarizationPage() {
             <Trans
               ns="demos"
               i18nKey={`${ep}.generalRules`}
-              components={{ strong: <strong /> }}
+              components={{ strong: <strong />, M: <InlineMath /> }}
             />
           </p>
           <ul></ul>
@@ -118,7 +118,7 @@ export default function EllipticalPolarizationPage() {
                       i18nKey={`${ep}.physicsContent`}
                       components={{
                         strong: <strong />,
-                        infinity: <MathInfinity />,
+                        M: <InlineMath />,
                       }}
                     />
                   </p>

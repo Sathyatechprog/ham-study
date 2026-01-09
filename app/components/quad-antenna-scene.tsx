@@ -149,7 +149,10 @@ function RadiationPattern({
       // If boom is X, we want beam along X.
       // Now elements are in YZ plane, beam should be X. Correct.
 
-      const gain = Math.abs(vertex.x) ** 2; // Beaming along X axis
+      // Directional cardioid pattern for 2-element Quad (Front-to-back ratio)
+      // Normalized cardioid: (1 + cos(theta)) / 2
+      // vertex is normalized, so vertex.x is cos(theta) where theta is angle from X-axis
+      const gain = ((1 + vertex.x) / 2) ** 2; // Beaming along +X axis
 
       vertex.multiplyScalar(gain * scale);
       posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
@@ -253,7 +256,7 @@ export default function QuadAntennaScene({
           onCheckedChange={(c) =>
             setPolarization(c ? "vertical" : "horizontal")
           }
-          className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+          className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
         />
       </div>
 
@@ -267,7 +270,7 @@ export default function QuadAntennaScene({
               id="wave-mode"
               checked={showWaves}
               onCheckedChange={setShowWaves}
-              className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+              className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
             />
             <Label
               htmlFor="wave-mode"
@@ -281,7 +284,7 @@ export default function QuadAntennaScene({
               id="pattern-mode"
               checked={showPattern}
               onCheckedChange={setShowPattern}
-              className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+              className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
             />
             <Label
               htmlFor="pattern-mode"

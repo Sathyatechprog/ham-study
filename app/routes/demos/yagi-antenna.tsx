@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { ClientOnly } from "~/components/client-only";
+import { BlockMath, InlineMath } from "~/components/math";
 import { getInstance } from "~/middleware/i18next";
 import type { Route } from "./+types/yagi-antenna";
 
@@ -11,9 +12,9 @@ import { ScientificCitation } from "~/components/scientific-citation";
 export const loader = ({ context }: Route.LoaderArgs) => {
   const { t } = getInstance(context);
   return {
-    title: t("demos.yagi.title"),
-    description: t("demos.yagi.description"),
-    keywords: t("demos.yagi.keywords"),
+    title: t("demos:yagiAntenna.metaTitle"),
+    description: t("demos:yagiAntenna.metaDescription"),
+    keywords: t("demos:yagiAntenna.metaKeywords"),
   };
 };
 
@@ -93,7 +94,7 @@ export default function YagiAntennaPage() {
             </li>
           </ul>
 
-          <h3>{t(`${yagi}.polarizationMatch`)}</h3>
+          <h3>{t(`${yagi}.polarizationTitle`)}</h3>
           <ul>
             <li>
               <Trans
@@ -105,6 +106,127 @@ export default function YagiAntennaPage() {
               {t(`${yagi}.polarizationNote`)}
             </li>
           </ul>
+
+          <div className="prose dark:prose-invert max-w-none mb-8">
+            <h3>{t(`${yagi}.theoryAnalysis`)}</h3>
+
+            <p>
+              <Trans
+                ns="demos"
+                i18nKey={`${yagi}.theoryContent`}
+                components={{ strong: <strong /> }}
+              />
+            </p>
+
+            <div className="my-6 space-y-4">
+              <div>
+                <p className="font-semibold mb-2">
+                  {t(`${yagi}.formulaDriven`)}:
+                </p>
+                <BlockMath math="L_{DE} \approx 0.48\lambda" />
+              </div>
+              <div>
+                <p className="font-semibold mb-2">
+                  {t(`${yagi}.formulaReflector`)}:
+                </p>
+                <BlockMath math="L_{Ref} > L_{DE} \quad (L_{Ref} \approx 1.05 \cdot \frac{\lambda}{2})" />
+              </div>
+              <div>
+                <p className="font-semibold mb-2">
+                  {t(`${yagi}.formulaDirector`)}:
+                </p>
+                <BlockMath math="L_{Dir} < L_{DE} \quad (L_{Dir} \approx 0.95 \cdot \frac{\lambda}{2})" />
+              </div>
+            </div>
+
+            <h4>{t(`${yagi}.theorySummaryTable.title`)}</h4>
+            <div className="overflow-x-auto my-4">
+              <table className="w-full border-collapse border border-zinc-200 dark:border-zinc-700 text-sm">
+                <thead>
+                  <tr className="bg-zinc-100 dark:bg-zinc-800">
+                    {Object.entries(
+                      t(`${yagi}.theorySummaryTable.headers`, {
+                        returnObjects: true,
+                      }) as string[],
+                    ).map(([key, header]) => (
+                      <th
+                        key={key}
+                        className="border border-zinc-200 dark:border-zinc-700 p-2 text-left font-semibold"
+                      >
+                        {header}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(
+                    t(`${yagi}.theorySummaryTable.rows`, {
+                      returnObjects: true,
+                    }),
+                  ).map(([key]) => (
+                    <tr
+                      key={key}
+                      className="even:bg-zinc-50 dark:even:bg-zinc-900/50"
+                    >
+                      <td className="border border-zinc-200 dark:border-zinc-700 p-2">
+                        <Trans
+                          ns="demos"
+                          i18nKey={
+                            // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
+                            `${yagi}.theorySummaryTable.rows.${key}.type` as any
+                          }
+                          components={{
+                            strong: <strong />,
+                            M: <InlineMath />,
+                          }}
+                        />
+                      </td>
+                      <td className="border border-zinc-200 dark:border-zinc-700 p-2">
+                        <Trans
+                          ns="demos"
+                          i18nKey={
+                            // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
+                            `${yagi}.theorySummaryTable.rows.${key}.length` as any
+                          }
+                          components={{ M: <InlineMath /> }}
+                        />
+                      </td>
+                      <td className="border border-zinc-200 dark:border-zinc-700 p-2">
+                        <Trans
+                          ns="demos"
+                          i18nKey={
+                            // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
+                            `${yagi}.theorySummaryTable.rows.${key}.reactance` as any
+                          }
+                          components={{ M: <InlineMath /> }}
+                        />
+                      </td>
+                      <td className="border border-zinc-200 dark:border-zinc-700 p-2">
+                        <Trans
+                          ns="demos"
+                          i18nKey={
+                            // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
+                            `${yagi}.theorySummaryTable.rows.${key}.phase` as any
+                          }
+                          components={{ M: <InlineMath /> }}
+                        />
+                      </td>
+                      <td className="border border-zinc-200 dark:border-zinc-700 p-2">
+                        <Trans
+                          ns="demos"
+                          i18nKey={
+                            // biome-ignore lint/suspicious/noExplicitAny: Dynamic key
+                            `${yagi}.theorySummaryTable.rows.${key}.function` as any
+                          }
+                          components={{ M: <InlineMath /> }}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
 
           <div className="bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-4 md:p-6 mb-8 text-sm md:text-base leading-relaxed">
             <ScientificCitation

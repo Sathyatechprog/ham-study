@@ -48,6 +48,25 @@ const getDemoRoutes = (idPrefix: string) => [
   route("demos/end-fed-antenna", "routes/demos/end-fed-antenna.tsx", {
     id: `${idPrefix}-end-fed`,
   }),
+  route("demos/long-wire-antenna", "routes/demos/long-wire-antenna.tsx", {
+    id: `${idPrefix}-long-wire`,
+  }),
+  route("demos/dipole-antenna", "routes/demos/dipole-antenna.tsx", {
+    id: `${idPrefix}-dipole`,
+  }),
+  route("demos/windom-antenna", "routes/demos/windom-antenna.tsx", {
+    id: `${idPrefix}-windom`,
+  }),
+  route("demos/hb9cv-antenna", "routes/demos/hb9cv-antenna.tsx", {
+    id: `${idPrefix}-hb9cv`,
+  }),
+  route(
+    "demos/magnetic-loop-antenna",
+    "routes/demos/magnetic-loop-antenna.tsx",
+    {
+      id: `${idPrefix}-magnetic-loop`,
+    },
+  ),
   route("tools/yagi-calculator", "routes/tools/yagi-calculator.tsx", {
     id: `${idPrefix}-yagi-tools`,
   }),

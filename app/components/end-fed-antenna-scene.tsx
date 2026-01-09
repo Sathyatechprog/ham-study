@@ -24,7 +24,7 @@ import { ElectricFieldInstanced } from "./electric-field-instanced";
 const wireLength = 8;
 const wireHeight = 2;
 
-function EndFedAntenna({ speed = 1.0 }: { speed?: number }) {
+function EndFedAntenna() {
   const ununBox = useMemo(() => new BoxGeometry(0.4, 0.4, 0.2), []);
   const connectorGeo = useMemo(
     () => new CylinderGeometry(0.05, 0.05, 0.2, 16),
@@ -49,133 +49,7 @@ function EndFedAntenna({ speed = 1.0 }: { speed?: number }) {
   }, [wireCurve]);
 
   // E-Field and H-Field visualization
-  // E-Field: Perpendicular to wire (let's say Y axis relative to wire)
-  // H-Field: Circles around wire
-
-  // Create many instances for fields
-  const segmentCount = 30;
-  const eFieldInstances = useMemo(() => {
-    const tempObj = new Object3D();
-    const mesh = new InstancedMesh(
-      new CylinderGeometry(0.02, 0.02, 1, 8),
-      new MeshBasicMaterial({
-        color: "#ea580c",
-        transparent: true,
-        opacity: 0.8,
-      }),
-      segmentCount,
-    );
-
-    // Position them along the wire
-    for (let i = 0; i < segmentCount; i++) {
-      const t = i / segmentCount;
-      const pos = wireCurve.getPoint(t);
-      const tangent = wireCurve.getTangent(t);
-
-      // Calculate an up vector perpendicular to tangent
-      // Tangent is roughly (-1, ~0.2, 0).
-      // We want something perpendicular. Let's pick (0, 0, 1) x Tangent -> Y-ish
-      const normal = new Vector3(0, 0, 1).cross(tangent).normalize();
-
-      tempObj.position.copy(pos);
-      tempObj.lookAt(pos.clone().add(normal)); // Orient cylinder along 'normal'
-      tempObj.rotateX(Math.PI / 2); // Cylinder default is Y-axis, so we need to align it
-
-      tempObj.updateMatrix();
-      mesh.setMatrixAt(i, tempObj.matrix);
-    }
-    return mesh;
-  }, [wireCurve]);
-
-  const hFieldInstances = useMemo(() => {
-    const tempObj = new Object3D();
-    const geometry = new TorusGeometry(0.3, 0.02, 8, 24);
-    const material = new MeshBasicMaterial({
-      color: "#3b82f6",
-      transparent: true,
-      opacity: 0.8,
-    });
-    const mesh = new InstancedMesh(geometry, material, segmentCount);
-
-    for (let i = 0; i < segmentCount; i++) {
-      const t = i / segmentCount;
-      const pos = wireCurve.getPoint(t);
-      const tangent = wireCurve.getTangent(t);
-
-      tempObj.position.copy(pos);
-      tempObj.lookAt(pos.clone().add(tangent)); // Orient torus to face along wire
-
-      tempObj.updateMatrix();
-      mesh.setMatrixAt(i, tempObj.matrix);
-    }
-    return mesh;
-  }, [wireCurve]);
-
-  // Ref for animating fields
-  const eRef = useRef<InstancedMesh>(null);
-  const hRef = useRef<InstancedMesh>(null);
-
-  const timeRef = useRef(0);
-
-  useFrame((_, delta) => {
-    timeRef.current += delta * 3 * speed;
-    const time = timeRef.current;
-    const tempObj = new Object3D();
-
-    if (eRef.current) {
-      for (let i = 0; i < segmentCount; i++) {
-        const t = i / (segmentCount - 1); // 0 to 1
-        // Voltage (E-field) distribution for Half-Wave:
-        // V(x) = cos(pi * x)  -> Max at 0 and 1, Zero at 0.5
-        const spatialAmp = Math.cos(t * Math.PI);
-
-        // Time oscillation (Voltage) - sin(wt)
-        const timeAmp = Math.sin(time);
-
-        const amp = spatialAmp * timeAmp;
-
-        const pos = wireCurve.getPoint(t);
-        const tangent = wireCurve.getTangent(t);
-        const normal = new Vector3(0, 0, 1).cross(tangent).normalize();
-
-        // E-field scales with amplitude
-        tempObj.position.copy(pos);
-        tempObj.lookAt(pos.clone().add(normal));
-        tempObj.rotateX(Math.PI / 2);
-        tempObj.scale.set(1, Math.abs(amp) * 3, 1); // Scale length
-
-        tempObj.updateMatrix();
-        eRef.current.setMatrixAt(i, tempObj.matrix);
-      }
-      eRef.current.instanceMatrix.needsUpdate = true;
-    }
-
-    if (hRef.current) {
-      for (let i = 0; i < segmentCount; i++) {
-        const t = i / (segmentCount - 1); // 0 to 1
-        // Current (H-field) distribution for Half-Wave:
-        // I(x) = sin(pi * x) -> Zero at 0 and 1, Max at 0.5
-        const spatialAmp = Math.sin(t * Math.PI);
-
-        // Time oscillation (Current) - 90 deg phase shift from Voltage
-        // I(t) = cos(wt)
-        const timeAmp = Math.cos(time);
-
-        const amp = spatialAmp * timeAmp;
-
-        const pos = wireCurve.getPoint(t);
-        const tangent = wireCurve.getTangent(t);
-
-        tempObj.position.copy(pos);
-        tempObj.lookAt(pos.clone().add(tangent));
-        tempObj.scale.set(Math.abs(amp) * 2, Math.abs(amp) * 2, 1); // Scale ring size
-
-        tempObj.updateMatrix();
-        hRef.current.setMatrixAt(i, tempObj.matrix);
-      }
-      hRef.current.instanceMatrix.needsUpdate = true;
-    }
-  });
+  // Removed internal field visualization in favor of ElectricFieldInstanced
 
   return (
     <group position={[2, 0, 0]}>
@@ -214,53 +88,75 @@ function EndFedAntenna({ speed = 1.0 }: { speed?: number }) {
       </mesh>
 
       {/* Fields */}
-      <primitive object={eFieldInstances} ref={eRef} />
-      <primitive object={hFieldInstances} ref={hRef} />
     </group>
   );
 }
 
-function RadiationPattern() {
-  // End fed (long wire) pattern depends on length. 1/2 wave is dipole-like.
-  // Let's assume 1/2 wave for simplicity -> Donut shape (Toroidal) but distorted due to sloper?
-  // Let's just use a standard dipole pattern but aligned with wire.
+function RadiationPattern({ harmonic = 1 }: { harmonic?: number }) {
   const geometry = useMemo(() => {
-    const geo = new SphereGeometry(1, 60, 40);
+    const geo = new SphereGeometry(1, 90, 60);
     const posAttribute = geo.attributes.position;
     const vertex = new Vector3();
     const scale = 5;
 
     for (let i = 0; i < posAttribute.count; i++) {
       vertex.fromBufferAttribute(posAttribute, i);
-      vertex.normalize();
+      const originalDir = vertex.clone().normalize();
 
-      // Dipole pattern aligned with X axis (roughly wire direction)
-      // Gain is low at ends (X axis), high broadside (Y-Z plane)
-      // sin(theta) where theta is angle from axis.
-      // vertex.x is cos(angle)
-      // gain = sqrt(y^2 + z^2) basically.
-      const gain = Math.sqrt(vertex.y * vertex.y + vertex.z * vertex.z);
+      // Theoretical Formula Calculation
+      // We align the pattern along the X axis (Dipole axis)
+      // theta is angle from X axis.
+      // x component corresponds to cos(theta)
+      // y,z components correspond to sin(theta) part
+      // cos(theta) = x / r (r=1 here) -> x
+      // sin(theta) = sqrt(y^2 + z^2)
 
-      vertex.multiplyScalar(Math.max(0.1, gain) * scale);
+      const cosTheta = originalDir.x;
+      const sinTheta = Math.sqrt(
+        originalDir.y * originalDir.y + originalDir.z * originalDir.z,
+      );
+
+      // Avoid division by zero
+      const safeSinTheta = Math.max(0.001, sinTheta);
+
+      let gain = 0;
+      const n = harmonic;
+
+      if (n % 2 === 1) {
+        // Odd harmonic (1, 3, 5...)
+        // F(theta) = cos(n * pi/2 * cosTheta) / sinTheta
+        const num = Math.cos(((n * Math.PI) / 2) * cosTheta);
+        gain = Math.abs(num / safeSinTheta);
+      } else {
+        // Even harmonic (2, 4...)
+        // F(theta) = sin(n * pi/2 * cosTheta) / sinTheta
+        const num = Math.sin(((n * Math.PI) / 2) * cosTheta);
+        gain = Math.abs(num / safeSinTheta);
+      }
+
+      // Normalize gain somewhat so it fits
+      // For n=1, max is 1. For higher n, max can be different ??
+      // Actually standard formula usually normalized to 1, but let's check.
+      // n=2, max at 45deg -> cos(45)=0.707. n*pi/2*0.707 = pi*0.707 = 2.22 rad. sin(2.22)=0.8. sin(45)=0.707. gain ~ 1.1.
+      // It's reasonably normalized.
+
+      vertex.multiplyScalar(gain * scale);
       posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
     }
     geo.computeVertexNormals();
     return geo;
-  }, []);
+  }, [harmonic]);
 
   return (
-    <group position={[-2, 1, 0]} rotation={[0, 0, 0.2]}>
-      {" "}
-      {/* Centered on wire approx */}
-      <mesh geometry={geometry}>
-        <meshBasicMaterial
-          color="#22c55e"
-          wireframe={true}
-          transparent={true}
-          opacity={0.2}
-        />
-      </mesh>
-    </group>
+    <mesh geometry={geometry}>
+      <meshBasicMaterial
+        color="#22c55e"
+        wireframe={true}
+        transparent={true}
+        opacity={0.3}
+        side={2} // DoubleSide
+      />
+    </mesh>
   );
 }
 
@@ -277,6 +173,7 @@ export default function EndFedAntennaScene({
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
     "medium",
   );
+  const [harmonic, setHarmonic] = useState(1);
 
   const speedMultiplier = {
     slow: 0.3,
@@ -338,12 +235,55 @@ export default function EndFedAntennaScene({
           {t("common.controls.visualization")}
         </div>
         <div className="flex flex-col space-y-2">
+          {/* Harmonic Selector */}
+          <div className="space-y-1.5">
+            <Label className="text-xs md:text-sm text-zinc-300">
+              Harmonic Mode
+            </Label>
+            <RadioGroup
+              value={harmonic.toString()}
+              onValueChange={(v) => setHarmonic(parseInt(v))}
+              className="grid grid-cols-4 gap-2"
+            >
+              {[1, 2, 3, 4].map((n) => (
+                <div key={n} className="flex flex-col items-center">
+                  <RadioGroupItem
+                    value={n.toString()}
+                    id={`h-${n}`}
+                    className="sr-only"
+                  />
+                  <Label
+                    htmlFor={`h-${n}`}
+                    className={`
+                      w-full text-center py-1 px-2 rounded cursor-pointer text-xs
+                      ${
+                        harmonic === n
+                          ? "bg-primary text-primary-foreground font-bold"
+                          : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                      }
+                    `}
+                  >
+                    {n}x (
+                    {n === 1
+                      ? "Fund."
+                      : n === 2
+                        ? "2nd"
+                        : n === 3
+                          ? "3rd"
+                          : "4th"}
+                    )
+                  </Label>
+                </div>
+              ))}
+            </RadioGroup>
+          </div>
+
           <div className="flex items-center space-x-2">
             <Switch
               id="wave-mode"
               checked={showWaves}
               onCheckedChange={setShowWaves}
-              className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+              className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
             />
             <Label
               htmlFor="wave-mode"
@@ -357,7 +297,7 @@ export default function EndFedAntennaScene({
               id="pattern-mode"
               checked={showPattern}
               onCheckedChange={setShowPattern}
-              className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+              className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
             />
             <Label
               htmlFor="pattern-mode"
@@ -457,15 +397,20 @@ export default function EndFedAntennaScene({
             position={[0, -2, 0]}
           />
 
-          <EndFedAntenna speed={effectiveSpeed} />
-          {showPattern && <RadiationPattern />}
+          <EndFedAntenna />
+          {showPattern && (
+            <group position={[-2, 1, 0]} rotation={[0, 0, Math.atan2(2, -8)]}>
+              <RadiationPattern harmonic={harmonic} />
+            </group>
+          )}
           {showWaves && (
-            <group position={[-2, 1, 0]} rotation={[0, 0, 0.2]}>
+            <group position={[-2, 1, 0]} rotation={[0, 0, Math.atan2(2, -8)]}>
               <ElectricFieldInstanced
                 antennaType="end-fed"
                 polarizationType="horizontal"
                 speed={effectiveSpeed}
                 amplitudeScale={1.5}
+                activeHarmonic={harmonic}
               />
             </group>
           )}

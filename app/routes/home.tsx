@@ -46,6 +46,21 @@ const VerticalPolarizationScene = lazy(
   () => import("~/components/vertical-polarization-scene"),
 );
 const YagiAntennaScene = lazy(() => import("~/components/yagi-antenna-scene"));
+const LongWireAntennaScene = lazy(
+  () => import("~/components/long-wire-antenna-scene"),
+);
+const DipoleAntennaScene = lazy(
+  () => import("~/components/dipole-antenna-scene"),
+);
+const WindomAntennaScene = lazy(
+  () => import("~/components/windom-antenna-scene"),
+);
+const HB9CVAntennaScene = lazy(
+  () => import("~/components/hb9cv-antenna-scene"),
+);
+const MagneticLoopAntennaScene = lazy(
+  () => import("~/components/magnetic-loop-antenna-scene"),
+);
 
 export const meta = ({ loaderData }: Route.MetaArgs) => {
   const { title, description, keywords } = loaderData;
@@ -200,6 +215,12 @@ export default function Home() {
       component: EllipticalPolarizationScene,
     },
     {
+      title: t("demos.dipoleAntenna.title"),
+      description: t("demos.dipoleAntenna.description"),
+      href: "/demos/dipole-antenna",
+      component: DipoleAntennaScene,
+    },
+    {
       title: t("demos.yagi.title"),
       description: t("demos.yagi.description"),
       href: "/demos/yagi-antenna",
@@ -240,6 +261,30 @@ export default function Home() {
       description: t("demos.endFed.description"),
       href: "/demos/end-fed-antenna",
       component: EndFedAntennaScene,
+    },
+    {
+      title: t("demos.longWireAntenna.title"),
+      description: t("demos.longWireAntenna.description"),
+      href: "/demos/long-wire-antenna",
+      component: LongWireAntennaScene,
+    },
+    {
+      title: t("demos.windomAntenna.title"),
+      description: t("demos.windomAntenna.description"),
+      href: "/demos/windom-antenna",
+      component: WindomAntennaScene,
+    },
+    {
+      title: t("demos.hb9cv.title"),
+      description: t("demos.hb9cv.description"),
+      href: "/demos/hb9cv-antenna",
+      component: HB9CVAntennaScene,
+    },
+    {
+      title: t("demos.magneticLoopAntenna.title"),
+      description: t("demos.magneticLoopAntenna.description"),
+      href: "/demos/magnetic-loop-antenna",
+      component: MagneticLoopAntennaScene,
     },
   ];
 

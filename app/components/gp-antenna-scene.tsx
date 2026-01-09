@@ -8,13 +8,15 @@ import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Switch } from "~/components/ui/switch";
 import { ElectricFieldInstanced } from "./electric-field-instanced";
 
-function GPAntenna() {
+function GPAntenna({ radialAngle }: { radialAngle: "60" | "135" }) {
   const radials = 4;
   const radialLen = 2;
-  // Radials droop slightly typically, say 45 deg or horizontal.
-  // Standard GP is often horizontal radials or 45 deg for impedance match.
-  // Let's do 45 deg as it looks "cooler" and is common for 50 ohm match.
-  const droop = Math.PI / 4;
+  // Radial Angle is the angle from the VERTICAL axis (Zenith).
+  // 90 deg = Horizontal.
+  // 135 deg = Drooping (pointing down 45 deg from horizontal).
+  // 60 deg = Uptilted (pointing up 30 deg from horizontal).
+  const angleFromVertical =
+    radialAngle === "135" ? (135 * Math.PI) / 180 : (60 * Math.PI) / 180;
 
   return (
     <group position={[0, 3, 0]}>
@@ -36,17 +38,12 @@ function GPAntenna() {
         return (
           // biome-ignore lint/suspicious/noArrayIndexKey: Static array length
           <group key={`radial-${i}`} rotation={[0, angle, 0]}>
-            <mesh
-              position={[
-                (radialLen * Math.sin(droop)) / 2,
-                (-radialLen * Math.cos(droop)) / 2,
-                0,
-              ]}
-              rotation={[0, 0, -droop]}
-            >
-              <cylinderGeometry args={[0.015, 0.015, radialLen, 16]} />
-              <meshStandardMaterial color="#3b82f6" />
-            </mesh>
+            <group rotation={[0, 0, -angleFromVertical]}>
+              <mesh position={[0, radialLen / 2, 0]}>
+                <cylinderGeometry args={[0.015, 0.015, radialLen, 16]} />
+                <meshStandardMaterial color="#3b82f6" />
+              </mesh>
+            </group>
           </group>
         );
       })}
@@ -60,7 +57,7 @@ function GPAntenna() {
   );
 }
 
-function RadiationPattern() {
+function RadiationPattern({ radialAngle }: { radialAngle: "60" | "135" }) {
   const geometry = useMemo(() => {
     const geo = new SphereGeometry(1, 40, 30);
     const posAttribute = geo.attributes.position;
@@ -76,19 +73,64 @@ function RadiationPattern() {
       // Vertical pattern varies. Low takeoff angle usually.
       // Null at zenith (straight up).
 
-      // y is vertical cosine.
-      const cosTheta = Math.abs(vertex.y); // Zenith angle cosine
-      const sinTheta = Math.sqrt(1 - cosTheta * cosTheta); // Horizontal component
+      // Monopole Formula from mds/gp.md
+      // F(theta) = (cos(PI/2 * cos(theta))) / sin(theta)
+      // theta is angle from vertical (Zenith).
+      // In Three.js, vertex.y is cos(theta).
+      // sin(theta) is sqrt(1 - y^2).
 
-      // Donut shape
-      const gain = sinTheta;
+      const cosTheta = vertex.y;
+      const sinTheta = Math.sqrt(1.0 - cosTheta * cosTheta);
+
+      let gain = 0;
+
+      // Avoid division by zero at poles (theta=0 or 180, sinTheta=0)
+      // Avoid division by zero at poles
+      if (sinTheta > 0.001) {
+        if (radialAngle === "135") {
+          // 135 deg (Drooping): Behaves closer to a vertical dipole
+          // Standard 1/4 wave monopole on ground plane formula:
+          // F(theta) = (cos(PI/2 * cos(theta))) / sin(theta)
+          const num = Math.cos((Math.PI / 2) * cosTheta);
+          // Allow full sphere radiation (donut shape)
+          gain = Math.abs(num / sinTheta);
+        } else {
+          // 60 deg (Uptilted / Bowl):
+          // Radials act as a reflector, pushing the beam UPWARDS.
+          // We aim for a peak elevation around 45-60 degrees up.
+
+          // 2. Beam Shaping for "Bowl" effect
+          // We want to shift the peak from horizon (y=0) to upwards (y>0).
+          // Let's use a directional factor peaked at target elevation.
+          const elevation = Math.asin(vertex.y); // -PI/2 to PI/2
+          const targetElevation = Math.PI / 4; // 45 deg up
+
+          // Simple beam shape: cos(elevation - target)
+          // Squaring it makes it tighter.
+          const beamShape = Math.cos(elevation - targetElevation);
+
+          // Combine:
+          // We use the beamShape primarily, but keep some monopole characteristic?
+          // Actually, purely directional beam might be clearer for visualization.
+          gain = beamShape * beamShape * beamShape;
+
+          // Ensure null at zenith if strictly vertical wire?
+          // Vertical wire always has null at zenith.
+          if (vertex.y > 0.98) gain = 0;
+
+          // Boost scale slightly to match visual bulk of other patterns
+          gain *= 1.2;
+        }
+      } else {
+        gain = 0;
+      }
 
       vertex.multiplyScalar(gain * scale);
       posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
     }
     geo.computeVertexNormals();
     return geo;
-  }, []);
+  }, [radialAngle]);
 
   return (
     <group position={[0, 3, 0]}>
@@ -114,6 +156,7 @@ export default function GPAntennaScene({
   const { t } = useTranslation("scene");
   const [showWaves, setShowWaves] = useState(true);
   const [showPattern, setShowPattern] = useState(true);
+  const [radialAngle, setRadialAngle] = useState<"60" | "135">("135");
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
     "medium",
   );
@@ -172,7 +215,7 @@ export default function GPAntennaScene({
               id="wave-mode"
               checked={showWaves}
               onCheckedChange={setShowWaves}
-              className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+              className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
             />
             <Label
               htmlFor="wave-mode"
@@ -186,7 +229,7 @@ export default function GPAntennaScene({
               id="pattern-mode"
               checked={showPattern}
               onCheckedChange={setShowPattern}
-              className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+              className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
             />
             <Label
               htmlFor="pattern-mode"
@@ -196,6 +239,45 @@ export default function GPAntennaScene({
             </Label>
           </div>
         </div>
+      </div>
+
+      <div className="pt-3 border-t border-white/10">
+        <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
+          {t("gpAntenna.radialAngle")}
+        </div>
+        <RadioGroup
+          defaultValue="135"
+          value={radialAngle}
+          onValueChange={(v) => setRadialAngle(v as "60" | "135")}
+          className="flex gap-4"
+        >
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem
+              value="60"
+              id="angle-60"
+              className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
+            />
+            <Label
+              htmlFor="angle-60"
+              className="text-xs cursor-pointer text-zinc-300"
+            >
+              {t("gpAntenna.angle60")}
+            </Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem
+              value="135"
+              id="angle-135"
+              className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
+            />
+            <Label
+              htmlFor="angle-135"
+              className="text-xs cursor-pointer text-zinc-300"
+            >
+              {t("gpAntenna.angle135")}
+            </Label>
+          </div>
+        </RadioGroup>
       </div>
 
       <div className="pt-3 border-t border-white/10">
@@ -286,16 +368,19 @@ export default function GPAntennaScene({
             position={[0, -3, 0]}
           />
 
-          <GPAntenna />
-          {showPattern && <RadiationPattern />}
+          <GPAntenna radialAngle={radialAngle} />
+          {showPattern && <RadiationPattern radialAngle={radialAngle} />}
           {/* Surface/Field Mode */}
           {showWaves && (
-            <ElectricFieldInstanced
-              antennaType="gp"
-              polarizationType="vertical"
-              speed={effectiveSpeed}
-              amplitudeScale={1.5}
-            />
+            <group position={[0, 3, 0]}>
+              <ElectricFieldInstanced
+                antennaType="gp"
+                polarizationType="vertical"
+                speed={effectiveSpeed}
+                amplitudeScale={1.5}
+                radialAngle={radialAngle}
+              />
+            </group>
           )}
         </Canvas>
 

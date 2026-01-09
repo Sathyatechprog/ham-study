@@ -173,7 +173,7 @@ export default function CircularPolarizationScene({
               id="wave-mode"
               checked={showWaves}
               onCheckedChange={setShowWaves}
-              className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+              className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
             />
             <Label
               htmlFor="wave-mode"
@@ -187,7 +187,7 @@ export default function CircularPolarizationScene({
               id="pattern-mode"
               checked={showPattern}
               onCheckedChange={setShowPattern}
-              className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+              className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
             />
             <Label
               htmlFor="pattern-mode"
@@ -214,7 +214,7 @@ export default function CircularPolarizationScene({
           id="polarization-toggle"
           checked={isRHCP}
           onCheckedChange={setIsRHCP}
-          className="data-[state=checked]:bg-primary-foreground data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+          className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
         />
       </div>
 

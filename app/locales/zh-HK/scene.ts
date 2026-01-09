@@ -9,6 +9,13 @@ export default {
       slow: "慢",
       medium: "中",
       fast: "快",
+      length: "天線長度 (Length λ)",
+      harmonicMode: "諧波模式 (Harmonic Mode)",
+      harmonic1: "基頻 (n=1)",
+      harmonic2: "2次諧波 (n=2)",
+      harmonic3: "3次諧波 (n=3)",
+      harmonic4: "4次諧波 (n=4)",
+      invertedV: "倒V模式 (Inverted V)",
     },
   },
   circularPolarization: {
@@ -40,6 +47,10 @@ export default {
     radials: "地網 (無源 / Radials)",
     pattern: "輻射方向圖 (Pattern)",
     eField: "電場 (E-field)",
+    radialAngle: "地網角度 (Radial Angle)",
+    angle90: "90° (水平/Horizontal)",
+    angle60: "60° (上翹/Uptilted)",
+    angle135: "135° (下垂/Drooping)",
   },
   horizontalPolarization: {
     title: "水平極化 (Horizontal Polarization)",
@@ -109,4 +120,31 @@ export default {
     pattern: "輻射方向圖 (Pattern)",
     waves: "電波強度 (Waves)",
   },
-} satisfies Record<string, unknown>;
+  longWireAntenna: {
+    title: "長線天線 (Long Wire)",
+    desc: "長度大於一個波長的天線。具有多瓣輻射方向圖。<br/>An antenna longer than a wavelength. Has a multi-lobed radiation pattern.",
+    radiator: "振子 (Radiator)",
+    eField: "電場 (E-Field)",
+    hField: "磁場 (H-Field)",
+    pattern: "輻射方向圖 (Pattern)",
+    waves: "電波強度 (Waves)",
+  },
+  hb9cvAntenna: {
+    title: "HB9CV 天線",
+    desc: "2單元相控陣列，心形輻射圖。<br/>2-Element Phased Array, Cardioid Pattern.",
+    frontElement: "前振子 (驅動, -225°)",
+    rearElement: "後振子 (驅動, 0°)",
+    phaseLine: "相位線 (Z形)",
+    pattern: "心形輻射圖",
+    strength: "電場強度",
+  },
+  magneticLoopAntenna: {
+    title: "磁環天線 (Magnetic Loop)",
+    desc: "一種高Q值窄頻寬天線，具有極深的零點。抗干擾能力極強。<br/>Small loop with high Q and deep nulls. Excellent for noise rejection.",
+    loop: "主環 (Main Loop)",
+    capacitor: "調諧電容 (Capacitor)",
+    pattern: "輻射方向圖 (軸向零點)",
+
+    strength: "電場強度",
+  },
+} satisfies typeof import("~/locales/zh/scene").default;
