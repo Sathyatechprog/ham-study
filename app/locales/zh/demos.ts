@@ -697,4 +697,42 @@ export default {
       "HB9CV 展示了相控阵列的原理：通过控制每个单元的相位来实现波束赋形，而无需无源寄生元件。",
     physicsQuote: "相控阵列是现代雷达和波束赋形系统的基础。",
   },
+  magneticLoopAntenna: {
+    metaTitle: "磁环天线 (Magnetic Loop) | 业余无线电可视化",
+    metaDescription:
+      "磁环天线（小环天线）3D交互演示。探索其高Q值、窄带宽及独特的抗干扰深零点特性。",
+    metaKeywords:
+      "磁环天线, 小环天线, magnetic loop, small loop, 高Q值, 抗干扰, 窄带天线",
+    title: "磁环天线 (Magnetic Loop)",
+    overviewTitle: "关于此演示",
+    overview:
+      "本页面展示了<strong>磁环天线 (Magnetic Loop)</strong>，也称为小环天线。它是一种电尺寸极小（周长 <M>C \\lt \\lambda/10</M>）的天线。",
+    structure:
+      "<strong>结构:</strong> 通常是一个垂直架设的单匝或多匝线圈，顶部或底部串联一个可变电容进行调谐。常用的馈电方式是使用一个更小的耦合环。",
+    features:
+      "<strong>特点:</strong> 效率较低，但具有极高的 Q 值和极窄的带宽。最著名的特点是其卓越的抗干扰能力。",
+    physicsModelTitle: "物理模型：磁偶极子",
+    physicsModel:
+      "小环天线在物理上等效于一个<strong>磁偶极子</strong>。由于尺寸远小于波长，假设环上的电流 <M>I</M> 是均匀分布的（这与偶极子天线不同）。",
+    fieldFormulaTitle: "远场电场公式",
+    fieldFormulaDesc: "球坐标系下的远场电场分量 <M>E_\\phi</M> 为：",
+    paramEta: "<M>\\eta \\approx 377\\Omega</M> (波阻抗)",
+    paramK: "<M>k = 2\\pi/\\lambda</M> (波数)",
+    paramI: "<M>I</M> 为环电流",
+    paramA: "<M>A</M> 为环面积",
+    paramTheta: "<M>\\theta</M> 为相对于环轴线 (Z轴) 的夹角",
+    patternTitle: "辐射方向图",
+    patternDesc: "方向性函数为 <M>F(\\theta) = \\sin\\theta</M>。",
+    patternNull:
+      "<strong>零点 (Nulls):</strong> 沿环轴线方向（垂直于环面），辐射为零。",
+    patternMax:
+      "<strong>最大值 (Max):</strong> 在环面方向（侧面看环是一条线），辐射最大。",
+    advantageTitle: "深零点抗干扰",
+    advantageDesc:
+      "磁环天线最值钱的特性是其拥有极深的零点。通过旋转天线，将干扰源置于轴线方向（零点），通著可将噪音降低 20-30dB。",
+    physicsContent:
+      "磁环天线在近场主要辐射磁场分量。在远场，其电场分量是水平的（<M>\\phi</M> 方向），其辐射方向图呈甜甜圈状，零点位于轴线上。",
+    physicsQuote:
+      '"The small loop antenna is equivalent to a magnetic dipole... it has a null along its axis and maximum radiation in the plane of the loop."',
+  },
 } satisfies Record<string, unknown>;

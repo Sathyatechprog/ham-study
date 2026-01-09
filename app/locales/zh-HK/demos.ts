@@ -652,8 +652,8 @@ export default {
     title: "HB9CV 天線",
     metaTitle: "HB9CV 天線 3D 可視化 - 相控陣列原理",
     metaDescription:
-      "HB9CV 天線互動式 3D 可視化。探索其獨特的相位原理、心形輻射方向圖以及高前後比特性。",
-    metaKeywords: "HB9CV 天線, 相控陣列, 定向天線, 業餘無線電, 3D 模擬",
+      "HB9CV 天線交互式 3D 可視化。探索其獨特的相位原理、心形輻射方向圖以及高前後比特性。",
+    metaKeywords: "HB9CV 天線, 相控陣列, 定向天線, 業餘無線電, 3D 仿真",
     about:
       "HB9CV 天線是由瑞士無線電愛好者 Rudolf Baumgartner (HB9CV) 在 1950 年代設計的經典 2 單元相控陣列天線。不同於只有一個有源振子的八木天線，HB9CV 的兩個單元都是有源驅動的。它們以相等的幅度但特定的相位差進行饋電，從而在非常短的動臂長度下實現了卓越的增益和驚人的前後比。",
     structureTitle: "結構",
@@ -686,7 +686,7 @@ export default {
           hb9cv: "優秀 (20-30 dB)",
           yagi: "一般 (10-15 dB)",
         },
-        bandwidth: { feature: "帶寬", hb9cv: "較寬", yagi: "較窄" },
+        bandwidth: { feature: "頻寬", hb9cv: "較寬", yagi: "較窄" },
         feed: {
           feature: "饋電系統",
           hb9cv: "需要相位線",
@@ -697,5 +697,43 @@ export default {
     physicsContent:
       "HB9CV 展示了相控陣列的原理：通過控制每個單元的相位來實現波束賦形，而無需無源寄生元件。",
     physicsQuote: "相控陣列是現代雷達和波束賦形系統的基礎。",
+  },
+  magneticLoopAntenna: {
+    metaTitle: "磁環天線 (Magnetic Loop) | 業餘無線電可視化",
+    metaDescription:
+      "磁環天線（小環天線）3D交互演示。探索其高Q值、窄帶寬及獨特的抗干擾深零點特性。",
+    metaKeywords:
+      "磁環天線, 小環天線, magnetic loop, small loop, 高Q值, 抗干擾, 窄帶天線",
+    title: "磁環天線 (Magnetic Loop)",
+    overviewTitle: "關於此演示",
+    overview:
+      "本頁面展示了<strong>磁環天線 (Magnetic Loop)</strong>，也稱為小環天線。它是一種電尺寸極小（周長 <M>C \\lt \\lambda/10</M>）的天線。",
+    structure:
+      "<strong>結構:</strong> 通常是一個垂直架設的單匝或多匝線圈，頂部或底部串聯一個可變電容進行調諧。常用的饋電方式是使用一個更小的耦合環。",
+    features:
+      "<strong>特點:</strong> 效率較低，但具有極高的 Q 值和極窄的頻寬。最著名的特點是其卓越的抗干擾能力。",
+    physicsModelTitle: "物理模型：磁偶極子",
+    physicsModel:
+      "小環天線在物理上等效於一個<strong>磁偶極子</strong>。由於尺寸遠小於波長，假設環上的電流 <M>I</M> 是均勻分佈的（這與偶極子天線不同）。",
+    fieldFormulaTitle: "遠場電場公式",
+    fieldFormulaDesc: "球坐標系下的遠場電場分量 <M>E_\\phi</M> 為：",
+    paramEta: "<M>\\eta \\approx 377\\Omega</M> (波阻抗)",
+    paramK: "<M>k = 2\\pi/\\lambda</M> (波數)",
+    paramI: "<M>I</M> 為環電流",
+    paramA: "<M>A</M> 為環面積",
+    paramTheta: "<M>\\theta</M> 為相對於環軸線 (Z軸) 的夾角",
+    patternTitle: "輻射方向圖",
+    patternDesc: "方向性函數為 <M>F(\\theta) = \\sin\\theta</M>。",
+    patternNull:
+      "<strong>零點 (Nulls):</strong> 沿環軸線方向（垂直於環面），輻射為零。",
+    patternMax:
+      "<strong>最大值 (Max):</strong> 在環面方向（側面看環是一條線），輻射最大。",
+    advantageTitle: "深零點抗干擾",
+    advantageDesc:
+      "磁環天線最值錢的特性是其擁有極深的零點。通過旋轉天線，將干擾源置於軸線方向（零點），通常可將噪音降低 20-30dB。",
+    physicsContent:
+      "磁環天線在近場主要輻射磁場分量。在遠場，其電場分量是水平的（<M>\\phi</M> 方向），其輻射方向圖呈甜甜圈狀，零點位於軸線上。",
+    physicsQuote:
+      '"The small loop antenna is equivalent to a magnetic dipole... it has a null along its axis and maximum radiation in the plane of the loop."',
   },
 } satisfies typeof import("~/locales/zh/demos").default;

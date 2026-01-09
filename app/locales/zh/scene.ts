@@ -138,4 +138,13 @@ export default {
     pattern: "心形辐射图",
     strength: "电场强度",
   },
+  magneticLoopAntenna: {
+    title: "磁环天线 (Magnetic Loop)",
+    desc: "一种高Q值窄带天线，具有极深的零点。抗干扰能力极强。<br/>Small loop with high Q and deep nulls. Excellent for noise rejection.",
+    loop: "主环 (Main Loop)",
+    capacitor: "调谐电容 (Capacitor)",
+    pattern: "辐射方向图 (轴向零点)",
+    rotation: "旋转天线 (Rotate)",
+    strength: "电场强度",
+  },
 } satisfies Record<string, unknown>;

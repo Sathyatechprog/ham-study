@@ -58,6 +58,9 @@ const WindomAntennaScene = lazy(
 const HB9CVAntennaScene = lazy(
   () => import("~/components/hb9cv-antenna-scene"),
 );
+const MagneticLoopAntennaScene = lazy(
+  () => import("~/components/magnetic-loop-antenna-scene"),
+);
 
 export const meta = ({ loaderData }: Route.MetaArgs) => {
   const { title, description, keywords } = loaderData;
@@ -276,6 +279,12 @@ export default function Home() {
       description: t("demos.hb9cv.description"),
       href: "/demos/hb9cv-antenna",
       component: HB9CVAntennaScene,
+    },
+    {
+      title: t("demos.magneticLoopAntenna.title"),
+      description: t("demos.magneticLoopAntenna.description"),
+      href: "/demos/magnetic-loop-antenna",
+      component: MagneticLoopAntennaScene,
     },
   ];
 

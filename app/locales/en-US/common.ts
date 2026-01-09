@@ -113,6 +113,13 @@ export default {
         "A 2-element phased array with high gain and F/B ratio, designed by HB9CV.",
       keywords: "HB9CV antenna, phased array, directional antenna, ham radio",
     },
+    magneticLoopAntenna: {
+      title: "Magnetic Loop Antenna",
+      description:
+        "Small Loop Antenna (Magnetic Dipole) 3D demo. Visualize its deep nulls and high Q.",
+      keywords:
+        "magnet loop, small loop, magnetic dipole, antenna visualization",
+    },
   },
 
   tools: {

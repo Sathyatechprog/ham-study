@@ -246,11 +246,24 @@ export function ElectricFieldInstanced({
           antennaType === "yagi" ||
           antennaType === "quad" ||
           antennaType === "moxon" ||
-          antennaType === "hb9cv"
+          antennaType === "hb9cv" ||
+          antennaType === "magnetic-loop"
         ) {
           // Directional Beam Logic first, then apply Polarization hScale/yScale
 
-          if (antennaType === "yagi" || antennaType === "quad") {
+          if (antennaType === "magnetic-loop") {
+            // Magnetic Loop (Small Loop/Magnetic Dipole)
+            // Assumed Orientation: Vertical Loop in XY plane.
+            // Axis is Z-axis.
+            // Nulls are along the Axis (Z).
+            // Max Radiation is in the Plane (X-Y).
+            // In our X-Z field fabric slice:
+            // - Along X (angle=0): In loop plane -> Max.
+            // - Along Z (angle=90): Along axis -> Null.
+            // So Pattern is cos(angle)-like (Figure-8 along X).
+            const cosA = Math.cos(angle);
+            dirGain = Math.abs(cosA) + 0.05; // Deep nulls
+          } else if (antennaType === "yagi" || antennaType === "quad") {
             // Yagi/Quad: X-axis Beam (+X is forward)
             // Need strong lobes in +X, weak in -X
             const front = Math.max(0, cosDir);
@@ -567,7 +580,7 @@ export function ElectricFieldInstanced({
           antennaType === "quad" ||
           antennaType === "moxon" ||
           antennaType === "hb9cv" ||
-          antennaType === "long-wire" ||
+          antennaType === "magnetic-loop" ||
           polarizationType === "horizontal"; // Dipoles/V-antennas have nulls
 
         if (

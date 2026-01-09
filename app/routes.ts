@@ -60,6 +60,13 @@ const getDemoRoutes = (idPrefix: string) => [
   route("demos/hb9cv-antenna", "routes/demos/hb9cv-antenna.tsx", {
     id: `${idPrefix}-hb9cv`,
   }),
+  route(
+    "demos/magnetic-loop-antenna",
+    "routes/demos/magnetic-loop-antenna.tsx",
+    {
+      id: `${idPrefix}-magnetic-loop`,
+    },
+  ),
   route("tools/yagi-calculator", "routes/tools/yagi-calculator.tsx", {
     id: `${idPrefix}-yagi-tools`,
   }),

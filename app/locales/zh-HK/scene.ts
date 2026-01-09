@@ -138,4 +138,13 @@ export default {
     pattern: "心形輻射圖",
     strength: "電場強度",
   },
+  magneticLoopAntenna: {
+    title: "磁環天線 (Magnetic Loop)",
+    desc: "一種高Q值窄頻寬天線，具有極深的零點。抗干擾能力極強。<br/>Small loop with high Q and deep nulls. Excellent for noise rejection.",
+    loop: "主環 (Main Loop)",
+    capacitor: "調諧電容 (Capacitor)",
+    pattern: "輻射方向圖 (軸向零點)",
+    rotation: "旋轉天線 (Rotate)",
+    strength: "電場強度",
+  },
 } satisfies typeof import("~/locales/zh/scene").default;

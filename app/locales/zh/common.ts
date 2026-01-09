@@ -104,6 +104,12 @@ export default {
         "HB9CV 设计的一种 2 单元相控阵列天线，具有高增益和高前后比。",
       keywords: "HB9CV 天线, 相控阵列, 定向天线, 业余无线电",
     },
+    magneticLoopAntenna: {
+      title: "磁环天线 (Magnetic Loop)",
+      description:
+        "小环天线（磁偶极子）3D演示。直观展示其深零点抗干扰和高Q特性。",
+      keywords: "磁环天线, 小环天线, 磁偶极子, 天线可视化",
+    },
   },
 
   tools: {

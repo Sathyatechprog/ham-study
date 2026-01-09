@@ -138,4 +138,13 @@ export default {
     pattern: "Cardioid Pattern",
     strength: "Field Strength",
   },
+  magneticLoopAntenna: {
+    title: "Magnetic Loop Antenna",
+    desc: "A small loop antenna with sharp nulls on axis. High Q, narrow bandwidth, excellent for noise rejection.<br/>Ideally suited for limited spaces and receiving weak signals.",
+    loop: "Main Loop",
+    capacitor: "Tuning Capacitor",
+    pattern: "Radiation Pattern (Null on Axis)",
+    rotation: "Rotate Antenna",
+    strength: "E-Field Strength",
+  },
 } satisfies typeof import("~/locales/zh/scene").default;

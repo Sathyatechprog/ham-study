@@ -659,6 +659,47 @@ export default {
     physicsQuote:
       '"By moving the feed point to an off-center position... the antenna impedance at the feed point can be made manageable on multiple harmonic bands."',
   },
+  magneticLoopAntenna: {
+    metaTitle: "Magnetic Loop Antenna | Ham Radio Visualization",
+    metaDescription:
+      "3D visualization of Magnetic Loop Antenna (Small Loop). Explore its high Q, narrow bandwidth, and deep nulls for noise rejection.",
+    metaKeywords:
+      "Magnetic Loop, Small Loop, Magnetic Dipole, High Q, Anti-Noise, Loop Antenna",
+    title: "Magnetic Loop Antenna",
+    overviewTitle: "About this Demo",
+    overview:
+      "This page demonstrates the <strong>Magnetic Loop Antenna</strong>, also known as the Small Loop Antenna. It is an electrically small antenna (<M>C \\lt \\lambda/10</M>).",
+    structure:
+      "<strong>Structure:</strong> Typically a vertically mounted single or multi-turn coil, tuned by a variable capacitor in series at the top or bottom. A common feed method uses a smaller coupling loop.",
+    features:
+      "<strong>Features:</strong> Lower efficiency, but extremely high Q factor and narrow bandwidth. Its most famous feature is its excellent noise rejection capability.",
+    physicsModelTitle: "Physics Model: Magnetic Dipole",
+    physicsModel:
+      "The Small Loop Antenna is physically equivalent to a <strong>Magnetic Dipole</strong>. Since its dimensions are much smaller than the wavelength, the current <M>I</M> on the loop is assumed to be uniform (unlike a dipole antenna).",
+    fieldFormulaTitle: "Far-Field Electric Field Formula",
+    fieldFormulaDesc:
+      "The far-field electric field component <M>E_\\phi</M> in spherical coordinates is:",
+    paramEta: "<M>\\eta \\approx 377\\Omega</M> (Wave Impedance)",
+    paramK: "<M>k = 2\\pi/\\lambda</M> (Wavenumber)",
+    paramI: "<M>I</M> is Loop Current",
+    paramA: "<M>A</M> is Loop Area",
+    paramTheta:
+      "<M>\\theta</M> is the angle relative to the loop axis (Z-axis)",
+    patternTitle: "Radiation Pattern",
+    patternDesc:
+      "The directivity function is <M>F(\\theta) = \\sin\\theta</M>.",
+    patternNull:
+      "<strong>Nulls:</strong> Radiation is zero along the loop axis (perpendicular to the loop plane).",
+    patternMax:
+      "<strong>Max:</strong> Radiation is maximum in the plane of the loop (looking at the loop edge-on).",
+    advantageTitle: "Deep Null Noise Rejection",
+    advantageDesc:
+      "The most valuable feature of the Magnetic Loop is its deep nulls. By rotating the antenna to place an interference source in the null (along the axis), noise can be reduced by 20-30dB.",
+    physicsContent:
+      "The Magnetic Loop Antenna radiates primarily magnetic field components in the near field. In the far field, its electric field component is horizontal (<M>\\phi</M> direction), and its radiation pattern is doughnut-shaped with nulls along the axis.",
+    physicsQuote:
+      '"The small loop antenna is equivalent to a magnetic dipole... it has a null along its axis and maximum radiation in the plane of the loop."',
+  },
   hb9cvAntenna: {
     title: "HB9CV Antenna",
     metaTitle: "HB9CV Antenna 3D Visualization - Phased Array Principle",
@@ -669,48 +710,27 @@ export default {
     about:
       "The HB9CV antenna is a classic 2-element phased array designed by Swiss radio amateur Rudolf Baumgartner (HB9CV) in the 1950s. Unlike a Yagi-Uda antenna where only one element is driven, both elements of the HB9CV are active. They are fed with equal amplitude but a specific phase difference, resulting in superior gain and a remarkable front-to-back ratio for such a short boom length.",
     structureTitle: "Structure",
-    structureContent:
-      "The antenna consists of two driven elements separated by approximately 1/8 wavelength. A phasing line (often Z-shaped) connects the two elements, introducing a specific phase shift. This configuration ensures that the radiation from the rear element cancels out towards the back and reinforces towards the front.",
-    phaseTitle: "Phasing Principle",
-    phaseContent: "The key to HB9CV's performance is the phase relationship:",
-    phaseFront:
-      "Space phase shift (due to distance) + Transmission line phase shift",
-    phaseRear: "Total phase difference results in cancellation at the rear.",
-    formulaTitle: "Radiation Pattern Formula",
-    formulaIntro:
-      "The array factor for the HB9CV can be approximated by summation of two sources with phase difference:",
-    afDef:
-      "Where k is wave number, d is spacing, θ is angle, and δ is phase difference.",
-    paramK: "k = 2π/λ",
-    paramD: "d ≈ λ/8 (45°)",
-    paramDelta: "δ ≈ 225° (5π/4)",
+    structureContent: "Two driven elements connected by a phasing line.",
+    phaseTitle: "Phasing",
+    phaseContent: "Uses 225 degrees phase shift for cardioid pattern.",
+    phaseFront: "Space phase + Line phase",
+    phaseRear: "Cancellation in rear",
+    formulaTitle: "Pattern Formula",
+    formulaIntro: "Array factor approximation:",
+    afDef: "k=wavenumber, d=spacing, theta=angle",
+    paramK: "k = 2pi/lambda",
+    paramD: "d ~ lambda/8",
+    paramDelta: "delta ~ 225 deg",
     patternTitle: "Radiation Pattern",
-    patternContent:
-      "The combination of 45° spatial separation and 225° electrical phase shift produces a cardioid (heart-shaped) pattern with a deep null at the back.",
-    comparisonTitle: "Comparison: HB9CV vs Yagi (2-element)",
+    patternContent: "Cardioid pattern with deep null in rear.",
+    comparisonTitle: "HB9CV vs Yagi",
     comparisonTable: {
       headers: { feature: "Feature", hb9cv: "HB9CV", yagi: "Yagi (2-el)" },
       rows: {
-        gain: {
-          feature: "Gain",
-          hb9cv: "Higher (~4-5 dBd)",
-          yagi: "Lower (~3-4 dBd)",
-        },
-        fbRatio: {
-          feature: "F/B Ratio",
-          hb9cv: "Excellent (20-30 dB)",
-          yagi: "Moderate (10-15 dB)",
-        },
-        bandwidth: {
-          feature: "Bandwidth",
-          hb9cv: "Broader",
-          yagi: "Narrower",
-        },
-        feed: {
-          feature: "Feed System",
-          hb9cv: "Phasing Line Required",
-          yagi: "Simple Dipole Feed",
-        },
+        gain: { feature: "Gain", hb9cv: "Higher", yagi: "Lower" },
+        fbRatio: { feature: "F/B Ratio", hb9cv: "High", yagi: "Moderate" },
+        bandwidth: { feature: "Bandwidth", hb9cv: "Wide", yagi: "Narrow" },
+        feed: { feature: "Feed", hb9cv: "Phased", yagi: "Simple" },
       },
     },
     physicsContent:
