@@ -64,6 +64,9 @@ const HB9CVAntennaScene = lazy(
 const MagneticLoopAntennaScene = lazy(
   () => import("~/components/magnetic-loop-antenna-scene"),
 );
+const ElectromagneticPropagationScene = lazy(
+  () => import("~/components/electromagnetic-propagation-scene"),
+);
 
 export const meta = ({ loaderData }: Route.MetaArgs) => {
   const { title, description, keywords } = loaderData;
@@ -310,6 +313,13 @@ export default function Home() {
           description: t(`${item.i18nKey}.description`),
           href: item.href,
           component: MagneticLoopAntennaScene,
+        };
+      case "demoCards.electromagneticPropagation":
+        return {
+          title: t(`${item.i18nKey}.title`),
+          description: t(`${item.i18nKey}.description`),
+          href: item.href,
+          component: ElectromagneticPropagationScene,
         };
       default:
         return {
