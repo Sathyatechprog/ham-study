@@ -3,6 +3,7 @@ import i18next from "i18next";
 import { lazy, Suspense, useState } from "react";
 import { initReactI18next, useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import { useInView } from "react-intersection-observer";
 import { ClientOnly } from "~/components/client-only";
 import { LocaleLink } from "~/components/locale-link";
 import { YagiSvgRenderer } from "~/components/tools/yagi-calculator/YagiSvgRenderer";
@@ -150,11 +151,22 @@ function ToolCard({ tool, actionText }: { tool: Tool; actionText: string }) {
   );
 }
 
-function DemoCard({ demo, actionText }: { demo: Demo; actionText: string }) {
+interface DemoCardProps {
+  demo: Demo;
+  actionText: string;
+}
+
+function DemoCard({ demo, actionText }: DemoCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const { ref, inView } = useInView({
+    triggerOnce: false,
+    threshold: 0.1,
+    rootMargin: "100px 0px", // Preload slightly before appearing
+  });
 
   return (
     <Card
+      ref={ref}
       className="border ring-offset-4 ring-border/50 ring-offset-gray-50 hover:ring-offset-gray-100 transition duration-300 hover:shadow-lg group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -173,13 +185,19 @@ function DemoCard({ demo, actionText }: { demo: Demo; actionText: string }) {
                 <div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />
               }
             >
-              <Suspense
-                fallback={
-                  <div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />
-                }
-              >
-                <demo.component isThumbnail={true} isHovered={isHovered} />
-              </Suspense>
+              {inView ? (
+                <Suspense
+                  fallback={
+                    <div className="h-full w-full bg-slate-100 dark:bg-slate-800 animate-pulse" />
+                  }
+                >
+                  <demo.component isThumbnail={true} isHovered={isHovered} />
+                </Suspense>
+              ) : (
+                <div className="h-full w-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                  <span className="text-xs text-muted-foreground/50">...</span>
+                </div>
+              )}
             </ClientOnly>
             <div
               className={`absolute inset-0 bg-black/5 flex items-center justify-center transition-opacity duration-300 ${

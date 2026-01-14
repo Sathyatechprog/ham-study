@@ -505,6 +505,7 @@ export default function ElectromagneticPropagationScene({
       ionoHeight: -1,
     };
 
+    // --- 真正的 3D 路径逻辑 ---
     const updateSignalPath = () => {
       const { mode, angle, frequency, ionoHeight } = paramsRef.current;
       // Note: We might want slightly looser check or force update if anything changes.
@@ -694,7 +695,6 @@ export default function ElectromagneticPropagationScene({
     // --- Loop ---
     const clock = new THREE.Clock();
     let animationId: number;
-    let lastMode = paramsRef.current.mode;
     const cameraParams = {
       radius: initialRadius,
       phi: Math.PI / 2.1,
@@ -744,12 +744,12 @@ export default function ElectromagneticPropagationScene({
     const animate = () => {
       animationId = requestAnimationFrame(animate);
 
-      // In thumbnail mode, pause if not hovered
-      if (isThumbnail && !paramsRef.current.isHovered) {
-        return;
-      }
-
       const delta = clock.getDelta();
+
+      // In thumbnail mode, pause physics/animation if not hovered,
+      // but we STILL need to fall through to the final render() call
+      // to ensure the scene is actually visible (not just a black canvas).
+      const shouldAnimate = !isThumbnail || paramsRef.current.isHovered;
 
       cameraParams.phi += (cameraParams.targetPhi - cameraParams.phi) * 0.1;
       cameraParams.theta +=
@@ -763,34 +763,39 @@ export default function ElectromagneticPropagationScene({
       );
       camera.lookAt(0, 0, 0);
 
-      earthGroup.rotation.y += delta * 0.02;
-      ionosphere.rotation.y -= delta * 0.01;
-
-      // 检测模式切换并强制清理 (Force clear pulses on mode switch)
-      if (lastMode !== paramsRef.current.mode) {
-        pulseGroup.children.forEach((group) => {
-          group.children.forEach((c) => (c as THREE.Mesh).geometry.dispose());
-        });
-        pulseGroup.clear();
-        lastMode = paramsRef.current.mode;
+      if (shouldAnimate) {
+        earthGroup.rotation.y += delta * 0.02;
+        ionosphere.rotation.y -= delta * 0.01;
       }
 
       updateSignalPath();
 
       // 1. 同步脉冲组 (Sync pulse groups with signal paths)
+      const validPulseGroupNames = new Set(
+        signalGroup.children.map((_, idx) => `pulse-group-${idx}`),
+      );
+      for (let i = pulseGroup.children.length - 1; i >= 0; i--) {
+        const child = pulseGroup.children[i];
+        if (!validPulseGroupNames.has(child.name)) {
+          child.children.forEach((c) => {
+            (c as THREE.Mesh).geometry.dispose();
+          });
+          pulseGroup.remove(child);
+        }
+      }
       signalGroup.children.forEach((child) => {
         const mesh = child as THREE.Mesh;
         const mat = mesh.material as THREE.MeshBasicMaterial;
         if (mat?.map) {
-          if (child.userData.isGroundWave) mat.map.offset.y -= delta * 1.5;
+          if (child.userData.isGroundWave && shouldAnimate)
+            mat.map.offset.y -= delta * 1.5;
         }
 
         // --- 真正的 3D 实体分段脉冲 (Segmented 3D Tube) ---
         if (child.userData.isTube && child.userData.curve) {
           const curve = child.userData.curve as THREE.Curve<THREE.Vector3>;
 
-          // 使用 child.uuid 或某种唯一标识来确保 pulseGroup 子项与 signalGroup 子项一一对应
-          // 目前使用 tubeIndex 依然可以，但我们需要在处理完所有活跃路径后，清理 pulseGroup 中多余的子项
+          // 获取当前路径索引
           const tubeIndex = signalGroup.children.indexOf(child);
           const childPulseGroupName = `pulse-group-${tubeIndex}`;
           let pSubGroup = pulseGroup.getObjectByName(childPulseGroupName);
@@ -806,45 +811,47 @@ export default function ElectromagneticPropagationScene({
             pulseGroup.add(pSubGroup);
           }
 
-          const time = clock.elapsedTime * 0.8;
-          const pulseCount = 3;
-          const pulseWidth = 0.15;
+          if (shouldAnimate) {
+            const time = clock.elapsedTime * 0.8;
+            const pulseCount = 3;
+            const pulseWidth = 0.15;
 
-          for (let i = 0; i < pulseCount; i++) {
-            const fraction = (time + i / pulseCount) % 1.0;
-            const start = Math.max(0, fraction - pulseWidth / 2);
-            const end = Math.min(1, fraction + pulseWidth / 2);
+            for (let i = 0; i < pulseCount; i++) {
+              const fraction = (time + i / pulseCount) % 1.0;
+              const start = Math.max(0, fraction - pulseWidth / 2);
+              const end = Math.min(1, fraction + pulseWidth / 2);
 
-            if (end - start < 0.01) continue;
+              if (end - start < 0.01) continue;
 
-            const subPoints = [];
-            const segments = 20;
-            for (let j = 0; j <= segments; j++) {
-              subPoints.push(
-                curve.getPoint(start + (end - start) * (j / segments)),
+              const subPoints = [];
+              const segments = 20;
+              for (let j = 0; j <= segments; j++) {
+                subPoints.push(
+                  curve.getPoint(start + (end - start) * (j / segments)),
+                );
+              }
+              const miniCurve = new THREE.CatmullRomCurve3(subPoints);
+
+              const miniGeo = new THREE.TubeGeometry(
+                miniCurve,
+                20,
+                0.35,
+                8,
+                false,
               );
+              const miniMat = new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                transparent: true,
+                opacity: Math.sin(fraction * Math.PI),
+                blending: THREE.AdditiveBlending,
+                depthTest: true,
+                depthWrite: false,
+              });
+
+              const miniMesh = new THREE.Mesh(miniGeo, miniMat);
+              miniMesh.renderOrder = 100;
+              pSubGroup.add(miniMesh);
             }
-            const miniCurve = new THREE.CatmullRomCurve3(subPoints);
-
-            const miniGeo = new THREE.TubeGeometry(
-              miniCurve,
-              20,
-              0.35,
-              8,
-              false,
-            );
-            const miniMat = new THREE.MeshBasicMaterial({
-              color: 0xffffff,
-              transparent: true,
-              opacity: Math.sin(fraction * Math.PI),
-              blending: THREE.AdditiveBlending,
-              depthTest: true,
-              depthWrite: false,
-            });
-
-            const miniMesh = new THREE.Mesh(miniGeo, miniMat);
-            miniMesh.renderOrder = 100;
-            pSubGroup.add(miniMesh);
           }
         }
       });
@@ -856,12 +863,15 @@ export default function ElectromagneticPropagationScene({
       for (let i = pulseGroup.children.length - 1; i >= 0; i--) {
         const group = pulseGroup.children[i];
         if (!activePulseNames.has(group.name)) {
-          group.children.forEach((c) => (c as THREE.Mesh).geometry.dispose());
+          group.children.forEach((c) => {
+            (c as THREE.Mesh).geometry.dispose();
+          });
           pulseGroup.remove(group);
         }
       }
 
       groundBounceGroup.children.forEach((child) => {
+        if (!shouldAnimate) return;
         const mesh = child as THREE.Mesh;
         const data = mesh.userData;
         data.life += delta * data.speed;
@@ -874,6 +884,7 @@ export default function ElectromagneticPropagationScene({
       });
 
       for (let i = scatterGroup.children.length - 1; i >= 0; i--) {
+        if (!shouldAnimate) break;
         const obj = scatterGroup.children[i];
         if (obj.userData.isRing) {
           obj.userData.life -= delta * 1.5;
@@ -881,7 +892,9 @@ export default function ElectromagneticPropagationScene({
           obj.scale.setScalar(s);
           const mat = (obj as THREE.Mesh).material as THREE.MeshBasicMaterial;
           mat.opacity = obj.userData.life;
-          if (obj.userData.life <= 0) scatterGroup.remove(obj);
+          if (obj.userData.life <= 0) {
+            scatterGroup.remove(obj);
+          }
         } else {
           const pts = obj as THREE.Points;
           pts.userData.life -= delta * 1.5;
@@ -927,17 +940,41 @@ export default function ElectromagneticPropagationScene({
       cancelAnimationFrame(animationId);
       if (container) container.innerHTML = "";
 
-      // Basic dispose
+      // Comprehensive Dispose
+      const disposeObject = (obj: THREE.Object3D) => {
+        obj.children.forEach((child) => {
+          disposeObject(child);
+        });
+
+        if ((obj as THREE.Mesh).geometry) {
+          (obj as THREE.Mesh).geometry.dispose();
+        }
+
+        if ((obj as THREE.Mesh).material) {
+          const material = (obj as THREE.Mesh).material;
+          if (Array.isArray(material)) {
+            material.forEach((m) => {
+              m.map?.dispose();
+              m.dispose();
+            });
+          } else {
+            material.map?.dispose();
+            material.dispose();
+          }
+        }
+      };
+
+      disposeObject(scene);
       renderer.dispose();
       fiberTexture.dispose();
       wifiTexture.dispose();
       glowTexture.dispose();
       hexGridTexture.dispose();
       impactWaveTexture.dispose();
-      // Dispose geos/mats if possible, but keep it simple for now as per React 18 strict mode
-      // might re-mount.
+
+      renderer.forceContextLoss();
     };
-  }, [isThumbnail]); // Re-run if thumbnail mode changes
+  }, [isThumbnail]); // Only re-init if isThumbnail changes radically
 
   return (
     <div ref={mountRef} className="w-full h-full cursor-move relative z-0" />
