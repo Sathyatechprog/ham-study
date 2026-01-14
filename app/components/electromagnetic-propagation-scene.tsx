@@ -726,6 +726,7 @@ export default function ElectromagneticPropagationScene({
       );
     };
     const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
       cameraParams.targetRadius += e.deltaY * 0.1;
       cameraParams.targetRadius = Math.max(
         60,
@@ -738,7 +739,7 @@ export default function ElectromagneticPropagationScene({
       container.addEventListener("mousedown", handleMouseDown);
       window.addEventListener("mouseup", handleMouseUp);
       window.addEventListener("mousemove", handleMouseMove);
-      container.addEventListener("wheel", handleWheel, { passive: true });
+      container.addEventListener("wheel", handleWheel, { passive: false });
     }
 
     const animate = () => {
