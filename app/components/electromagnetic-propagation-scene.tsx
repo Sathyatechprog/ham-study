@@ -771,19 +771,6 @@ export default function ElectromagneticPropagationScene({
 
       updateSignalPath();
 
-      // 1. 同步脉冲组 (Sync pulse groups with signal paths)
-      const validPulseGroupNames = new Set(
-        signalGroup.children.map((_, idx) => `pulse-group-${idx}`),
-      );
-      for (let i = pulseGroup.children.length - 1; i >= 0; i--) {
-        const child = pulseGroup.children[i];
-        if (!validPulseGroupNames.has(child.name)) {
-          child.children.forEach((c) => {
-            (c as THREE.Mesh).geometry.dispose();
-          });
-          pulseGroup.remove(child);
-        }
-      }
       signalGroup.children.forEach((child) => {
         const mesh = child as THREE.Mesh;
         const mat = mesh.material as THREE.MeshBasicMaterial;
@@ -858,9 +845,12 @@ export default function ElectromagneticPropagationScene({
       });
 
       // 关键：在处理完所有当前活跃路径后，清理掉 pulseGroup 中任何名称不属于当前有效索引的组
-      const activePulseNames = new Set(
-        signalGroup.children.map((_, i) => `pulse-group-${i}`),
-      );
+      const activePulseNames = new Set();
+      signalGroup.children.forEach((child, i) => {
+        if (child.userData.isTube) {
+          activePulseNames.add(`pulse-group-${i}`);
+        }
+      });
       for (let i = pulseGroup.children.length - 1; i >= 0; i--) {
         const group = pulseGroup.children[i];
         if (!activePulseNames.has(group.name)) {
