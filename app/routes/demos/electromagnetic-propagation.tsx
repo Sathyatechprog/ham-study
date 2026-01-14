@@ -1,6 +1,6 @@
+import { FadersIcon, XIcon } from "@phosphor-icons/react";
 import type { TFunction } from "i18next";
 import i18next from "i18next";
-import { FadersIcon, XIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { initReactI18next, useTranslation } from "react-i18next";
 import ElectromagneticPropagationScene from "~/components/electromagnetic-propagation-scene";

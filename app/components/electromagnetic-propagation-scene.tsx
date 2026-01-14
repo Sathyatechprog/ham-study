@@ -954,11 +954,15 @@ export default function ElectromagneticPropagationScene({
           const material = (obj as THREE.Mesh).material;
           if (Array.isArray(material)) {
             material.forEach((m) => {
-              m.map?.dispose();
+              if ("map" in m) {
+                (m as THREE.MeshStandardMaterial).map?.dispose();
+              }
               m.dispose();
             });
           } else {
-            material.map?.dispose();
+            if ("map" in material) {
+              (material as THREE.MeshStandardMaterial).map?.dispose();
+            }
             material.dispose();
           }
         }

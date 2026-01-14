@@ -97,10 +97,25 @@ function LongWireAntenna({
 
   useMemo(() => {
     return () => {
-      eFieldInstances.geometry.dispose();
-      (eFieldInstances.material as any).dispose();
+      if (eFieldInstances.material) {
+        if (Array.isArray(eFieldInstances.material)) {
+          eFieldInstances.material.forEach((m) => {
+            m.dispose();
+          });
+        } else {
+          eFieldInstances.material.dispose();
+        }
+      }
       hFieldInstances.geometry.dispose();
-      (hFieldInstances.material as any).dispose();
+      if (hFieldInstances.material) {
+        if (Array.isArray(hFieldInstances.material)) {
+          hFieldInstances.material.forEach((m) => {
+            m.dispose();
+          });
+        } else {
+          hFieldInstances.material.dispose();
+        }
+      }
     };
   }, [eFieldInstances, hFieldInstances]);
 
