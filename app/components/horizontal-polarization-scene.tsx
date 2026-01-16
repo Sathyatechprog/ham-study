@@ -257,6 +257,7 @@ export default function HorizontalPolarizationScene({
           <Antenna />
           {showPattern && <RadiationPattern />}
           {/* Surface/Field Mode */}
+          {/* Surface/Field Mode */}
           {showWaves && (
             <ElectricFieldInstanced
               antennaType="horizontal"

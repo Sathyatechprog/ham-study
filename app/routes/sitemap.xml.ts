@@ -12,7 +12,7 @@ export const loader = ({ request }: Route.LoaderArgs) => {
     <loc>${origin}${demo.href}</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-  </url>`
+  </url>`,
     )
     .join("");
 
@@ -23,7 +23,7 @@ export const loader = ({ request }: Route.LoaderArgs) => {
     <loc>${origin}${tool.href}</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-  </url>`
+  </url>`,
     )
     .join("");
 

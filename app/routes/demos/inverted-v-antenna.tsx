@@ -8,7 +8,7 @@ import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/inverted-v-antenna";
 
 const InvertedVAntennaScene = lazy(
-  () => import("~/components/inverted-v-scene")
+  () => import("~/components/inverted-v-scene"),
 );
 
 import { BlockMath } from "~/components/math";
