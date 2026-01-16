@@ -1,6 +1,6 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { SphereGeometry, Vector3 } from "three";
 import { Label } from "~/components/ui/label";
@@ -81,7 +81,7 @@ export default function VerticalPolarizationScene({
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
     "medium",
   );
-  // Removed vizMode as we only have 'surface' + 'pattern' toggle now
+  const uniqueId = useId();
 
   const speedMultiplier = {
     slow: 0.3,
@@ -124,98 +124,99 @@ export default function VerticalPolarizationScene({
       </div>
     </>
   );
-
-  const ControlsContent = () => (
-    <div className="flex flex-col space-y-3">
-      <div className="pt-3 border-t border-white/10 md:border-none md:pt-0">
-        <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
-          {t("common.controls.visualization")}
+  const ControlsContent = () => {
+    return (
+      <div className="flex flex-col space-y-3">
+        <div className="pt-3 border-t border-white/10 md:border-none md:pt-0">
+          <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
+            {t("common.controls.visualization")}
+          </div>
+          <div className="flex flex-col space-y-2">
+            <div className="flex items-center space-x-2">
+              <Switch
+                id={`${uniqueId}wave-mode`}
+                checked={showWaves}
+                onCheckedChange={setShowWaves}
+                className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+              />
+              <Label
+                htmlFor={`${uniqueId}wave-mode`}
+                className="text-xs md:text-sm text-zinc-300"
+              >
+                {t("common.controls.showWaves")}
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Switch
+                id={`${uniqueId}pattern-mode`}
+                checked={showPattern}
+                onCheckedChange={setShowPattern}
+                className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
+              />
+              <Label
+                htmlFor={`${uniqueId}pattern-mode`}
+                className="text-xs md:text-sm text-zinc-300"
+              >
+                {t("common.controls.showPattern")}
+              </Label>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col space-y-2">
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="wave-mode"
-              checked={showWaves}
-              onCheckedChange={setShowWaves}
-              className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
-            />
-            <Label
-              htmlFor="wave-mode"
-              className="text-xs md:text-sm text-zinc-300"
-            >
-              {t("common.controls.showWaves")}
-            </Label>
+
+        <div className="pt-3 border-t border-white/10">
+          <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
+            {t("common.controls.speed")}
           </div>
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="pattern-mode"
-              checked={showPattern}
-              onCheckedChange={setShowPattern}
-              className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
-            />
-            <Label
-              htmlFor="pattern-mode"
-              className="text-xs md:text-sm text-zinc-300"
-            >
-              {t("common.controls.showPattern")}
-            </Label>
-          </div>
+          <RadioGroup
+            defaultValue="medium"
+            value={speedMode}
+            onValueChange={(v) => setSpeedMode(v as "slow" | "medium" | "fast")}
+            className="flex gap-4"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem
+                value="slow"
+                id={`${uniqueId}r-slow`}
+                className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
+              />
+              <Label
+                htmlFor={`${uniqueId}r-slow`}
+                className="text-xs cursor-pointer text-zinc-300"
+              >
+                {t("common.controls.slow")}
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem
+                value="medium"
+                id={`${uniqueId}r-medium`}
+                className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
+              />
+              <Label
+                htmlFor={`${uniqueId}r-medium`}
+                className="text-xs cursor-pointer text-zinc-300"
+              >
+                {t("common.controls.medium")}
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem
+                value="fast"
+                id={`${uniqueId}r-fast`}
+                className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
+              />
+              <Label
+                htmlFor={`${uniqueId}r-fast`}
+                className="text-xs cursor-pointer text-zinc-300"
+              >
+                {t("common.controls.fast")}
+              </Label>
+            </div>
+          </RadioGroup>
         </div>
       </div>
-
-      <div className="pt-3 border-t border-white/10">
-        <div className="mb-2 text-xs md:text-sm font-medium text-zinc-200">
-          {t("common.controls.speed")}
-        </div>
-        <RadioGroup
-          defaultValue="medium"
-          value={speedMode}
-          onValueChange={(v) => setSpeedMode(v as "slow" | "medium" | "fast")}
-          className="flex gap-4"
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem
-              value="slow"
-              id="r-slow"
-              className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
-            />
-            <Label
-              htmlFor="r-slow"
-              className="text-xs cursor-pointer text-zinc-300"
-            >
-              {t("common.controls.slow")}
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem
-              value="medium"
-              id="r-medium"
-              className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
-            />
-            <Label
-              htmlFor="r-medium"
-              className="text-xs cursor-pointer text-zinc-300"
-            >
-              {t("common.controls.medium")}
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem
-              value="fast"
-              id="r-fast"
-              className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
-            />
-            <Label
-              htmlFor="r-fast"
-              className="text-xs cursor-pointer text-zinc-300"
-            >
-              {t("common.controls.fast")}
-            </Label>
-          </div>
-        </RadioGroup>
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="flex flex-col gap-4">

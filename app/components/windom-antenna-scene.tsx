@@ -1,6 +1,6 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CatmullRomCurve3, DoubleSide, SphereGeometry, Vector3 } from "three";
 import { Label } from "~/components/ui/label";
@@ -347,6 +347,7 @@ export default function WindomAntennaScene({
   const [speedMode, setSpeedMode] = useState<"slow" | "medium" | "fast">(
     "medium",
   );
+  const uniqueId = useId();
 
   const speedMultiplier = {
     slow: 0.3,
@@ -372,35 +373,41 @@ export default function WindomAntennaScene({
         <div className="flex flex-col space-y-2">
           <div className="flex items-center space-x-2">
             <Switch
-              id="inv-v"
+              id={`${uniqueId}inv-v`}
               checked={isInvertedV}
               onCheckedChange={setIsInvertedV}
               className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
             />
-            <Label htmlFor="inv-v" className="text-xs md:text-sm text-zinc-300">
+            <Label
+              htmlFor={`${uniqueId}inv-v`}
+              className="text-xs md:text-sm text-zinc-300"
+            >
               {t("common.controls.invertedV")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
             <Switch
-              id="waves"
+              id={`${uniqueId}waves`}
               checked={showWaves}
               onCheckedChange={setShowWaves}
               className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
             />
-            <Label htmlFor="waves" className="text-xs md:text-sm text-zinc-300">
+            <Label
+              htmlFor={`${uniqueId}waves`}
+              className="text-xs md:text-sm text-zinc-300"
+            >
               {t("common.controls.showWaves")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
             <Switch
-              id="pattern"
+              id={`${uniqueId}pattern`}
               checked={showPattern}
               onCheckedChange={setShowPattern}
               className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
             />
             <Label
-              htmlFor="pattern"
+              htmlFor={`${uniqueId}pattern`}
               className="text-xs md:text-sm text-zinc-300"
             >
               {t("common.controls.showPattern")}
@@ -422,11 +429,11 @@ export default function WindomAntennaScene({
           <div className="flex items-center space-x-2">
             <RadioGroupItem
               value="1"
-              id="h1"
+              id={`${uniqueId}h1`}
               className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
             />
             <Label
-              htmlFor="h1"
+              htmlFor={`${uniqueId}h1`}
               className="text-xs cursor-pointer text-zinc-300"
             >
               {t("common.controls.harmonic1")}
@@ -435,11 +442,11 @@ export default function WindomAntennaScene({
           <div className="flex items-center space-x-2">
             <RadioGroupItem
               value="2"
-              id="h2"
+              id={`${uniqueId}h2`}
               className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
             />
             <Label
-              htmlFor="h2"
+              htmlFor={`${uniqueId}h2`}
               className="text-xs cursor-pointer text-zinc-300"
             >
               {t("common.controls.harmonic2")}
@@ -448,11 +455,11 @@ export default function WindomAntennaScene({
           <div className="flex items-center space-x-2">
             <RadioGroupItem
               value="3"
-              id="h3"
+              id={`${uniqueId}h3`}
               className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
             />
             <Label
-              htmlFor="h3"
+              htmlFor={`${uniqueId}h3`}
               className="text-xs cursor-pointer text-zinc-300"
             >
               {t("common.controls.harmonic3")}
@@ -461,11 +468,11 @@ export default function WindomAntennaScene({
           <div className="flex items-center space-x-2">
             <RadioGroupItem
               value="4"
-              id="h4"
+              id={`${uniqueId}h4`}
               className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
             />
             <Label
-              htmlFor="h4"
+              htmlFor={`${uniqueId}h4`}
               className="text-xs cursor-pointer text-zinc-300"
             >
               {t("common.controls.harmonic4")}
@@ -487,30 +494,36 @@ export default function WindomAntennaScene({
           <div className="flex items-center space-x-2">
             <RadioGroupItem
               value="slow"
-              id="slow"
+              id={`${uniqueId}slow`}
               className="border-zinc-400 text-primary-foreground"
             />
-            <Label htmlFor="slow" className="text-xs text-zinc-300">
+            <Label
+              htmlFor={`${uniqueId}slow`}
+              className="text-xs text-zinc-300"
+            >
               {t("common.controls.slow")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem
               value="medium"
-              id="med"
+              id={`${uniqueId}med`}
               className="border-zinc-400 text-primary-foreground"
             />
-            <Label htmlFor="med" className="text-xs text-zinc-300">
+            <Label htmlFor={`${uniqueId}med`} className="text-xs text-zinc-300">
               {t("common.controls.medium")}
             </Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem
               value="fast"
-              id="fast"
+              id={`${uniqueId}fast`}
               className="border-zinc-400 text-primary-foreground"
             />
-            <Label htmlFor="fast" className="text-xs text-zinc-300">
+            <Label
+              htmlFor={`${uniqueId}fast`}
+              className="text-xs text-zinc-300"
+            >
               {t("common.controls.fast")}
             </Label>
           </div>

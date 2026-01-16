@@ -1,6 +1,6 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { SphereGeometry, Vector3 } from "three";
 import { Label } from "~/components/ui/label";
@@ -99,6 +99,7 @@ export default function EllipticalPolarizationScene({
   );
   const [isRHCP, _setIsRHCP] = useState(true);
   const [axialRatio, _setAxialRatio] = useState(0.7);
+  const uniqueId = useId();
 
   const speedMultiplier = {
     slow: 0.3,
@@ -158,13 +159,13 @@ export default function EllipticalPolarizationScene({
         <div className="flex flex-col space-y-2">
           <div className="flex items-center space-x-2">
             <Switch
-              id="wave-mode"
+              id={`${uniqueId}wave-mode`}
               checked={showWaves}
               onCheckedChange={setShowWaves}
               className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
             />
             <Label
-              htmlFor="wave-mode"
+              htmlFor={`${uniqueId}wave-mode`}
               className="text-xs md:text-sm text-zinc-300"
             >
               {t("common.controls.showWaves")}
@@ -172,13 +173,13 @@ export default function EllipticalPolarizationScene({
           </div>
           <div className="flex items-center space-x-2">
             <Switch
-              id="pattern-mode"
+              id={`${uniqueId}pattern-mode`}
               checked={showPattern}
               onCheckedChange={setShowPattern}
               className="data-[state=checked]:bg-primary-foreground/80 data-[state=unchecked]:bg-zinc-700 border-zinc-500"
             />
             <Label
-              htmlFor="pattern-mode"
+              htmlFor={`${uniqueId}pattern-mode`}
               className="text-xs md:text-sm text-zinc-300"
             >
               {t("common.controls.showPattern")}
@@ -242,11 +243,11 @@ export default function EllipticalPolarizationScene({
           <div className="flex items-center space-x-2">
             <RadioGroupItem
               value="slow"
-              id="r-slow"
+              id={`${uniqueId}r-slow`}
               className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
             />
             <Label
-              htmlFor="r-slow"
+              htmlFor={`${uniqueId}r-slow`}
               className="text-xs cursor-pointer text-zinc-300"
             >
               {t("common.controls.slow")}
@@ -255,11 +256,11 @@ export default function EllipticalPolarizationScene({
           <div className="flex items-center space-x-2">
             <RadioGroupItem
               value="medium"
-              id="r-medium"
+              id={`${uniqueId}r-medium`}
               className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
             />
             <Label
-              htmlFor="r-medium"
+              htmlFor={`${uniqueId}r-medium`}
               className="text-xs cursor-pointer text-zinc-300"
             >
               {t("common.controls.medium")}
@@ -268,11 +269,11 @@ export default function EllipticalPolarizationScene({
           <div className="flex items-center space-x-2">
             <RadioGroupItem
               value="fast"
-              id="r-fast"
+              id={`${uniqueId}r-fast`}
               className="border-zinc-400 text-primary-foreground data-[state=checked]:bg-transparent data-[state=checked]:border-primary-foreground data-[state=checked]:text-input"
             />
             <Label
-              htmlFor="r-fast"
+              htmlFor={`${uniqueId}r-fast`}
               className="text-xs cursor-pointer text-zinc-300"
             >
               {t("common.controls.fast")}
