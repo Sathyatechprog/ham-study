@@ -30,6 +30,7 @@ export function Footer() {
                 <a
                   href="mailto:ham@charlesify.com"
                   title={t("footer.feedback.emailTitle")}
+                  aria-label={t("footer.feedback.emailTitle")}
                 >
                   <EnvelopeIcon weight="duotone" />
                 </a>
@@ -45,6 +46,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   title={t("footer.feedback.githubTitle")}
+                  aria-label={t("footer.feedback.githubTitle")}
                 >
                   <GithubLogoIcon weight="duotone" size={20} />
                 </a>
