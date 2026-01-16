@@ -150,7 +150,7 @@ export default function InvertedVAntennaPage() {
                 {
                   id: "cebik",
                   text: "Cebik, L. B., W4RNL. (2000). The Inverted-V: Its Gain and Patterns.",
-                  url: "http://www.antentop.org/w4rnl.001/v1.html",
+                  url: "https://www.antentop.org/w4rnl.001/v1.html",
                 },
               ]}
             />

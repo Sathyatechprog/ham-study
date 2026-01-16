@@ -243,7 +243,7 @@ export default function MoxonAntennaPage() {
                 {
                   id: "cebik-moxon",
                   text: "Cebik, L. B., W4RNL. The Moxon Rectangle: A Review.",
-                  url: "http://www.antentop.org/w4rnl.001/moxon1.html",
+                  url: "https://www.antentop.org/w4rnl.001/moxon1.html",
                 },
               ]}
             />
