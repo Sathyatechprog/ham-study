@@ -57,7 +57,7 @@ export function ElectricFieldInstanced(props: ElectricFieldInstancedProps) {
   // Small Spheres
   const geometry = useMemo(
     () => new SphereGeometry(0.05, 6, 6), // Low poly spheres
-    []
+    [],
   );
 
   const hasReceivedFirstFrame = useRef(false);
@@ -154,7 +154,7 @@ export function ElectricFieldInstanced(props: ElectricFieldInstancedProps) {
         colorBuffer: colorBuf,
       },
       // Transfer ownership
-      [matrixBuf.buffer, colorBuf.buffer]
+      [matrixBuf.buffer, colorBuf.buffer],
     );
   });
 
