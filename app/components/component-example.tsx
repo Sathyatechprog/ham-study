@@ -167,6 +167,7 @@ function FormExample() {
     push: true,
   });
   const [theme, setTheme] = React.useState("light");
+  const uniqueId = React.useId();
 
   return (
     <Example title="Form">
@@ -419,17 +420,17 @@ function FormExample() {
             <FieldGroup>
               <div className="grid grid-cols-2 gap-4">
                 <Field>
-                  <FieldLabel htmlFor="small-form-name">Name</FieldLabel>
+                  <FieldLabel htmlFor={`${uniqueId}-name`}>Name</FieldLabel>
                   <Input
-                    id="small-form-name"
+                    id={`${uniqueId}-name`}
                     placeholder="Enter your name"
                     required
                   />
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="small-form-role">Role</FieldLabel>
+                  <FieldLabel htmlFor={`${uniqueId}-role`}>Role</FieldLabel>
                   <Select defaultValue="">
-                    <SelectTrigger id="small-form-role">
+                    <SelectTrigger id={`${uniqueId}-role`}>
                       <SelectValue placeholder="Select a role" />
                     </SelectTrigger>
                     <SelectContent>
@@ -444,12 +445,12 @@ function FormExample() {
                 </Field>
               </div>
               <Field>
-                <FieldLabel htmlFor="small-form-framework">
+                <FieldLabel htmlFor={`${uniqueId}-framework`}>
                   Framework
                 </FieldLabel>
                 <Combobox items={frameworks}>
                   <ComboboxInput
-                    id="small-form-framework"
+                    id={`${uniqueId}-framework`}
                     placeholder="Select a framework"
                     required
                   />
@@ -466,9 +467,11 @@ function FormExample() {
                 </Combobox>
               </Field>
               <Field>
-                <FieldLabel htmlFor="small-form-comments">Comments</FieldLabel>
+                <FieldLabel htmlFor={`${uniqueId}-comments`}>
+                  Comments
+                </FieldLabel>
                 <Textarea
-                  id="small-form-comments"
+                  id={`${uniqueId}-comments`}
                   placeholder="Add any additional comments"
                 />
               </Field>
