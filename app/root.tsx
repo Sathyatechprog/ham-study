@@ -26,6 +26,7 @@ import { redirect } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
+  const origin = url.origin;
   const segments = url.pathname.split("/").filter(Boolean);
 
   // Redirect /zh/... to /... (Remove 'zh' prefix for default language)
@@ -37,7 +38,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
   const locale = await getLocale(request);
   return data(
-    { locale },
+    { locale, origin },
     { headers: { "Set-Cookie": await localeCookie.serialize(locale) } },
   );
 }
@@ -101,10 +102,16 @@ export const links: Route.LinksFunction = () => [
   { rel: "manifest", href: "/site.webmanifest" },
 ];
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export function Layout({
+  children,
+  loaderData,
+}: {
+  children: React.ReactNode;
+  loaderData: { origin: string };
+}) {
   const { i18n } = useTranslation();
   const location = useLocation();
-
+  const origin = loaderData?.origin || "https://ham.charlesify.com";
   return (
     <html lang={i18n.language} dir={i18n.dir(i18n.language)} className="h-full">
       <head>
@@ -114,14 +121,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {/* Common Meta Tags */}
         <meta property="og:site_name" content="业余无线电可视化" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={location.pathname} />
-        <meta property="og:image" content="/og.webp" />
+        <meta property="og:url" content={`${origin}${location.pathname}`} />
+        <meta property="og:image" content={`${origin}/og.webp`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="/og.webp" />
+        <meta name="twitter:image" content={`${origin}/og.webp`} />
 
-        <link rel="canonical" href={location.pathname} />
+        <link rel="canonical" href={origin + location.pathname} />
 
         <Meta />
         <Links />
