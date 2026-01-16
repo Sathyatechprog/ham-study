@@ -12,7 +12,7 @@ export const loader = ({ request }: Route.LoaderArgs) => {
     <loc>${origin}${demo.href}</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-  </url>`,
+  </url>`
     )
     .join("");
 
@@ -23,12 +23,12 @@ export const loader = ({ request }: Route.LoaderArgs) => {
     <loc>${origin}${tool.href}</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-  </url>`,
+  </url>`
     )
     .join("");
 
   const content = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>${origin}/</loc>
     <changefreq>daily</changefreq>

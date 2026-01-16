@@ -54,7 +54,7 @@ export function Header() {
         {/* Logo / Title */}
         <Link to={homeLink} className="flex items-center gap-2 group">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
+            xmlns="https://www.w3.org/2000/svg"
             viewBox="0 0 40 40"
             fill="none"
             className="w-10 h-10 transform transition-transform duration-300 group-hover:scale-105"

@@ -9,7 +9,7 @@ import { getLocale } from "~/middleware/i18next";
 import type { Route } from "./+types/moxon-antenna";
 
 const MoxonAntennaScene = lazy(
-  () => import("~/components/moxon-antenna-scene"),
+  () => import("~/components/moxon-antenna-scene")
 );
 
 import { ScientificCitation } from "~/components/scientific-citation";
@@ -160,7 +160,7 @@ export default function MoxonAntennaPage() {
                     {Object.entries(
                       t("moxonAntenna.theorySummaryTable.headers", {
                         returnObjects: true,
-                      }) as string[],
+                      }) as string[]
                     ).map(([key, header]) => (
                       <th
                         key={key}
@@ -175,7 +175,7 @@ export default function MoxonAntennaPage() {
                   {Object.entries(
                     t("moxonAntenna.theorySummaryTable.rows", {
                       returnObjects: true,
-                    }),
+                    })
                   ).map(([key]) => (
                     <tr
                       key={key}
@@ -243,7 +243,7 @@ export default function MoxonAntennaPage() {
                 {
                   id: "cebik-moxon",
                   text: "Cebik, L. B., W4RNL. The Moxon Rectangle: A Review.",
-                  url: "http://www.antentop.org/w4rnl.001/moxon1.html",
+                  url: "https://www.antentop.org/w4rnl.001/moxon1.html",
                 },
               ]}
             />

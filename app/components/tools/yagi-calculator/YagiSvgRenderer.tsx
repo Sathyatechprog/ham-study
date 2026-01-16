@@ -34,7 +34,7 @@ export function YagiSvgRenderer({
       height={"100%"}
       viewBox={`0 0 ${width} ${height}`}
       className="w-full h-full"
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       xmlSpace="preserve"
       ref={ref}
     >
