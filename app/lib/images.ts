@@ -59,21 +59,21 @@ export const ImageSizes = {
   BANNER_FULL: "100vw",
 };
 
+// 3. Unified Image Repository
+// Merge all image configurations here.
+// When adding new folders (e.g. banners), define a new glob above and spread it here.
+const imageRepository = {
+  ...demoImages,
+  // ...bannerImages,
+};
+
 export function getImageProps(path: string) {
-  // Detect Type based on path (Simple folder-based routing)
-  // Currently we only have 'demos', but logic is extensible
-  let metadata: ImageMetadata[] | null = null;
+  // 1. Try resolving from the unified repository
+  // This lookup is content-agnostic (demos, banners, etc. all work)
+  const metadata = resolveAsset(imageRepository, path);
 
-  // 1. Try Demos
-  if (path.includes("demos/")) {
-    metadata = resolveAsset(demoImages, path);
-  }
-  // Future: else if (path.includes("banners/")) { ... }
-
-  // Fallback: If no specific config found, try resolving in demos anyway or return null/raw
+  // Fallback: If no metadata found, assume path is direct resource or failed
   if (!metadata) {
-    // Attempt fallback lookups if strict folder matching isn't desired,
-    // or assume path is a direct URL if not found.
     return { src: path, srcSet: undefined, placeholder: undefined };
   }
 
@@ -93,8 +93,6 @@ export function getImageProps(path: string) {
     };
   }
 
-  console.log("metadata", metadata);
-  console.log("placeholder", placeholder);
   // Should not happen with current glob config, but safety check
   return { src: path, srcSet: undefined, placeholder };
 }
