@@ -8,11 +8,18 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
   plugins: [
     imagetools(),
-    cloudflare({ viteEnvironment: { name: "ssr" } }),
+    cloudflare({
+      viteEnvironment: { name: "ssr" },
+    }),
     tailwindcss(),
     reactRouter(),
     tsconfigPaths(),
   ],
+  resolve: {
+    alias: {
+      "node:worker_threads": "/app/mocks/worker_threads.ts",
+    },
+  },
   ssr: {
     noExternal: ["@react-three/fiber", "@react-three/drei", "three"],
   },
