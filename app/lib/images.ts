@@ -5,6 +5,8 @@ export interface ImageMetadata {
   format: string;
 }
 
+const root = "../assets";
+
 // 1. Demos Configuration (Thumbnail sizes)
 const demoImages = import.meta.glob<ImageMetadata[]>(
   "../assets/images/demos/**/*.{png,jpg,jpeg,webp}",
@@ -32,15 +34,23 @@ function normalizeKey(path: string) {
 // Generic Resolver
 function resolveAsset<T>(glob: Record<string, T>, path: string): T | null {
   const normalized = normalizeKey(path);
-  // Try to find key that includes the path (e.g. "demos/vertical" in ".../demos/vertical.webp")
-  const key = Object.keys(glob).find(
-    (k) => k.includes(`/${normalized}.`) || k.includes(`/${normalized}/`)
-  );
-  if (!key) return null;
+  // Construct full expected path (relative to this file)
+  const targetPath = `${root}/${normalized}`;
 
-  const mod = glob[key];
-  // @ts-expect-error - Vite module default export handling
-  return (mod?.default ?? mod) as T;
+  // Try specific extensions directly instead of iterating all keys
+  // This is faster (O(1) lookup vs O(N) search) and stricter
+  const extensions = [".png", ".jpg", ".jpeg", ".webp"];
+
+  for (const ext of extensions) {
+    const fullKey = `${targetPath}${ext}`;
+    if (fullKey in glob) {
+      const mod = glob[fullKey];
+      // @ts-expect-error - Vite module default export handling
+      return (mod?.default ?? mod) as T;
+    }
+  }
+
+  return null;
 }
 
 export const ImageSizes = {
